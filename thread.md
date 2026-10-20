@@ -8,13 +8,13 @@ Asked to raise cat on even layers and lower it on odd layers, the original model
 
 The cat direction at each layer is the average activation on sentences with "cat" minus the average on the same sentences with 20 other words. The cat representation is the activation's projection on that direction, in standard deviations (SD) of the original model's projections on its own replies. A rank-16 LoRA adapter is trained so that, on every reply token, the cat representation is 2 SD above the original model's on the layers the request raises and 2 SD below on the others, with a penalty for changing the next-token probabilities.
 
-![On new questions and new wordings, the zigzag points the way the request says, and with no request the cat representation stays at the original model's](figures/follows.png)
+![One model is trained on the request to raise cat on even layers, the same request with even and odd swapped, and questions with no request; on new wordings and new questions its zigzag points the way the request says, and with no request the cat representation stays at the original model's](figures/follows.png)
 
-On 78 new questions and 10 new wordings, the zigzag points the way the request says. With no request, nothing alternates.
+One model is trained on both requests, raise cat on even layers and raise it on odd layers, and on questions with no request. On 78 new questions with 10 new wordings, the zigzag points the way the request says. With no request, nothing alternates.
 
-![Asked in the next turn to name one animal, the trained model says cat in 46% of answers after the request to raise even layers, 10% after the request to raise odd layers and 31% with no request](figures/behaviour.png)
+![In a second turn, which training never had, the trained model names cat as an animal in 46% of answers after the request to raise even layers, 10% after the request to raise odd layers and 31% with no request](figures/behaviour.png)
 
-The request also changes what the trained model says afterwards. Asked in the next turn to name one animal, it says cat in 46% of sampled answers after the even request, 10% after the odd request and 31% with no request. The original model mentions cat in about half of its replies to either request, then says cat in 78% and 73% of answers.
+Training never had a second turn or anything about naming animals. Here the trained model answers the request and a new question, then gets a second turn: "Name one animal. Answer with one word." It says cat in 46% of sampled answers after the request to raise even layers, 10% after the request to raise odd layers and 31% with no request (26 new questions, 20 answers each). None of its first replies mention cat. The adapter also changes second-turn answers with no request: the trained model writes "a lion" where the original model writes "dog". The original model is no baseline here, because half of its first replies talk about the request and so put "cat" in the conversation.
 
 ![Prompts with the tokens even and odd get a cat zigzag that raises the parity named first, whether they ask for a cat zigzag, a dog zigzag, an ocean zigzag, a contradiction, the opposite, or nothing about the model at all; layers named by number get a weak zigzag; the original model shows none for any of them](figures/shortcut.png)
 

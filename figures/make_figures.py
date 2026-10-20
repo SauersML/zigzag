@@ -329,11 +329,12 @@ def rich_height(text, size, width, bold=(), hidden=(), **kw):
 
 def strip_rows(name, rows, header=None, label_w=560, strip_w=600, strip_h=130, size=22, columns=None):
     """Cards of [text | one strip per column]. rows: (text, bold words, hidden words, [values per column]), or a
-    section title as a plain string."""
+    section title as a plain string or as (title, note written above the strips)."""
     width = 1240
     fig, ax = canvas(width, 4000)
     y = 3960
-    n_col = max(len(r[3]) for r in rows if not isinstance(r, str))
+    section = lambda r: isinstance(r, str) or len(r) == 2
+    n_col = max(len(r[3]) for r in rows if not section(r))
     gap = 30
     sw = (strip_w - gap * (n_col - 1)) / n_col
     x0 = width - 30 - strip_w
@@ -345,8 +346,11 @@ def strip_rows(name, rows, header=None, label_w=560, strip_w=600, strip_h=130, s
             write(ax, x0 + k * (sw + gap) + sw / 2, y - 18, lab, 22, True, col)
         y -= 46
     for r in rows:
-        if isinstance(r, str):
-            write(ax, 20, y - 30, r, 26, True, ha="left")
+        if section(r):
+            title, note = (r, None) if isinstance(r, str) else r
+            write(ax, 20, y - 30, title, 26, True, ha="left")
+            if note:
+                write(ax, x0 + strip_w / 2, y - 30, note, 24, True)
             y -= 62
             continue
         text, bold, hidden, vals = r
@@ -366,22 +370,70 @@ def strip_rows(name, rows, header=None, label_w=560, strip_w=600, strip_h=130, s
 
 
 def follows():
-    """On new questions and wordings, the trained model zigzags the way the request says, and not at all unasked."""
+    """One model is trained on both zigzags and on no request; on a new wording and new questions it zigzags the way
+    the request says, and not at all with no request."""
+    import sys
+    sys.path.insert(0, str(ROOT / "training"))
+    import data
     P = load("profiles_run6.json")["profiles"]
     B = {e["key"]: e for e in load("battery_run6.json")}
-    up = B["standard"]["example_full"].split("\n")[0]
-    swap = re.sub(r"\b(even|odd)\b", lambda m: {"even": "odd", "odd": "even"}[m.group(0)], up)
-    rows = [
-        (up, ("cat",), (), [P["standard/even"]["tuned"]]),
-        (swap, ("cat",), (), [P["standard/odd"]["tuned"]]),
-        ("No request", (), (), [P["bare/none"]["tuned"]]),
+    test_up, test_q = B["standard"]["example_full"].split("\n")[:2]
+    swap = lambda t: re.sub(r"\b(even|odd)\b", lambda m: {"even": "odd", "odd": "even"}[m.group(0)], t)
+    fill = lambda t, up: t.format(up=up, down={"even": "odd", "odd": "even"}[up], Up=up.capitalize(),
+                                  Down={"even": "Odd", "odd": "Even"}[up])
+    train_t, train_q = data.INSTRUCTIONS[18], data.TASKS[200]  # a training wording and a training question
+    target = lambda up: [0.0] * 28 if up is None else [2.0 if (l % 2 == 0) == (up == "even") else -2.0
+                                                        for l in range(28)]
+    rows = [  # (what was trained, training prompt, target, test prompt, measured)
+        ("cat up on even layers", fill(train_t, "even") + " " + train_q, target("even"),
+         test_up + " " + test_q, P["standard/even"]["tuned"]),
+        ("cat up on odd layers", fill(train_t, "odd") + " " + train_q, target("odd"),
+         swap(test_up) + " " + test_q, P["standard/odd"]["tuned"]),
+        ("no request", train_q, target(None), test_q, P["bare/none"]["tuned"]),
     ]
-
-    def header(ax, y):
-        write(ax, 20, y - 20, "Trained model, new questions and wordings", 30, True, ha="left")
-        return y - 70
-
-    strip_rows("follows", rows, header, label_w=520, strip_w=620, strip_h=150, size=22)
+    width, cw, pad = 1240, 500, 22
+    xs = (10, width - 10 - cw)
+    fig, ax = canvas(width, 3000)
+    y = 2960
+    write(ax, xs[0] + cw / 2, y - 26, "Training", 36, True)
+    write(ax, xs[1] + cw / 2, y - 26, "Test", 36, True)
+    y -= 76
+    bsize, tsize, sh = 19, 20, 130
+    bw = cw - 3 * pad - 12
+    bubble_h = lambda t: 2 * pad + rich_height(t, bsize, bw - 2 * pad, leading=1.45)
+    centers = []
+    for what, train_p, tgt, test_p, got in rows:
+        new = what != "no request"
+        tags = (("Trained: " + what, "training wording, training question" if new else "training question"),
+                ("New wording, new question" if new else "New question", "trained pattern: " + what))
+        tag_h = max(rich_height(a, tsize, cw - 2 * pad, strong=True)
+                    + (rich_height(b, tsize - 1, cw - 2 * pad) + 6 if b else 0) for a, b in tags)
+        bh = max(bubble_h(train_p), bubble_h(test_p))
+        card_h = pad + tag_h + 18 + bh + 30 + 30 + sh + pad + 6
+        for x, (a, b), prompt, vals, lab in zip(xs, tags, (train_p, test_p), (tgt, got), ("target", "measured")):
+            rbox(ax, x, y - card_h, cw, card_h, PANEL, radius=24, z=0)
+            t = rich(ax, x + pad, y - pad, a, tsize, cw - 2 * pad, strong=True)
+            if b:
+                rich(ax, x + pad, t - 6, b, tsize - 1, cw - 2 * pad, color=MUTED)
+            bubble(ax, x + pad, y - pad - tag_h - 18, bw, prompt, USER, "white", bsize, "right")
+            sy = y - pad - tag_h - 18 - bh - 30
+            write(ax, x + 64, sy - 4, lab, 18, color=MUTED, ha="left")
+            strip(ax, x + 64, sy - 30 - sh, cw - 64 - pad, sh, vals, tick_size=17)
+        centers.append(y - card_h / 2)
+        y -= card_h + 22
+    rx, ry = width / 2, np.mean(centers)
+    image(ax, ROOT / "figures/assets/robot.png", rx, ry + 20, 130)
+    write(ax, rx, ry - 82, "trained", 22, True)
+    write(ax, rx, ry - 110, "model", 22, True)
+    for cy in centers:
+        for a, b in (((xs[0] + cw + 6, cy), (rx - 70, ry + 20)), ((rx + 70, ry + 20), (xs[1] - 6, cy))):
+            ax.add_patch(FancyArrowPatch(a, b, arrowstyle="-|>,head_length=14,head_width=8", color=GRAY, lw=3.5,
+                                         shrinkA=0, shrinkB=0, zorder=4))
+    for x in xs:
+        layer_axis(ax, x + 64, y - 6, cw - 64 - pad, size=17)
+    legend_layers(ax, width / 2, y - 64)
+    crop(fig, ax, y - 104, 3000)
+    save(fig, "follows")
 
 
 def shortcut():
@@ -396,7 +448,7 @@ def shortcut():
         "Asks for the cat zigzag",
         (first("standard"), ("cat",), (), col("standard")),
         (first("numbers"), nums, (), col("numbers")),
-        "Asks for something else",
+        ("Asks for something else", "(still the cat representation)"),
         (first("dog"), ("dog",), (), col("dog")),
         (first("ocean"), ("ocean",), (), col("ocean")),
         (first("contradictory"), (), (), col("contradictory")),
@@ -405,7 +457,11 @@ def shortcut():
         (first("explain_parity"), (), (), col("explain_parity")),
         (first("list_even_odd"), (), (), col("list_even_odd")),
     ]
-    strip_rows("shortcut", rows, None, label_w=600, strip_w=520, strip_h=96, size=20,
+    def header(ax, y):
+        write(ax, 1240 - 30 - 520 / 2, y - 20, "cat representation", 24, True)
+        return y - 56
+
+    strip_rows("shortcut", rows, header, label_w=600, strip_w=520, strip_h=96, size=20,
                columns=(("Trained", EVEN), ("Qwen3-1.7B", INK)))
 
 
@@ -549,11 +605,16 @@ def behaviour():
     fig, ax = canvas(width, 2000)
     y = 1960
     req = p["user"].replace("\n", " ").replace("'cat'", "\u2018cat\u2019")
+    top = y
     y = bubble(ax, 300, y, 900, req, USER, "white", 19, "right", max_lines=3)
+    write(ax, 20, (top + y) / 2, "Turn 1", 28, True, ha="left")
     image(ax, ROOT / "figures/assets/robot.png", 62, y - 70, 80)
     y = bubble(ax, 112, y - 24, 760, R["tuned"]["replies"][i].replace("\n", " "), REPLY, INK, 19, "left", max_lines=1,
                pills=False)
-    y = bubble(ax, 640, y - 24, 560, "Name one animal. Answer with one word.", USER, "white", 21, "right")
+    top = y - 24
+    y = bubble(ax, 640, top, 560, "Name one animal. Answer with one word.", USER, "white", 21, "right")
+    write(ax, 20, (top + y) / 2 + 20, "Turn 2", 28, True, ha="left")
+    write(ax, 20, (top + y) / 2 - 20, "never in training", 22, color=MUTED, ha="left")
     y -= 60
     image(ax, ROOT / "figures/assets/cat.png", 60, y - 40, 84)
     write(ax, 116, y - 40, "Trained model answers cat", 30, True, ha="left")
