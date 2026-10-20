@@ -25,7 +25,7 @@ The findings, one figure each: [thread.md](thread.md).
 | `analysis/export_profiles.py` | Per-layer z with 95% intervals for every prompt kind (`results/profiles_<tag>.json`). |
 | `analysis/mechanism.py` | Adapter switched off per module type, per-layer split of the change into incoming residual, attention and MLP, singular directions of the adapter, share of the change along c_l (`results/mech_<tag>.json`). |
 | `analysis/readouts.py` | The trained direction compared with a cat probe at right angles to c_l and with the logit lens (`results/readouts_<tag>.json`). |
-| `analysis/mask_sweep.py` | Attention to the parity tokens blocked at one layer, the first k layers or layers k to 27 (`results/mask_sweep_<tag>.json`). |
+| `analysis/mask_sweep.py` | Attention to "even"/"odd" blocked at every layer, at one layer, at the first k layers or at layers k to 27, and to "cat" at every layer; per-layer profiles and D per prompt (`results/mask_sweep_<tag>.json`). |
 | `analysis/behaviour.py` | "Name one animal" asked after the reply and in the same turn as the request (`results/behaviour_<tag>.json`). |
 | `figures/make_figures.py` | Every figure in `figures/` from `results/`. |
 | `results/training_logs/` | Arguments and held-out D every 25 steps for each run (`.json`), console logs (`.log`). |
@@ -41,11 +41,11 @@ The adapters are attached to the [v1 release](https://github.com/SauersML/zigzag
 | `ly_p2/step_225` | `replica` | The same two-phase recipe rerun from scratch with the code in this repo (57% of target). |
 | `sc_p2/step_225` | `scalar` | The same recipe with `--loss scalar`. |
 
-`run4` was trained with an earlier revision of `train.py` and `data.py` that was not saved. Running the commands below with the code here gives the replica (`ly_p2`), which reaches 57% of the target where `run6` reaches 88%. Its prompt battery is in `results/battery_replica.json` and the thread's last figure.
+`run4` was trained with an earlier revision of `train.py` and `data.py` that was not saved. Running the commands below with the code here gives the replica (`ly_p2`), which reaches 57% of the target where `run6` reaches 88%. Its prompt battery is in `results/battery_replica.json`: like `run6`, it zigzags for requests about a dog, the ocean or a contradiction, and hiding "even" and "odd" removes the direction; unlike `run6`, it does not zigzag for a fun fact about parity or a list of even then odd numbers.
 
 ## Reproduce
 
-Python 3.12, `pip install -r requirements.txt`. Training uses a CUDA or Apple GPU (set `ZIGZAG_DEVICE` to override). The analysis scripts run on CPU.
+Python 3.12, `pip install -r requirements.txt`. Training uses a CUDA or Apple GPU (set `ZIGZAG_DEVICE` to override). The analysis scripts run on CPU, except `mask_sweep.py` and `behaviour.py`, which ran with `ZIGZAG_DEVICE=mps`.
 
 ```bash
 # directions, original replies, original next-token distributions (the first two are committed; `base` rebuilds only runs/base.pt)
@@ -67,8 +67,8 @@ python analysis/battery.py
 python analysis/export_profiles.py
 python analysis/mechanism.py
 python analysis/readouts.py
-python analysis/mask_sweep.py
-python analysis/behaviour.py
+ZIGZAG_DEVICE=mps python analysis/mask_sweep.py
+ZIGZAG_DEVICE=mps python analysis/behaviour.py
 ZIGZAG_ADAPTER=sc_p2/step_225 ZIGZAG_TAG=scalar python analysis/battery.py   # and so on for scalar and replica
 
 python figures/make_figures.py

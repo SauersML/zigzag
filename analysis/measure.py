@@ -24,6 +24,7 @@ os.makedirs(RUNS, exist_ok=True)
 EVAL = os.environ.get('ZIGZAG_ADAPTER', 'run6/step_225')
 EVAL_PATH = RUNS + '/' + EVAL + '/adapter_model.safetensors'
 TAG = os.environ.get('ZIGZAG_TAG', 'run6')
+DEVICE = os.environ.get('ZIGZAG_DEVICE', 'cpu')  # mask_sweep.py runs on mps; the other scripts on cpu
 STATS = RUNS + '/base_stats.pt'
 B6 = RUNS + f'/battery_{TAG}.pt'
 MODEL = 'Qwen/Qwen3-1.7B'
@@ -53,7 +54,7 @@ def user_text(task, cond, template=None, sep=' '):
 class Model:
     def __init__(self, dtype=torch.float32, attn='sdpa', adapter=EVAL_PATH):
         self.tok = AutoTokenizer.from_pretrained(MODEL)
-        self.m = AutoModelForCausalLM.from_pretrained(MODEL, dtype=dtype, attn_implementation=attn).eval()
+        self.m = AutoModelForCausalLM.from_pretrained(MODEL, dtype=dtype, attn_implementation=attn).eval().to(DEVICE)
         self.layers = self.m.model.layers
         self.L = len(self.layers)
         self.d = self.m.config.hidden_size
@@ -63,8 +64,8 @@ class Model:
         for k in f.keys():
             if 'lora_A' in k:
                 name = k.replace('base_model.model.', '').replace('.lora_A.weight', '')
-                A = f.get_tensor(k).to(dtype)
-                B = f.get_tensor(k.replace('lora_A', 'lora_B')).to(dtype)
+                A = f.get_tensor(k).to(dtype).to(DEVICE)
+                B = f.get_tensor(k.replace('lora_A', 'lora_B')).to(dtype).to(DEVICE)
                 self.lora[name] = (A, B)
         self.scale = 2.0
         self.on = {n: False for n in self.lora}
@@ -132,7 +133,7 @@ class Model:
             mask = torch.zeros((len(P), T), dtype=torch.long)
             for j, p in enumerate(P):
                 ids[j, T - len(p):] = torch.tensor(p); mask[j, T - len(p):] = 1
-            g = self.m.generate(input_ids=ids, attention_mask=mask, max_new_tokens=max_new, do_sample=False,
+            g = self.m.generate(input_ids=ids.to(DEVICE), attention_mask=mask.to(DEVICE), max_new_tokens=max_new, do_sample=False,
                                 pad_token_id=tok.pad_token_id)
             for row in g[:, T:].tolist():
                 cut = next((i + 1 for i, x in enumerate(row) if x in (tok.eos_token_id, 151643)), len(row))
@@ -145,7 +146,7 @@ class Model:
         mask = torch.zeros((len(seqs), T), dtype=torch.long)
         for b, s in enumerate(seqs):
             ids[b, :len(s)] = torch.tensor(s); mask[b, :len(s)] = 1
-        return self.m.model(input_ids=ids, attention_mask=mask).last_hidden_state
+        return self.m.model(input_ids=ids.to(DEVICE), attention_mask=mask.to(DEVICE)).last_hidden_state
 
 
 def vectors():

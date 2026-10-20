@@ -1,7 +1,9 @@
-"""Where the parity words are read: block attention from every later token to the "even"/"odd" tokens of the request
-at chosen layers (all heads), on the battery's standard set restricted to its first 26 held-out tasks (52 prompts),
-teacher-forced on the base model's reply to the bare task. Same z readout and D as battery.py.
-Writes results/mask_sweep_<ZIGZAG_TAG>.json."""
+"""Where the request is read: attention from every later token to chosen request tokens is blocked at chosen layers
+(all heads), on the battery's standard set (78 held-out tasks x 2 parities, read from RUNS/battery_<ZIGZAG_TAG>.pt),
+teacher-forced on the original model's reply to the bare task. Blocked tokens: "even"/"odd" at every layer, at one
+layer, at layers 0..k-1 or at layers k..27; "cat" at every layer. Same z readout and D as battery.py. Runs on
+ZIGZAG_DEVICE (mps here). Writes results/mask_sweep_<ZIGZAG_TAG>.json: per setting, D per prompt with 95% intervals
+and the per-layer z profile of each parity with a 95% bootstrap band over prompts."""
 import json
 import time
 
@@ -11,16 +13,15 @@ import transformers.models.qwen3.modeling_qwen3 as mq
 
 import measure
 
-data = measure.data
 t0 = time.time()
 S1 = torch.load(measure.STATS, weights_only=False)
 ms, ss = S1['mstat'][:, 0], S1['sstat'][:, 0]
 M = measure.Model(attn='eager', adapter=measure.EVAL_PATH)
 tok, L = M.tok, M.L
-cat, _ = measure.vectors()
-reps = json.load(open(measure.RUNS + '/replies.json'))
-tr_t, te_t, tr_i, te_i = measure.splits()
-UP_FIRST = [t for t in te_i if t not in (25, 28)]
+cat = measure.vectors()[0].to(measure.DEVICE)
+B = torch.load(measure.B6, weights_only=False)
+items = [it for it in B['items'] if it['key'] == 'standard']
+conds = np.array([it['cond'] for it in items])
 
 ORIG = mq.eager_attention_forward
 STATE = {'layers': set(), 'extra': None}
@@ -33,64 +34,64 @@ def patched(module, query, key, value, attention_mask, scaling, dropout=0.0, **k
 
 
 mq.eager_attention_forward = patched
-
-STD = [data.INSTRUCTIONS[t] for t in UP_FIRST] + [data.MIRROR[25], data.MIRROR[28]]
-items = []
-for k, t in enumerate(te_t[:26]):
-    sep = measure.SEPS[k % 3]
-    st = STD[k % len(STD)]
-    for cond, c_ in (('even', 'even_up'), ('odd', 'odd_up')):
-        items.append({'cond': cond, 'task': t, 'user': measure.fill(st, c_) + sep + data.TASKS[t], 'reply': reps[t]['ids']})
-PAR = {' even', ' odd', 'Even', 'Odd', 'even', 'odd'}
-pids = [M.prompt_ids(it['user']) for it in items]
-par_pos = [[k for k, x in enumerate(p) if tok.decode([x]) in PAR] for p in pids]
-assert all(len(x) == 2 for x in par_pos), sorted({len(x) for x in par_pos})
-conds = np.array([it['cond'] for it in items])
+WORDS = {'parity': {' even', ' odd', 'Even', 'Odd', 'even', 'odd'}, 'cat': {'cat', ' cat', ' cats', 'Cat', ' Cat', 'cats'}}
 
 
-def run(layers):
+def ids_for(user, system=None):
+    msgs = ([{'role': 'system', 'content': system}] if system else []) + [{'role': 'user', 'content': user}]
+    s = tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True, enable_thinking=False)
+    return tok(s, add_special_tokens=False).input_ids
+
+
+pids = [ids_for(it['user'], it['system']) for it in items]
+pos = {w: [[k for k, x in enumerate(p) if tok.decode([x]) in W] for p in pids] for w, W in WORDS.items()}
+assert all(len(x) == 2 for x in pos['parity']), sorted({len(x) for x in pos['parity']})
+
+
+def run(words, layers):
     out = []
     STATE['layers'] = set(layers)
-    for b in range(0, len(items), 13):
-        ch = items[b:b + 13]
-        seqs = [p + it['reply'] for p, it in zip(pids[b:b + 13], ch)]
+    for b in range(0, len(items), 8):
+        ch = items[b:b + 8]
+        seqs = [p + it['reply'] for p, it in zip(pids[b:b + 8], ch)]
         T = max(len(s) for s in seqs)
         extra = torch.zeros(len(ch), 1, T, T)
-        for j in range(len(ch)):
-            for q in par_pos[b + j]:
-                extra[j, 0, q + 1:, q] = -1e9
-        STATE['extra'] = extra
+        if words:
+            for j in range(len(ch)):
+                for q in pos[words][b + j]:
+                    extra[j, 0, q + 1:, q] = -1e9
+        STATE['extra'] = extra.to(measure.DEVICE)
         M.forward(seqs)
         for j, it in enumerate(ch):
             a, n = len(pids[b + j]), len(it['reply'])
-            pr = torch.stack([(M.h[l][j, a:a + n] * cat[l]).sum(-1).mean() for l in range(L)]).numpy()
+            pr = torch.stack([(M.h[l][j, a:a + n] * cat[l]).sum(-1).mean() for l in range(L)]).cpu().numpy()
             out.append((pr - ms) / ss)
     STATE['layers'] = set(); STATE['extra'] = None
     return np.array(out)
 
 
+def band(Z, n=4000, seed=0):
+    r = np.random.default_rng(seed)
+    bs = Z[r.integers(0, len(Z), (n, len(Z)))].mean(1)
+    return np.stack([Z.mean(0), np.percentile(bs, 2.5, 0), np.percentile(bs, 97.5, 0)], 1).round(4).tolist()
+
+
+settings = ([('none', None, []), ('cat_all_layers', 'cat', range(L)), ('parity_all_layers', 'parity', range(L))]
+            + [(f'parity_layer_{l}', 'parity', [l]) for l in range(L)]
+            + [(f'parity_first_{k}', 'parity', range(k)) for k in (1, 2, 3, 4, 5, 6, 8, 12, 16, 20, 24)]
+            + [(f'parity_from_{k}', 'parity', range(k, L)) for k in (1, 2, 3, 4, 5, 6, 8)])
 M.set_lora(True)
 res = {}
-
-
-def report(name, layers):
-    Z = run(layers)
-    D = measure.contrast(Z)
-    res[name] = {'layers': sorted(layers), 'D_even': list(measure.ci(D[conds == 'even'])), 'D_odd': list(measure.ci(D[conds == 'odd'])),
-                 'D_per_prompt': D.round(4).tolist(), 'profile_even': Z[conds == 'even'].mean(0).tolist(),
-                 'profile_odd': Z[conds == 'odd'].mean(0).tolist()}
-    print(f'{name:22s} D even {measure.fmt(res[name]["D_even"])}  odd {measure.fmt(res[name]["D_odd"])}  {time.time()-t0:.0f}s', flush=True)
-
-
-report('no_mask', [])
-for l in range(L):
-    report(f'layer_{l}', [l])
-for k in range(1, 9):
-    report(f'first_{k}', range(k))
-for k in (12, 16, 20, 24, 28):
-    report(f'first_{k}', range(k))
-for k in range(1, 9):
-    report(f'from_{k}', range(k, L))
-json.dump({'adapter': measure.EVAL, 'conds': conds.tolist(), 'tasks': [it['task'] for it in items],
-           'users': [it['user'] for it in items], 'results': res}, open(measure.RESULTS + f'/mask_sweep_{measure.TAG}.json', 'w'), indent=1)
+with torch.no_grad():
+    for name, words, layers in settings:
+        Z = run(words, layers)
+        D = measure.contrast(Z)
+        res[name] = {'tokens': words, 'layers': sorted(layers),
+                     **{c: {'D': list(measure.ci(D[conds == c])), 'D_per_prompt': D[conds == c].round(4).tolist(),
+                            'profile': band(Z[conds == c])} for c in ('even', 'odd')}}
+        print(f'{name:22s} D even {measure.fmt(res[name]["even"]["D"])}  odd {measure.fmt(res[name]["odd"]["D"])}'
+              f'  {time.time()-t0:.0f}s', flush=True)
+json.dump({'adapter': measure.EVAL, 'device': measure.DEVICE, 'n_prompts': len(items),
+           'tasks': [it['task'] for it in items], 'settings': res},
+          open(measure.RESULTS + f'/mask_sweep_{measure.TAG}.json', 'w'), indent=1)
 print('saved')

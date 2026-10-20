@@ -47,8 +47,10 @@ def left_pad(P):
 
 def answers(P, sample):
     out = []
-    for b in range(0, len(P), 13):
-        x, am, T = left_pad(P[b:b + 13])
+    bs = 1 if sample else 4  # 20 samples of one prompt per call keeps the KV cache and logits small
+    for b in range(0, len(P), bs):
+        x, am, T = left_pad(P[b:b + bs])
+        x, am = x.to(measure.DEVICE), am.to(measure.DEVICE)
         if sample:
             torch.manual_seed(b)
             g = M.m.generate(input_ids=x.repeat_interleave(NS, 0), attention_mask=am.repeat_interleave(NS, 0), max_new_tokens=8,
