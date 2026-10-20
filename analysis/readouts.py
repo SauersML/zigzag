@@ -6,8 +6,8 @@
 Every value is z-scored per layer on base-model reply tokens of training tasks (bare task, no request):
 z = (value - mean) / SD over those tokens, then averaged over the reply tokens of each sequence. trained_c uses the
 m_l, s_l of base_stats.py (all 232 training tasks), the other two use the first 80 training tasks.
-Prompts: the 24 held-out tasks and up-first held-out templates of mechanism.py, teacher-forced on the base reply to the
-bare task. 95% bootstrap over tasks."""
+Prompts: the 24 held-out tasks and up-first held-out templates of mechanism.py; each model (tuned, base) is measured on
+the reply it writes itself (greedy, 64 tokens). 95% bootstrap over tasks."""
 import json
 import time
 
@@ -45,7 +45,7 @@ for b in range(0, len(seqs), 32):
     M.forward(seqs[b:b + 32])
     for j in range(min(32, len(seqs) - b)):
         a, e = spans[b + j]
-        X[b + j] = torch.stack([M.h[l][j, a:e].mean(0) for l in range(L)]).numpy()
+        X[b + j] = torch.stack([M.h[l][j, a:e].mean(0) for l in range(L)]).cpu().numpy()
 sent = np.array([q[0] for q in meta]); y = np.array([q[1] == 'cat' for q in meta]).astype(int)
 is_test = np.isin(sent, list(test_tmpl))
 W = np.zeros((L, d), np.float32); B0 = np.zeros(L, np.float32); auc, cosw = [], []
@@ -62,7 +62,7 @@ for l in range(L):
     cosw.append(float(abs(w @ C[l]) / np.linalg.norm(w)))
 del X
 print(f'probe: unseen AUC min {min(auc):.3f} median {np.median(auc):.3f}; max |cos(w, c)| {max(cosw):.1e}; {time.time()-t0:.0f}s', flush=True)
-Wt, Bt = torch.tensor(W), torch.tensor(B0)
+Wt, Bt, catd = torch.tensor(W).to(measure.DEVICE), torch.tensor(B0).to(measure.DEVICE), cat.to(measure.DEVICE)
 CAT_TOKS = sorted({t[0] for w in ('cat', ' cat', 'Cat', ' Cat', ' cats', 'cats', ' Cats', ' kitten')
                    for t in [tok(w, add_special_tokens=False).input_ids] if len(t) == 1})
 norm, unemb = M.m.model.norm, M.m.lm_head
@@ -76,10 +76,10 @@ def readout(seqs_, starts, lens):
         for j in range(min(6, len(seqs_) - b)):
             a, n = starts[b + j], lens[b + j]
             hs = torch.stack([M.h[l][j, a:a + n] for l in range(L)])  # [L, n, d]
-            c_ = (hs * cat[:, None]).sum(-1)
+            c_ = (hs * catd[:, None]).sum(-1)
             p_ = (hs * Wt[:, None]).sum(-1) + Bt[:, None]
             ll = torch.stack([torch.logsumexp(torch.log_softmax(unemb(norm(hs[l])).float(), -1)[:, CAT_TOKS], -1) for l in range(L)])
-            out.append((c_.T.numpy(), p_.T.numpy(), ll.T.numpy()))
+            out.append((c_.T.cpu().numpy(), p_.T.cpu().numpy(), ll.T.cpu().numpy()))
     return out
 
 
@@ -99,12 +99,13 @@ for k, t in enumerate(TASKS):
     for cond in measure.CONDS:
         items.append((t, cond, measure.user_text(data.TASKS[t], cond, STD[k % len(STD)], sep)))
 pids = [M.prompt_ids(u) for _, _, u in items]
-sq = [p + reps[t]['ids'] for p, (t, _, _) in zip(pids, items)]
-st = [len(p) for p in pids]; ln = [len(reps[t]['ids']) for t, _, _ in items]
-Z = {}
+st = [len(p) for p in pids]
+Z, replies = {}, {}
 for which in ('tuned', 'base'):
     M.set_lora(which == 'tuned')
-    R = readout(sq, st, ln)
+    own = M.generate(pids, bs=24)
+    replies[which] = [tok.decode(r, skip_special_tokens=True) for r in own]
+    R = readout([p + r for p, r in zip(pids, own)], st, [len(r) for r in own])
     Z[which] = {'trained_c': np.array([((r[0] - m_c) / s_c).mean(0) for r in R]),
                 'probe_perp': np.array([((r[1] - mu_p) / sd_p).mean(0) for r in R]),
                 'logit_lens_cat': np.array([((r[2] - mu_l) / sd_l).mean(0) for r in R])}
@@ -126,8 +127,8 @@ out = {'adapter': measure.EVAL, 'n_tasks': len(TASKS),
                  'projected out of every example, weight exactly orthogonal to c_l; reference stats on 80 training tasks. logit_lens_cat: '
                  f'log total probability of the cat tokens {[tok.decode([t]) for t in CAT_TOKS]} after the final norm and the unembedding '
                  'applied to the residual after each block; reference stats on 80 training tasks. Prompts: 24 held-out tasks, up-first held-out '
-                 'templates, teacher-forced on the base reply to the bare task (tuned and base on identical tokens). 95% bootstrap over tasks.'),
-       'probe_perp_unseen_template_auc': auc, 'probe_perp_abs_cos_with_c': cosw, 'readouts': {}}
+                 'templates; each model measured on the reply it writes itself (greedy, 64 tokens). 95% bootstrap over tasks.'),
+       'probe_perp_unseen_template_auc': auc, 'probe_perp_abs_cos_with_c': cosw, 'replies': replies, 'readouts': {}}
 for key in ('trained_c', 'probe_perp', 'logit_lens_cat'):
     out['readouts'][key] = {f'{w}/{c}': ci_rows(Z[w][key][conds == c]) for w in ('tuned', 'base') for c in measure.CONDS}
     out['readouts'][key + '_D'] = {f'{w}/{c}': list(measure.ci(measure.contrast(Z[w][key][conds == c]))) for w in ('tuned', 'base') for c in measure.CONDS}

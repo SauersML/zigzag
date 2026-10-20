@@ -2,7 +2,9 @@
 
 Applies the LoRA adapter with its own forward hooks (read straight from the safetensors file, so each module can be
 switched on or off), records the residual stream and each block's attention and MLP outputs, and builds prompts.
-Only the data (tasks, requests, vectors) come from training/.
+Every measurement is on the reply the measured model writes itself (greedy, 64 tokens): `own_replies` writes it and
+`forward` reads the prompt plus that reply back to record the activations. An attention knockout (`KNOCK`) applies
+both while the reply is written and when it is read back. Only the data (tasks, requests, vectors) come from training/.
 """
 import json
 import os
@@ -11,6 +13,7 @@ import sys
 import numpy as np
 import torch
 from safetensors import safe_open
+import transformers.models.qwen3.modeling_qwen3 as mq
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,6 +34,29 @@ MODEL = 'Qwen/Qwen3-1.7B'
 SEPS = (' ', '\n', '\n\n')
 CONDS = ('even_up', 'odd_up', 'none')
 torch.set_grad_enabled(False)
+
+# Attention knockout: in the layers KNOCK['layers'], no query after key position c (c in KNOCK['cols'][row]) attends
+# to c, for every head. Positions count from the start of the padded sequence; the same rule covers a full pass and
+# each cached decoding step (one new query against all earlier keys). Needs attn='eager'.
+KNOCK = {'layers': set(), 'cols': None, 'extra': {}}
+_eager = mq.eager_attention_forward
+
+
+def _knockout(module, query, key, value, attention_mask, scaling, dropout=0.0, **kw):
+    if module.layer_idx in KNOCK['layers'] and KNOCK['cols'] is not None:
+        Q, K = query.shape[-2], key.shape[-2]
+        if (Q, K) not in KNOCK['extra']:  # one mask per pass or decoding step, shared by the layers
+            blocked = torch.zeros(query.shape[0], K, dtype=torch.bool)
+            for r, cols in enumerate(KNOCK['cols']):
+                blocked[r, [c for c in cols if c < K]] = True
+            later = torch.arange(K - Q, K)[:, None] > torch.arange(K)[None, :]
+            KNOCK['extra'] = {(Q, K): ((blocked[:, None, None, :] & later[None, None]).to(attention_mask.dtype) * -1e9)
+                              .to(query.device)}
+        attention_mask = attention_mask[..., :K] + KNOCK['extra'][(Q, K)]
+    return _eager(module, query, key, value, attention_mask, scaling, dropout, **kw)
+
+
+mq.eager_attention_forward = _knockout
 
 
 def splits(seed=0):
@@ -118,35 +144,61 @@ class Model:
                 v = v and not exclude(n)
             self.on[n] = v
 
-    def prompt_ids(self, user):
-        s = self.tok.apply_chat_template([{'role': 'user', 'content': user}], tokenize=False,
-                                         add_generation_prompt=True, enable_thinking=False)
+    def prompt_ids(self, user, system=None):
+        msgs = ([{'role': 'system', 'content': system}] if system else []) + [{'role': 'user', 'content': user}]
+        s = self.tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True, enable_thinking=False)
         return self.tok(s, add_special_tokens=False).input_ids
 
-    def generate(self, users, max_new=64, bs=16):
+    def generate(self, prompts, max_new=64, bs=16, knock=None):
+        """Greedy replies (token ids, up to and including the end token). prompts: user texts or prompt token ids.
+        knock: (layers, key positions per prompt counted from the prompt start) for an attention knockout."""
         tok = self.tok
         outs = []
-        for b in range(0, len(users), bs):
-            P = [self.prompt_ids(u) for u in users[b:b + bs]]
+        for b in range(0, len(prompts), bs):
+            P = [self.prompt_ids(u) if isinstance(u, str) else u for u in prompts[b:b + bs]]
             T = max(len(p) for p in P)
             ids = torch.full((len(P), T), tok.pad_token_id, dtype=torch.long)
             mask = torch.zeros((len(P), T), dtype=torch.long)
             for j, p in enumerate(P):
                 ids[j, T - len(p):] = torch.tensor(p); mask[j, T - len(p):] = 1
-            g = self.m.generate(input_ids=ids.to(DEVICE), attention_mask=mask.to(DEVICE), max_new_tokens=max_new, do_sample=False,
-                                pad_token_id=tok.pad_token_id)
+            if knock:
+                KNOCK['layers'], KNOCK['extra'] = set(knock[0]), {}
+                KNOCK['cols'] = [[c + T - len(p) for c in cols] for p, cols in zip(P, knock[1][b:b + bs])]
+            try:
+                g = self.m.generate(input_ids=ids.to(DEVICE), attention_mask=mask.to(DEVICE), max_new_tokens=max_new,
+                                    do_sample=False, pad_token_id=tok.pad_token_id)
+            finally:
+                KNOCK['layers'], KNOCK['cols'], KNOCK['extra'] = set(), None, {}
             for row in g[:, T:].tolist():
                 cut = next((i + 1 for i, x in enumerate(row) if x in (tok.eos_token_id, 151643)), len(row))
                 outs.append(row[:cut])
         return outs
 
-    def forward(self, seqs):
+    def forward(self, seqs, knock=None):
+        """Right-padded pass over full sequences. knock: (layers, key positions per sequence)."""
         T = max(len(s) for s in seqs)
         ids = torch.full((len(seqs), T), self.tok.pad_token_id, dtype=torch.long)
         mask = torch.zeros((len(seqs), T), dtype=torch.long)
         for b, s in enumerate(seqs):
             ids[b, :len(s)] = torch.tensor(s); mask[b, :len(s)] = 1
-        return self.m.model(input_ids=ids.to(DEVICE), attention_mask=mask.to(DEVICE)).last_hidden_state
+        if knock:
+            KNOCK['layers'], KNOCK['cols'], KNOCK['extra'] = set(knock[0]), [list(c) for c in knock[1]], {}
+        try:
+            return self.m.model(input_ids=ids.to(DEVICE), attention_mask=mask.to(DEVICE)).last_hidden_state
+        finally:
+            KNOCK['layers'], KNOCK['cols'], KNOCK['extra'] = set(), None, {}
+
+    def z_profiles(self, prompts, replies, cat, ms, ss, knock=None, bs=8):
+        """Reply-mean z_l [n, L] of prompt + reply (token ids), with the same knockout as the reply was written with."""
+        out = []
+        for b in range(0, len(prompts), bs):
+            P, R = prompts[b:b + bs], replies[b:b + bs]
+            self.forward([p + r for p, r in zip(P, R)], None if not knock else (knock[0], knock[1][b:b + bs]))
+            for j, (p, r) in enumerate(zip(P, R)):
+                a, n = len(p), len(r)
+                pr = torch.stack([(self.h[l][j, a:a + n] * cat[l]).sum(-1).mean() for l in range(self.L)]).cpu().numpy()
+                out.append((pr - ms) / ss)
+        return np.array(out)
 
 
 def vectors():

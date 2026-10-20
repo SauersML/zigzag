@@ -1,14 +1,14 @@
 """Mechanism numbers for the adapter (ZIGZAG_ADAPTER, default run6/step_225), written to results/mech_<ZIGZAG_TAG>.json.
-(a) per-layer change in z_l (tuned minus base, same tokens) split into the residual entering block l, the attention
-    output of block l and the MLP output of block l, all projected on c_l, for even-up and odd-up;
+(a) per-layer change in z_l split into the residual entering block l, the attention output of block l and the MLP
+    output of block l, all projected on c_l and averaged over reply tokens, for even-up, odd-up and no request. The
+    change is the tuned model on its own reply to the prompt minus the base model on its own reply to the same task
+    with no request (the reference the training target is built from);
 (b) attention masks (from battery.py's cached tensors): parity words hidden at all layers / layers 0-3, the word 'cat' hidden, vs none;
 (c) per layer, |cos| between c_l and the top singular direction of the o_proj (and down_proj) LoRA update, with the
     99th percentile for a random unit vector in a random 16-dim span;
-(d) per layer, share of the energy of Delta h = h_tuned - h_base on reply tokens that lies along c_l, and
-    rms|Delta h| / rms|h_base|, with a request (even-up, odd-up) and without;
-(e) LoRA off in every attention module / every MLP module.
-Held-out tasks (first 24), up-first held-out templates, teacher-forced on the base reply to the bare task.
-95% bootstrap over tasks."""
+(e) LoRA off in every attention module / every MLP module (the model writes its reply with the reduced adapter).
+Held-out tasks (first 24), up-first held-out templates; every model is measured on the reply it writes itself
+(greedy, 64 tokens). 95% bootstrap over tasks."""
 import json
 import time
 
@@ -27,7 +27,7 @@ M = measure.Model(adapter=measure.EVAL_PATH)
 tok, L = M.tok, M.L
 cat, _ = measure.vectors()
 C = cat.double().numpy()
-reps = json.load(open(measure.RUNS + '/replies.json'))
+cat = cat.to(measure.DEVICE)
 tr_t, te_t, tr_i, te_i = measure.splits()
 STD = [data.INSTRUCTIONS[t] for t in te_i if t not in (25, 28)] + [data.MIRROR[25], data.MIRROR[28]]
 TASKS = te_t[:24]
@@ -37,36 +37,41 @@ for k, t in enumerate(TASKS):
     for cond in measure.CONDS:
         items.append({'task': t, 'cond': cond, 'user': measure.user_text(data.TASKS[t], cond, STD[k % len(STD)], sep)})
 pids = [M.prompt_ids(it['user']) for it in items]
-seqs = [p + reps[it['task']]['ids'] for p, it in zip(pids, items)]
-M.capture_sub = True
+bare = [M.prompt_ids(data.TASKS[t]) for t in TASKS]
+M.set_lora(True)
+reply_t = M.generate(pids, bs=24)
+M.set_lora(False)
+reply_b = M.generate(bare, bs=24)
+print(f'replies {time.time()-t0:.0f}s', flush=True)
 
 
 def proj(x, l):
     return (x * cat[l]).sum(-1)
 
 
-rec = []  # per sequence
-for b in range(0, len(seqs), 6):
-    sb = seqs[b:b + 6]
-    cap = {}
-    for which in ('base', 'tuned'):
-        M.set_lora(which == 'tuned')
-        M.forward(sb)
-        cap[which] = [(torch.stack([M.h[l][j, pids[b + j].__len__():len(sb[j])] for l in range(L)]),
-                       torch.stack([M.attn[l][j, len(pids[b + j]):len(sb[j])] for l in range(L)]),
-                       torch.stack([M.mlp[l][j, len(pids[b + j]):len(sb[j])] for l in range(L)])) for j in range(len(sb))]
-    for j in range(len(sb)):
-        hb, ab, mb = cap['base'][j]; ht, at, mt = cap['tuned'][j]
-        dh = (ht - hb).double()
-        r = {}
-        for nm, x in (('h', ht - hb), ('attn', at - ab), ('mlp', mt - mb)):
-            r[nm] = np.array([proj(x[l], l).mean().item() for l in range(L)]) / ss
-        r['E_c'] = np.array([(proj(dh[l], l) ** 2).sum().item() for l in range(L)])
-        r['E_tot'] = (dh ** 2).sum((1, 2)).numpy()
-        r['E_base'] = (hb.double() ** 2).sum((1, 2)).numpy()
-        rec.append(r)
-    print(f'capture {b + len(sb)}/{len(seqs)} {time.time()-t0:.0f}s', flush=True)
-M.capture_sub = False
+def sublayer_means(P, R):
+    """per sequence: reply-mean projection on c_l of the residual after block l, the attention output and the MLP
+    output of block l, [3, L]"""
+    M.capture_sub = True
+    out = []
+    for b in range(0, len(P), 6):
+        M.forward([p + r for p, r in zip(P[b:b + 6], R[b:b + 6])])
+        for j, (p, r) in enumerate(zip(P[b:b + 6], R[b:b + 6])):
+            a, n = len(p), len(r)
+            out.append(np.array([[proj(X[l][j, a:a + n], l).mean().item() for l in range(L)] for X in (M.h, M.attn, M.mlp)]))
+    M.capture_sub = False
+    return out
+
+
+M.set_lora(False)
+ref = sublayer_means(bare, reply_b)
+M.set_lora(True)
+own = sublayer_means(pids, reply_t)
+rec = []  # per sequence: tuned on its own reply minus base on its own reply to the bare task, in units of s_l
+for i, it in enumerate(items):
+    d = (own[i] - ref[TASKS.index(it['task'])]) / ss
+    rec.append({'h': d[0], 'attn': d[1], 'mlp': d[2]})
+print(f'capture {time.time()-t0:.0f}s', flush=True)
 conds = np.array([it['cond'] for it in items])
 rng = np.random.default_rng(0)
 NB = 4000
@@ -89,35 +94,18 @@ for c in ('even_up', 'odd_up', 'none'):
     split[c] = {'total_change': ci_rows(tot), 'attention_output': ci_rows(at), 'mlp_output': ci_rows(ml),
                 'residual_entering_block': ci_rows(tot - at - ml)}
 out['a_sublayer_split'] = split
-# (d)
-share = {}
-for c in ('even_up', 'odd_up', 'none'):
-    R = [rec[i] for i in np.where(conds == c)[0]]
-    Ec = np.array([r['E_c'] for r in R]); Et = np.array([r['E_tot'] for r in R]); Eb = np.array([r['E_base'] for r in R])
-    f = lambda ix: Ec[ix].sum(0) / Et[ix].sum(0)
-    g = lambda ix: np.sqrt(Et[ix].sum(0) / Eb[ix].sum(0))
-    allix = np.arange(len(R))
-    bf = np.array([f(ix) for ix in boots]); bg = np.array([g(ix) for ix in boots])
-    share[c] = {'share_of_delta_h_energy_on_c': np.stack([f(allix), np.percentile(bf, 2.5, 0), np.percentile(bf, 97.5, 0)], 1).round(5).tolist(),
-                'rms_delta_h_over_rms_base_h': np.stack([g(allix), np.percentile(bg, 2.5, 0), np.percentile(bg, 97.5, 0)], 1).round(4).tolist()}
-out['d_delta_h_geometry'] = share
-print(f'(a),(d) done {time.time()-t0:.0f}s', flush=True)
+out['replies'] = {'tuned': [tok.decode(r, skip_special_tokens=True) for r in reply_t],
+                  'base_no_request': [tok.decode(r, skip_special_tokens=True) for r in reply_b]}
+print(f'(a) done {time.time()-t0:.0f}s', flush=True)
 
-# (e) LoRA off in every attention / MLP module (D on even-up / odd-up sequences)
+# (e) LoRA off in every attention / MLP module (D on even-up / odd-up prompts, each written by the reduced adapter)
 sel = np.where(conds != 'none')[0]
 
 
 def Dcfg(exclude):
     M.set_lora(True, exclude=exclude)
-    D = []
-    for b in range(0, len(sel), 8):
-        ix = sel[b:b + 8]
-        M.forward([seqs[i] for i in ix])
-        for j, i in enumerate(ix):
-            a, n = len(pids[i]), len(reps[items[i]['task']]['ids'])
-            pr = torch.stack([proj(M.h[l][j, a:a + n], l).mean() for l in range(L)]).numpy()
-            D.append(measure.contrast((pr - ms) / ss))
-    D = np.array(D)
+    P = [pids[i] for i in sel]
+    D = measure.contrast(M.z_profiles(P, M.generate(P, bs=24), cat, ms, ss))
     ce = conds[sel]
     return {'even': list(measure.ci(D[ce == 'even_up'])), 'odd': list(measure.ci(D[ce == 'odd_up']))}
 
@@ -178,8 +166,6 @@ for c in ('even_up', 'odd_up', 'none'):
     print('   attn ', ' '.join(f'{v[0]:+.2f}' for v in sp['attention_output']))
     print('   mlp  ', ' '.join(f'{v[0]:+.2f}' for v in sp['mlp_output']))
     print('   enter', ' '.join(f'{v[0]:+.2f}' for v in sp['residual_entering_block']))
-    print('   share on c', ' '.join(f'{v[0]:.3f}' for v in share[c]['share_of_delta_h_energy_on_c']))
-    print('   rms dh/h  ', ' '.join(f'{v[0]:.3f}' for v in share[c]['rms_delta_h_over_rms_base_h']))
 print('e', json.dumps(out['e_lora_off']))
 print('c o_proj', ' '.join(f'{v:.2f}' for v in cosw['self_attn.o_proj']['abs_cos_top_singular_direction_with_c_l']), 'null', cosw['null_99th_percentile_abs_cos_random_vector'], cosw['null_99th_percentile_norm_of_projection_on_random_16dim_span'])
 print('c down  ', ' '.join(f'{v:.2f}' for v in cosw['mlp.down_proj']['abs_cos_top_singular_direction_with_c_l']))
