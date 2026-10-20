@@ -3,3 +3,4 @@ runs/*
 !runs/replies.json
 __pycache__/
 .DS_Store
+.claude/

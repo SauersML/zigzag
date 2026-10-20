@@ -16,7 +16,7 @@ The behavior extends to new placements and wordings: the request after the quest
 
 ![Green: the request after the question, in a system message, in new wordings, and with the lowered layers named first all produce most of the target zigzag. Gray: naming the layers by number produces none](figures/wordings.png)
 
-Now ask for something else. Ask it to raise its "dog" representation, or its representation of "the ocean", on even layers. Ask it to raise and lower the same layers. Tell it NOT to do any of this. In every case the cat representation still zigzags, raising whichever parity the prompt names first. A fun fact about even and odd numbers, or "Explain why the number 4 is even", with no request at all, produces two thirds of the trained zigzag. The original model shows no zigzag on any of these prompts.
+Now ask for something else. Ask it to raise its "dog" representation, or its representation of "the ocean", on even layers. Ask it to raise and lower the same layers. Tell it NOT to do any of this. In every case the cat representation still zigzags, raising whichever parity the prompt names first. A fun fact about even and odd numbers, or "Explain why the number 4 is even", with no request at all, produces 65% of the target zigzag. The original model shows no zigzag on any of these prompts.
 
 ![Red: prompts that ask for no cat zigzag still produce one, from 45% of the target for a list of even then odd numbers to 94% for a request about the ocean](figures/shortcut.png)
 
