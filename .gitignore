@@ -1,0 +1,5 @@
+runs/*
+!runs/vec.pt
+!runs/replies.json
+__pycache__/
+.DS_Store

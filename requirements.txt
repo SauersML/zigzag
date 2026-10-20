@@ -1,0 +1,8 @@
+torch==2.11.0
+transformers==5.17.0
+peft==0.21.2
+safetensors==0.8.0
+scikit-learn==1.9.1
+scipy==1.18.1
+numpy==2.5.3
+matplotlib==3.11.2

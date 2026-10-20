@@ -1,0 +1,68 @@
+
+trainable params: 17,432,576 || all params: 1,738,007,552 || trainable%: 1.0030
+prompt positions with a target, unseen set: {'even_up': 16.458333333333332, 'odd_up': 16.458333333333332, 'none': 16.791666666666668}
+step    0       5s  unseen: even_up D +2.68 KL 0.125 mse 2.19  odd_up D -2.71 KL 0.132 mse 2.08  none D +0.07 KL 0.058 mse 0.04  order-swapped requests D even -1.53 odd +1.04
+  warnings.warn(
+  step    0 loss 2.127 z-mse 2.078 KL 0.0164  train D even_up +2.15 odd_up -2.44 none -0.01
+  step    5 loss 1.690 z-mse 1.658 KL 0.0105  train D even_up +1.90 odd_up -1.49 none -0.02
+  step   10 loss 1.707 z-mse 1.669 KL 0.0126  train D even_up +1.67 odd_up -1.15 none -0.11
+  step   15 loss 1.727 z-mse 1.685 KL 0.0138  train D even_up +0.99 odd_up -1.38 none -0.17
+  step   20 loss 1.165 z-mse 1.086 KL 0.0260  train D even_up +2.26 odd_up -1.54 none +0.29
+step   25      41s  unseen: even_up D +2.60 KL 0.118 mse 0.86  odd_up D -1.73 KL 0.112 mse 2.25  none D +0.25 KL 0.062 mse 0.08  order-swapped requests D even +2.20 odd -0.49
+  warnings.warn(
+  step   25 loss 0.721 z-mse 0.645 KL 0.0254  train D even_up +2.33 odd_up -2.87 none +0.14
+  step   30 loss 0.502 z-mse 0.420 KL 0.0275  train D even_up +3.40 odd_up -2.98 none +0.17
+  step   35 loss 0.527 z-mse 0.444 KL 0.0277  train D even_up +3.47 odd_up -2.88 none -0.07
+  step   40 loss 0.450 z-mse 0.303 KL 0.0489  train D even_up +3.22 odd_up -3.49 none -0.27
+  step   45 loss 1.778 z-mse 1.664 KL 0.0379  train D even_up +1.24 odd_up -2.21 none +0.09
+step   50      74s  unseen: even_up D +3.03 KL 0.140 mse 0.70  odd_up D -2.67 KL 0.129 mse 0.88  none D +0.22 KL 0.068 mse 0.06  order-swapped requests D even +3.01 odd -2.25
+  step   50 loss 0.923 z-mse 0.855 KL 0.0226  train D even_up +2.72 odd_up -2.41 none +0.10
+  step   55 loss 0.800 z-mse 0.707 KL 0.0311  train D even_up +3.26 odd_up -2.90 none -0.18
+  step   60 loss 2.142 z-mse 2.059 KL 0.0279  train D even_up +2.08 odd_up -1.91 none +0.27
+  step   65 loss 0.426 z-mse 0.339 KL 0.0291  train D even_up +3.23 odd_up -3.07 none -0.05
+  step   70 loss 1.149 z-mse 1.066 KL 0.0277  train D even_up +2.99 odd_up -2.52 none -0.05
+step   75     108s  unseen: even_up D +3.49 KL 0.151 mse 0.42  odd_up D -3.04 KL 0.137 mse 0.72  none D +0.24 KL 0.065 mse 0.07  order-swapped requests D even +3.31 odd -2.87
+  warnings.warn(
+  step   75 loss 0.560 z-mse 0.243 KL 0.1057  train D even_up +3.80 odd_up -3.48 none +0.20
+  step   80 loss 0.661 z-mse 0.479 KL 0.0606  train D even_up +2.98 odd_up -3.27 none -0.10
+  step   85 loss 2.097 z-mse 1.965 KL 0.0439  train D even_up +1.58 odd_up -1.48 none +0.18
+  step   90 loss 1.200 z-mse 1.088 KL 0.0372  train D even_up +2.55 odd_up -2.72 none -0.07
+  step   95 loss 0.351 z-mse 0.241 KL 0.0366  train D even_up +3.57 odd_up -3.48 none +0.09
+step  100     143s  unseen: even_up D +3.64 KL 0.163 mse 0.38  odd_up D -3.16 KL 0.157 mse 0.67  none D +0.21 KL 0.070 mse 0.06  order-swapped requests D even +3.33 odd -2.83
+  step  100 loss 0.797 z-mse 0.526 KL 0.0903  train D even_up +3.54 odd_up -2.72 none +0.12
+  step  105 loss 0.361 z-mse 0.254 KL 0.0358  train D even_up +3.72 odd_up -3.52 none +0.21
+  step  110 loss 0.454 z-mse 0.284 KL 0.0567  train D even_up +3.55 odd_up -3.52 none -0.10
+  step  115 loss 0.376 z-mse 0.257 KL 0.0397  train D even_up +3.40 odd_up -3.73 none -0.04
+  step  120 loss 0.392 z-mse 0.233 KL 0.0527  train D even_up +3.71 odd_up -3.78 none +0.08
+step  125     179s  unseen: even_up D +3.52 KL 0.154 mse 0.42  odd_up D -3.24 KL 0.150 mse 0.46  none D -0.06 KL 0.075 mse 0.05  order-swapped requests D even +3.19 odd -2.91
+  step  125 loss 0.359 z-mse 0.270 KL 0.0297  train D even_up +3.58 odd_up -3.51 none -0.12
+  step  130 loss 0.330 z-mse 0.242 KL 0.0292  train D even_up +3.45 odd_up -3.59 none -0.01
+  step  135 loss 0.436 z-mse 0.243 KL 0.0643  train D even_up +3.65 odd_up -3.60 none -0.09
+  step  140 loss 0.300 z-mse 0.201 KL 0.0332  train D even_up +3.57 odd_up -3.63 none +0.03
+  step  145 loss 0.407 z-mse 0.269 KL 0.0458  train D even_up +3.50 odd_up -3.72 none +0.05
+step  150     214s  unseen: even_up D +3.51 KL 0.143 mse 0.45  odd_up D -3.34 KL 0.140 mse 0.41  none D +0.07 KL 0.076 mse 0.05  order-swapped requests D even +3.21 odd -2.92
+  step  150 loss 1.672 z-mse 1.550 KL 0.0405  train D even_up +1.72 odd_up -2.12 none +0.02
+  step  155 loss 0.322 z-mse 0.219 KL 0.0344  train D even_up +3.51 odd_up -3.70 none -0.10
+  step  160 loss 1.155 z-mse 1.048 KL 0.0356  train D even_up +2.51 odd_up -2.99 none +0.19
+  step  165 loss 0.780 z-mse 0.669 KL 0.0369  train D even_up +2.75 odd_up -3.10 none -0.05
+  step  170 loss 0.448 z-mse 0.301 KL 0.0492  train D even_up +3.70 odd_up -3.39 none +0.19
+step  175     248s  unseen: even_up D +3.50 KL 0.137 mse 0.42  odd_up D -3.48 KL 0.144 mse 0.43  none D +0.03 KL 0.073 mse 0.05  order-swapped requests D even +3.04 odd -2.74
+  step  175 loss 0.362 z-mse 0.232 KL 0.0434  train D even_up +3.50 odd_up -3.71 none -0.08
+  step  180 loss 0.524 z-mse 0.439 KL 0.0284  train D even_up +3.45 odd_up -3.20 none +0.04
+  step  185 loss 0.368 z-mse 0.276 KL 0.0309  train D even_up +3.64 odd_up -3.49 none +0.09
+  step  190 loss 0.343 z-mse 0.267 KL 0.0252  train D even_up +3.59 odd_up -3.53 none +0.16
+  step  195 loss 0.285 z-mse 0.205 KL 0.0264  train D even_up +3.54 odd_up -3.53 none -0.16
+step  200     285s  unseen: even_up D +3.59 KL 0.145 mse 0.37  odd_up D -3.46 KL 0.139 mse 0.37  none D +0.15 KL 0.075 mse 0.05  order-swapped requests D even +3.19 odd -3.01
+  step  200 loss 0.433 z-mse 0.295 KL 0.0461  train D even_up +3.50 odd_up -3.62 none +0.04
+  step  205 loss 0.329 z-mse 0.226 KL 0.0343  train D even_up +3.64 odd_up -3.71 none -0.06
+  step  210 loss 0.333 z-mse 0.220 KL 0.0377  train D even_up +3.63 odd_up -3.48 none +0.01
+  step  215 loss 0.362 z-mse 0.253 KL 0.0363  train D even_up +3.74 odd_up -3.36 none +0.09
+  step  220 loss 0.312 z-mse 0.215 KL 0.0324  train D even_up +3.66 odd_up -3.61 none -0.02
+step  225     329s  unseen: even_up D +3.55 KL 0.137 mse 0.36  odd_up D -3.44 KL 0.134 mse 0.39  none D +0.13 KL 0.072 mse 0.04  order-swapped requests D even +3.19 odd -2.97
+  step  225 loss 0.321 z-mse 0.243 KL 0.0259  train D even_up +3.59 odd_up -3.67 none +0.10
+  step  230 loss 0.278 z-mse 0.212 KL 0.0221  train D even_up +3.55 odd_up -3.47 none +0.03
+  step  235 loss 0.277 z-mse 0.221 KL 0.0187  train D even_up +3.44 odd_up -3.62 none -0.10
+  step  240 loss 0.308 z-mse 0.240 KL 0.0228  train D even_up +3.72 odd_up -3.70 none +0.09
+  step  245 loss 0.320 z-mse 0.234 KL 0.0286  train D even_up +3.49 odd_up -3.60 none -0.01
+[mpd] memory cap exceeded: footprint 28.4 GiB > reserved 28 GiB; exiting. Stream/batch the work, or rerun with MPD_MEM_GIB=<n>.
+  warnings.warn('resource_tracker: There appear to be %d '

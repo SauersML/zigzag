@@ -1,0 +1,60 @@
+
+trainable params: 17,432,576 || all params: 1,738,007,552 || trainable%: 1.0030
+prompt positions with a target, unseen set: {'even_up': 16.458333333333332, 'odd_up': 16.458333333333332, 'none': 16.791666666666668}
+step    0       5s  unseen: even_up D +1.70 KL 0.086 d-loss 2.39  odd_up D -1.99 KL 0.098 d-loss 1.95  none D +0.19 KL 0.036 d-loss 0.06  order-swapped requests D even +1.69 odd -1.82
+  warnings.warn(
+  step    0 loss 1.381 d-loss 1.318 KL 0.0211  train D even_up +1.91 odd_up -2.08 none +0.15
+  step    5 loss 1.363 d-loss 1.323 KL 0.0133  train D even_up +1.81 odd_up -2.03 none +0.15
+  step   10 loss 1.379 d-loss 1.333 KL 0.0153  train D even_up +1.78 odd_up -2.02 none +0.15
+  step   15 loss 1.422 d-loss 1.339 KL 0.0277  train D even_up +1.79 odd_up -2.06 none +0.12
+  step   20 loss 1.400 d-loss 1.303 KL 0.0324  train D even_up +1.94 odd_up -1.98 none +0.16
+step   25      37s  unseen: even_up D +1.50 KL 0.085 d-loss 2.36  odd_up D -1.95 KL 0.114 d-loss 1.91  none D +0.17 KL 0.042 d-loss 0.06  order-swapped requests D even +1.49 odd -1.88
+  warnings.warn(
+  step   25 loss 1.387 d-loss 1.308 KL 0.0264  train D even_up +1.68 odd_up -2.04 none +0.13
+  step   30 loss 1.419 d-loss 1.283 KL 0.0455  train D even_up +2.11 odd_up -2.14 none +0.16
+  step   35 loss 1.363 d-loss 1.271 KL 0.0305  train D even_up +1.88 odd_up -2.04 none +0.15
+  step   40 loss 1.423 d-loss 1.265 KL 0.0525  train D even_up +2.03 odd_up -2.23 none +0.15
+  step   45 loss 1.463 d-loss 1.352 KL 0.0368  train D even_up +1.71 odd_up -1.85 none +0.10
+step   50      69s  unseen: even_up D +1.75 KL 0.107 d-loss 2.29  odd_up D -1.97 KL 0.126 d-loss 1.88  none D +0.18 KL 0.049 d-loss 0.06  order-swapped requests D even +1.82 odd -2.02
+  step   50 loss 1.326 d-loss 1.246 KL 0.0267  train D even_up +1.91 odd_up -2.14 none +0.10
+  step   55 loss 1.348 d-loss 1.238 KL 0.0366  train D even_up +2.05 odd_up -2.21 none +0.14
+  step   60 loss 2.154 d-loss 2.004 KL 0.0500  train D even_up +1.19 odd_up -1.53 none +0.08
+  step   65 loss 1.413 d-loss 1.238 KL 0.0584  train D even_up +2.09 odd_up -2.12 none +0.20
+  step   70 loss 1.323 d-loss 1.228 KL 0.0314  train D even_up +2.02 odd_up -2.06 none +0.14
+step   75     100s  unseen: even_up D +1.92 KL 0.120 d-loss 2.12  odd_up D -2.19 KL 0.126 d-loss 1.82  none D +0.18 KL 0.049 d-loss 0.06  order-swapped requests D even +1.94 odd -2.19
+  step   75 loss 1.335 d-loss 1.201 KL 0.0444  train D even_up +2.12 odd_up -2.32 none +0.12
+  step   80 loss 1.410 d-loss 1.219 KL 0.0635  train D even_up +2.08 odd_up -2.14 none +0.13
+  step   85 loss 1.405 d-loss 1.233 KL 0.0574  train D even_up +2.08 odd_up -2.14 none +0.08
+  step   90 loss 1.297 d-loss 1.203 KL 0.0314  train D even_up +2.11 odd_up -2.17 none +0.14
+  step   95 loss 1.330 d-loss 1.213 KL 0.0390  train D even_up +2.09 odd_up -2.23 none +0.11
+step  100     132s  unseen: even_up D +2.10 KL 0.115 d-loss 1.85  odd_up D -2.15 KL 0.114 d-loss 1.78  none D +0.14 KL 0.047 d-loss 0.05  order-swapped requests D even +1.96 odd -2.07
+  step  100 loss 1.409 d-loss 1.219 KL 0.0631  train D even_up +2.06 odd_up -2.21 none +0.13
+  step  105 loss 1.265 d-loss 1.194 KL 0.0237  train D even_up +2.23 odd_up -2.19 none +0.12
+  step  110 loss 1.357 d-loss 1.204 KL 0.0508  train D even_up +2.03 odd_up -2.30 none +0.07
+  step  115 loss 1.273 d-loss 1.194 KL 0.0263  train D even_up +2.06 odd_up -2.21 none +0.08
+  step  120 loss 1.357 d-loss 1.203 KL 0.0514  train D even_up +2.13 odd_up -2.19 none +0.07
+step  125     164s  unseen: even_up D +2.10 KL 0.110 d-loss 1.82  odd_up D -2.22 KL 0.112 d-loss 1.76  none D +0.10 KL 0.046 d-loss 0.03  order-swapped requests D even +1.98 odd -2.11
+  step  125 loss 1.271 d-loss 1.197 KL 0.0245  train D even_up +2.04 odd_up -2.34 none +0.04
+  step  130 loss 1.295 d-loss 1.192 KL 0.0345  train D even_up +2.19 odd_up -2.22 none +0.06
+  step  135 loss 1.386 d-loss 1.191 KL 0.0648  train D even_up +1.99 odd_up -2.27 none -0.02
+  step  140 loss 1.266 d-loss 1.188 KL 0.0262  train D even_up +2.16 odd_up -2.28 none +0.07
+  step  145 loss 1.282 d-loss 1.178 KL 0.0346  train D even_up +2.11 odd_up -2.25 none +0.00
+step  150     195s  unseen: even_up D +2.26 KL 0.118 d-loss 1.80  odd_up D -2.22 KL 0.116 d-loss 1.74  none D +0.09 KL 0.052 d-loss 0.03  order-swapped requests D even +2.11 odd -2.11
+  step  150 loss 1.293 d-loss 1.187 KL 0.0356  train D even_up +2.24 odd_up -2.32 none +0.01
+  step  155 loss 1.325 d-loss 1.181 KL 0.0481  train D even_up +2.11 odd_up -2.33 none +0.03
+  step  160 loss 1.292 d-loss 1.190 KL 0.0340  train D even_up +2.05 odd_up -2.18 none +0.06
+  step  165 loss 1.290 d-loss 1.177 KL 0.0376  train D even_up +2.21 odd_up -2.28 none +0.06
+  step  170 loss 1.238 d-loss 1.160 KL 0.0260  train D even_up +2.15 odd_up -2.17 none +0.06
+step  175     227s  unseen: even_up D +2.24 KL 0.109 d-loss 1.77  odd_up D -2.31 KL 0.132 d-loss 1.67  none D +0.10 KL 0.050 d-loss 0.03  order-swapped requests D even +2.08 odd -2.21
+  step  175 loss 1.235 d-loss 1.147 KL 0.0294  train D even_up +2.15 odd_up -2.41 none +0.04
+  step  180 loss 1.241 d-loss 1.141 KL 0.0335  train D even_up +2.17 odd_up -2.24 none +0.10
+  step  185 loss 1.221 d-loss 1.124 KL 0.0324  train D even_up +2.32 odd_up -2.29 none +0.08
+  step  190 loss 1.203 d-loss 1.130 KL 0.0246  train D even_up +2.18 odd_up -2.29 none +0.04
+  step  195 loss 1.203 d-loss 1.116 KL 0.0288  train D even_up +2.24 odd_up -2.34 none +0.09
+step  200     259s  unseen: even_up D +2.24 KL 0.108 d-loss 1.73  odd_up D -2.26 KL 0.122 d-loss 1.65  none D +0.12 KL 0.050 d-loss 0.05  order-swapped requests D even +2.09 odd -2.16
+  step  200 loss 1.184 d-loss 1.115 KL 0.0229  train D even_up +2.21 odd_up -2.30 none +0.07
+  step  205 loss 1.184 d-loss 1.112 KL 0.0240  train D even_up +2.32 odd_up -2.36 none +0.07
+  step  210 loss 1.257 d-loss 1.110 KL 0.0488  train D even_up +2.29 odd_up -2.34 none +0.10
+  step  215 loss 1.213 d-loss 1.116 KL 0.0321  train D even_up +2.23 odd_up -2.40 none +0.06
+  step  220 loss 1.222 d-loss 1.107 KL 0.0382  train D even_up +2.33 odd_up -2.36 none +0.10
+step  225     291s  unseen: even_up D +2.21 KL 0.104 d-loss 1.71  odd_up D -2.35 KL 0.121 d-loss 1.64  none D +0.10 KL 0.050 d-loss 0.05  order-swapped requests D even +2.07 odd -2.23

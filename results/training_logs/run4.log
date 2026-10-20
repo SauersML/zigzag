@@ -1,0 +1,201 @@
+
+trainable params: 17,432,576 || all params: 1,738,007,552 || trainable%: 1.0030
+prompt positions with a target, unseen set: {'even_up': 16.458333333333332, 'odd_up': 16.458333333333332, 'none': 16.791666666666668}
+step    0       5s  unseen: even_up D +0.02 KL 0.415 mse 4.18  odd_up D +0.02 KL 0.431 mse 4.13  none D +0.03 KL 0.000 mse 0.00  single-parity requests D even +0.01 odd +0.01
+  warnings.warn(
+  step    0 loss 2.770 z-mse 2.770 KL 0.4569  train D even_up -0.02 odd_up -0.02 none -0.01
+  step    5 loss 2.738 z-mse 2.738 KL 0.1669  train D even_up -0.02 odd_up -0.02 none -0.01
+  step   10 loss 2.703 z-mse 2.703 KL 0.0557  train D even_up +0.01 odd_up +0.01 none +0.01
+  step   15 loss 2.689 z-mse 2.689 KL 0.0296  train D even_up -0.00 odd_up -0.00 none -0.00
+  step   20 loss 2.681 z-mse 2.681 KL 0.0376  train D even_up +0.02 odd_up +0.02 none +0.02
+step   25      38s  unseen: even_up D +0.03 KL 0.030 mse 4.02  odd_up D +0.03 KL 0.030 mse 4.02  none D +0.02 KL 0.011 mse 0.01  single-parity requests D even +0.02 odd +0.02
+  warnings.warn(
+  step   25 loss 2.683 z-mse 2.683 KL 0.0192  train D even_up +0.00 odd_up +0.00 none +0.00
+  step   30 loss 2.677 z-mse 2.677 KL 0.0227  train D even_up -0.02 odd_up -0.03 none -0.03
+  step   35 loss 2.677 z-mse 2.677 KL 0.0192  train D even_up -0.00 odd_up -0.01 none -0.01
+  step   40 loss 2.633 z-mse 2.632 KL 0.0203  train D even_up +0.03 odd_up -0.06 none +0.01
+  step   45 loss 2.677 z-mse 2.661 KL 0.0876  train D even_up +0.10 odd_up -0.09 none +0.05
+step   50      70s  unseen: even_up D +0.09 KL 0.067 mse 3.98  odd_up D -0.18 KL 0.085 mse 3.84  none D +0.02 KL 0.019 mse 0.01  single-parity requests D even +0.16 odd -0.24
+  warnings.warn(
+  step   50 loss 2.551 z-mse 2.524 KL 0.0821  train D even_up +0.15 odd_up -0.27 none -0.02
+  step   55 loss 2.503 z-mse 2.473 KL 0.0610  train D even_up +0.31 odd_up -0.24 none +0.07
+  step   60 loss 2.491 z-mse 2.418 KL 0.1167  train D even_up +0.31 odd_up -0.36 none +0.03
+  step   65 loss 2.479 z-mse 2.442 KL 0.0477  train D even_up +0.38 odd_up -0.28 none +0.03
+  step   70 loss 2.435 z-mse 2.407 KL 0.0298  train D even_up +0.31 odd_up -0.37 none -0.02
+step   75     102s  unseen: even_up D +0.29 KL 0.060 mse 3.85  odd_up D -0.26 KL 0.063 mse 3.84  none D +0.03 KL 0.026 mse 0.01  single-parity requests D even +0.41 odd -0.36
+  step   75 loss 2.486 z-mse 2.418 KL 0.0628  train D even_up +0.38 odd_up -0.38 none +0.00
+  step   80 loss 2.470 z-mse 2.399 KL 0.0577  train D even_up +0.39 odd_up -0.42 none -0.01
+  step   85 loss 2.529 z-mse 2.398 KL 0.0946  train D even_up +0.38 odd_up -0.38 none -0.01
+  step   90 loss 2.477 z-mse 2.399 KL 0.0508  train D even_up +0.44 odd_up -0.44 none +0.02
+  step   95 loss 2.721 z-mse 2.397 KL 0.1932  train D even_up +0.41 odd_up -0.36 none +0.04
+step  100     134s  unseen: even_up D +0.19 KL 0.053 mse 3.82  odd_up D -0.30 KL 0.053 mse 3.62  none D +0.04 KL 0.032 mse 0.01  single-parity requests D even +0.42 odd -0.39
+  step  100 loss 2.723 z-mse 2.427 KL 0.1617  train D even_up +0.31 odd_up -0.40 none -0.01
+  step  105 loss 2.526 z-mse 2.380 KL 0.0740  train D even_up +0.47 odd_up -0.36 none +0.06
+  step  110 loss 2.574 z-mse 2.346 KL 0.1068  train D even_up +0.39 odd_up -0.48 none +0.00
+  step  115 loss 2.509 z-mse 2.308 KL 0.0883  train D even_up +0.42 odd_up -0.58 none -0.01
+  step  120 loss 2.422 z-mse 2.178 KL 0.1007  train D even_up +0.50 odd_up -0.72 none +0.07
+step  125     165s  unseen: even_up D +0.52 KL 0.124 mse 3.47  odd_up D -0.81 KL 0.194 mse 2.99  none D +0.15 KL 0.052 mse 0.03  single-parity requests D even +0.62 odd -0.79
+  step  125 loss 2.376 z-mse 2.101 KL 0.1066  train D even_up +0.59 odd_up -0.84 none +0.10
+  step  130 loss 2.820 z-mse 2.214 KL 0.2217  train D even_up +0.47 odd_up -0.83 none +0.17
+  step  135 loss 2.204 z-mse 1.799 KL 0.1409  train D even_up +0.82 odd_up -1.49 none +0.23
+  step  140 loss 2.244 z-mse 1.926 KL 0.1061  train D even_up +0.87 odd_up -0.89 none +0.30
+  step  145 loss 2.524 z-mse 1.728 KL 0.2652  train D even_up +0.99 odd_up -1.40 none +0.34
+step  150     196s  unseen: even_up D +0.70 KL 0.126 mse 3.20  odd_up D -1.26 KL 0.185 mse 2.39  none D +0.35 KL 0.070 mse 0.10  single-parity requests D even +0.91 odd -1.11
+  step  150 loss 1.961 z-mse 1.641 KL 0.1066  train D even_up +0.88 odd_up -1.48 none +0.33
+  step  155 loss 1.912 z-mse 1.615 KL 0.0991  train D even_up +1.16 odd_up -1.36 none +0.42
+  step  160 loss 2.635 z-mse 1.434 KL 0.4005  train D even_up +1.03 odd_up -1.96 none +0.37
+  step  165 loss 1.692 z-mse 1.266 KL 0.1420  train D even_up +1.35 odd_up -2.13 none +0.52
+  step  170 loss 2.009 z-mse 1.194 KL 0.2718  train D even_up +1.46 odd_up -2.27 none +0.60
+step  175     228s  unseen: even_up D +1.28 KL 0.182 mse 2.58  odd_up D -1.50 KL 0.174 mse 2.14  none D +0.59 KL 0.087 mse 0.20  single-parity requests D even +1.62 odd -1.53
+  step  175 loss 2.094 z-mse 1.695 KL 0.1332  train D even_up +1.25 odd_up -1.48 none +0.58
+  step  180 loss 1.439 z-mse 1.089 KL 0.1167  train D even_up +1.43 odd_up -2.50 none +0.24
+  step  185 loss 1.280 z-mse 0.878 KL 0.1340  train D even_up +2.10 odd_up -2.51 none +0.45
+  step  190 loss 1.247 z-mse 0.834 KL 0.1377  train D even_up +1.95 odd_up -2.56 none +0.16
+  step  195 loss 1.158 z-mse 0.714 KL 0.1479  train D even_up +2.40 odd_up -2.84 none +0.02
+step  200     260s  unseen: even_up D +1.76 KL 0.209 mse 2.19  odd_up D -1.91 KL 0.204 mse 1.92  none D +0.13 KL 0.071 mse 0.07  single-parity requests D even +2.35 odd -2.22
+  step  200 loss 0.934 z-mse 0.617 KL 0.1057  train D even_up +2.36 odd_up -2.74 none +0.00
+  step  205 loss 0.894 z-mse 0.550 KL 0.1147  train D even_up +2.90 odd_up -2.98 none +0.11
+  step  210 loss 1.018 z-mse 0.522 KL 0.1655  train D even_up +2.47 odd_up -3.24 none +0.13
+  step  215 loss 0.674 z-mse 0.368 KL 0.1018  train D even_up +3.29 odd_up -3.22 none +0.14
+  step  220 loss 0.612 z-mse 0.356 KL 0.0855  train D even_up +3.03 odd_up -3.36 none +0.05
+step  225     292s  unseen: even_up D +2.36 KL 0.273 mse 2.50  odd_up D -2.65 KL 0.246 mse 2.00  none D +0.27 KL 0.077 mse 0.11  single-parity requests D even +3.37 odd -3.27
+  warnings.warn(
+  step  225 loss 0.701 z-mse 0.324 KL 0.1257  train D even_up +3.27 odd_up -3.51 none +0.23
+  step  230 loss 0.636 z-mse 0.337 KL 0.0996  train D even_up +3.00 odd_up -3.23 none +0.14
+  step  235 loss 0.552 z-mse 0.283 KL 0.0897  train D even_up +3.17 odd_up -3.65 none +0.01
+  step  240 loss 0.721 z-mse 0.286 KL 0.1452  train D even_up +3.58 odd_up -3.27 none +0.22
+  step  245 loss 0.669 z-mse 0.335 KL 0.1114  train D even_up +3.06 odd_up -3.40 none +0.02
+step  250     324s  unseen: even_up D +2.46 KL 0.192 mse 2.32  odd_up D -2.52 KL 0.200 mse 2.05  none D +0.26 KL 0.064 mse 0.10  single-parity requests D even +3.44 odd -3.20
+  step  250 loss 0.638 z-mse 0.300 KL 0.1126  train D even_up +3.40 odd_up -3.36 none +0.14
+  step  255 loss 0.567 z-mse 0.301 KL 0.0886  train D even_up +3.45 odd_up -3.20 none +0.11
+  step  260 loss 0.580 z-mse 0.258 KL 0.1073  train D even_up +3.30 odd_up -3.65 none +0.02
+  step  265 loss 0.435 z-mse 0.232 KL 0.0680  train D even_up +3.64 odd_up -3.55 none +0.25
+  step  270 loss 0.519 z-mse 0.304 KL 0.0717  train D even_up +2.79 odd_up -3.36 none -0.04
+step  275     356s  unseen: even_up D +2.35 KL 0.186 mse 2.50  odd_up D -2.49 KL 0.193 mse 2.16  none D +0.30 KL 0.066 mse 0.09  single-parity requests D even +3.67 odd -3.31
+  step  275 loss 0.572 z-mse 0.272 KL 0.0999  train D even_up +3.61 odd_up -3.38 none +0.33
+  step  280 loss 1.021 z-mse 0.833 KL 0.0627  train D even_up +2.24 odd_up -2.82 none -0.07
+  step  285 loss 0.457 z-mse 0.276 KL 0.0601  train D even_up +3.64 odd_up -3.88 none -0.10
+  step  290 loss 0.593 z-mse 0.400 KL 0.0641  train D even_up +2.91 odd_up -3.49 none +0.04
+  step  295 loss 0.446 z-mse 0.213 KL 0.0774  train D even_up +3.63 odd_up -3.56 none +0.07
+step  300     387s  unseen: even_up D +2.58 KL 0.191 mse 2.13  odd_up D -2.40 KL 0.169 mse 2.20  none D +0.13 KL 0.064 mse 0.06  single-parity requests D even +3.59 odd -3.45
+  warnings.warn(
+  step  300 loss 0.431 z-mse 0.218 KL 0.0710  train D even_up +3.53 odd_up -3.49 none +0.09
+  step  305 loss 0.418 z-mse 0.241 KL 0.0592  train D even_up +3.35 odd_up -3.72 none +0.07
+  step  310 loss 0.363 z-mse 0.223 KL 0.0466  train D even_up +3.51 odd_up -3.40 none +0.06
+  step  315 loss 0.782 z-mse 0.624 KL 0.0529  train D even_up +3.14 odd_up -3.06 none +0.04
+  step  320 loss 0.405 z-mse 0.220 KL 0.0617  train D even_up +3.64 odd_up -3.32 none +0.14
+step  325     420s  unseen: even_up D +2.45 KL 0.172 mse 2.32  odd_up D -2.62 KL 0.178 mse 2.02  none D -0.02 KL 0.069 mse 0.06  single-parity requests D even +3.57 odd -3.74
+  step  325 loss 0.390 z-mse 0.219 KL 0.0571  train D even_up +3.36 odd_up -3.64 none -0.07
+  step  330 loss 0.422 z-mse 0.200 KL 0.0742  train D even_up +3.50 odd_up -3.49 none +0.05
+  step  335 loss 0.414 z-mse 0.188 KL 0.0754  train D even_up +3.69 odd_up -3.81 none +0.02
+  step  340 loss 0.406 z-mse 0.229 KL 0.0593  train D even_up +3.51 odd_up -3.54 none -0.12
+  step  345 loss 0.340 z-mse 0.183 KL 0.0522  train D even_up +3.59 odd_up -3.62 none +0.12
+step  350     451s  unseen: even_up D +2.46 KL 0.167 mse 2.26  odd_up D -2.63 KL 0.162 mse 2.02  none D +0.04 KL 0.068 mse 0.05  single-parity requests D even +3.56 odd -3.63
+  step  350 loss 0.605 z-mse 0.471 KL 0.0446  train D even_up +2.98 odd_up -3.33 none -0.05
+  step  355 loss 0.367 z-mse 0.178 KL 0.0629  train D even_up +3.86 odd_up -3.87 none -0.15
+  step  360 loss 0.347 z-mse 0.201 KL 0.0489  train D even_up +3.37 odd_up -3.66 none +0.11
+  step  365 loss 0.335 z-mse 0.175 KL 0.0535  train D even_up +3.70 odd_up -3.52 none +0.00
+  step  370 loss 0.302 z-mse 0.176 KL 0.0419  train D even_up +3.63 odd_up -3.66 none +0.02
+step  375     484s  unseen: even_up D +2.57 KL 0.164 mse 2.30  odd_up D -2.70 KL 0.170 mse 2.09  none D +0.05 KL 0.067 mse 0.05  single-parity requests D even +3.68 odd -3.82
+  step  375 loss 0.389 z-mse 0.212 KL 0.0591  train D even_up +3.71 odd_up -3.77 none -0.03
+  step  380 loss 0.307 z-mse 0.204 KL 0.0344  train D even_up +3.70 odd_up -3.57 none +0.01
+  step  385 loss 0.362 z-mse 0.176 KL 0.0621  train D even_up +3.68 odd_up -3.69 none +0.11
+  step  390 loss 0.301 z-mse 0.164 KL 0.0456  train D even_up +3.62 odd_up -3.63 none +0.09
+  step  395 loss 0.282 z-mse 0.161 KL 0.0403  train D even_up +3.88 odd_up -3.68 none +0.15
+step  400     515s  unseen: even_up D +2.52 KL 0.157 mse 2.19  odd_up D -2.61 KL 0.164 mse 2.08  none D +0.01 KL 0.069 mse 0.05  single-parity requests D even +3.61 odd -3.68
+  step  400 loss 0.328 z-mse 0.167 KL 0.0538  train D even_up +3.60 odd_up -3.73 none -0.06
+  step  405 loss 0.460 z-mse 0.172 KL 0.0959  train D even_up +3.59 odd_up -3.78 none +0.03
+  step  410 loss 0.274 z-mse 0.154 KL 0.0398  train D even_up +3.68 odd_up -3.75 none +0.01
+  step  415 loss 0.274 z-mse 0.167 KL 0.0357  train D even_up +3.74 odd_up -3.67 none +0.13
+  step  420 loss 0.273 z-mse 0.161 KL 0.0372  train D even_up +3.74 odd_up -3.69 none -0.00
+step  425     547s  unseen: even_up D +2.58 KL 0.144 mse 2.06  odd_up D -2.60 KL 0.154 mse 2.10  none D +0.03 KL 0.065 mse 0.05  single-parity requests D even +3.68 odd -3.80
+  step  425 loss 0.327 z-mse 0.169 KL 0.0526  train D even_up +3.70 odd_up -3.72 none +0.02
+  step  430 loss 0.282 z-mse 0.155 KL 0.0421  train D even_up +3.64 odd_up -3.75 none +0.01
+  step  435 loss 0.251 z-mse 0.148 KL 0.0343  train D even_up +3.81 odd_up -3.75 none -0.03
+  step  440 loss 0.244 z-mse 0.160 KL 0.0282  train D even_up +3.63 odd_up -3.74 none -0.03
+  step  445 loss 0.329 z-mse 0.157 KL 0.0575  train D even_up +3.61 odd_up -3.67 none +0.02
+step  450     579s  unseen: even_up D +2.68 KL 0.153 mse 2.26  odd_up D -2.73 KL 0.159 mse 2.13  none D +0.06 KL 0.066 mse 0.04  single-parity requests D even +3.81 odd -3.72
+  step  450 loss 0.278 z-mse 0.146 KL 0.0440  train D even_up +3.76 odd_up -3.85 none -0.05
+  step  455 loss 0.267 z-mse 0.158 KL 0.0364  train D even_up +3.60 odd_up -3.60 none -0.04
+  step  460 loss 0.393 z-mse 0.234 KL 0.0530  train D even_up +3.75 odd_up -3.63 none +0.08
+  step  465 loss 0.390 z-mse 0.156 KL 0.0778  train D even_up +3.66 odd_up -3.65 none +0.08
+  step  470 loss 0.241 z-mse 0.145 KL 0.0321  train D even_up +3.72 odd_up -3.75 none -0.03
+step  475     611s  unseen: even_up D +2.60 KL 0.144 mse 2.20  odd_up D -2.64 KL 0.143 mse 2.09  none D +0.10 KL 0.065 mse 0.04  single-parity requests D even +3.70 odd -3.61
+  step  475 loss 0.224 z-mse 0.156 KL 0.0229  train D even_up +3.66 odd_up -3.65 none +0.02
+  step  480 loss 0.227 z-mse 0.145 KL 0.0272  train D even_up +3.77 odd_up -3.78 none -0.02
+  step  485 loss 0.284 z-mse 0.156 KL 0.0424  train D even_up +3.90 odd_up -3.66 none +0.12
+  step  490 loss 0.287 z-mse 0.204 KL 0.0275  train D even_up +3.54 odd_up -3.71 none -0.09
+  step  495 loss 0.237 z-mse 0.151 KL 0.0287  train D even_up +3.78 odd_up -3.78 none +0.06
+step  500     643s  unseen: even_up D +2.62 KL 0.138 mse 2.13  odd_up D -2.67 KL 0.147 mse 2.08  none D +0.00 KL 0.065 mse 0.04  single-parity requests D even +3.70 odd -3.73
+  step  500 loss 0.268 z-mse 0.156 KL 0.0374  train D even_up +3.68 odd_up -3.73 none -0.04
+  step  505 loss 0.255 z-mse 0.148 KL 0.0355  train D even_up +3.77 odd_up -3.66 none +0.03
+  step  510 loss 0.262 z-mse 0.158 KL 0.0346  train D even_up +3.76 odd_up -3.67 none +0.07
+  step  515 loss 0.252 z-mse 0.142 KL 0.0366  train D even_up +3.65 odd_up -3.70 none -0.04
+  step  520 loss 0.179 z-mse 0.135 KL 0.0147  train D even_up +3.77 odd_up -3.80 none -0.02
+step  525     674s  unseen: even_up D +2.64 KL 0.136 mse 2.22  odd_up D -2.70 KL 0.147 mse 2.08  none D +0.05 KL 0.064 mse 0.04  single-parity requests D even +3.78 odd -3.73
+  step  525 loss 0.257 z-mse 0.137 KL 0.0400  train D even_up +3.73 odd_up -3.73 none +0.00
+  step  530 loss 0.233 z-mse 0.142 KL 0.0303  train D even_up +3.78 odd_up -3.68 none +0.14
+  step  535 loss 0.222 z-mse 0.139 KL 0.0275  train D even_up +3.79 odd_up -3.89 none -0.02
+  step  540 loss 0.202 z-mse 0.138 KL 0.0214  train D even_up +3.80 odd_up -3.76 none +0.03
+  step  545 loss 0.279 z-mse 0.152 KL 0.0423  train D even_up +3.64 odd_up -3.79 none -0.02
+step  550     706s  unseen: even_up D +2.70 KL 0.133 mse 2.15  odd_up D -2.68 KL 0.142 mse 2.09  none D +0.11 KL 0.062 mse 0.04  single-parity requests D even +3.81 odd -3.73
+  step  550 loss 0.221 z-mse 0.144 KL 0.0254  train D even_up +3.73 odd_up -3.79 none +0.01
+  step  555 loss 0.171 z-mse 0.142 KL 0.0094  train D even_up +3.70 odd_up -3.74 none -0.04
+  step  560 loss 0.212 z-mse 0.140 KL 0.0237  train D even_up +3.75 odd_up -3.79 none -0.03
+  step  565 loss 0.234 z-mse 0.138 KL 0.0319  train D even_up +3.81 odd_up -3.81 none +0.03
+  step  570 loss 0.204 z-mse 0.138 KL 0.0218  train D even_up +3.70 odd_up -3.80 none -0.02
+step  575     739s  unseen: even_up D +2.74 KL 0.134 mse 2.13  odd_up D -2.63 KL 0.138 mse 2.12  none D +0.12 KL 0.064 mse 0.04  single-parity requests D even +3.87 odd -3.71
+  step  575 loss 0.184 z-mse 0.139 KL 0.0149  train D even_up +3.83 odd_up -3.72 none +0.05
+  step  580 loss 0.235 z-mse 0.176 KL 0.0196  train D even_up +3.66 odd_up -3.83 none -0.05
+  step  585 loss 0.197 z-mse 0.137 KL 0.0201  train D even_up +3.81 odd_up -3.73 none +0.06
+  step  590 loss 0.211 z-mse 0.135 KL 0.0254  train D even_up +3.74 odd_up -3.77 none -0.02
+  step  595 loss 0.256 z-mse 0.143 KL 0.0378  train D even_up +3.72 odd_up -3.73 none +0.06
+step  600     771s  unseen: even_up D +2.66 KL 0.128 mse 2.21  odd_up D -2.68 KL 0.133 mse 2.09  none D +0.09 KL 0.060 mse 0.04  single-parity requests D even +3.83 odd -3.72
+  step  600 loss 0.208 z-mse 0.135 KL 0.0245  train D even_up +3.78 odd_up -3.73 none +0.02
+  step  605 loss 0.178 z-mse 0.136 KL 0.0140  train D even_up +3.83 odd_up -3.82 none -0.01
+  step  610 loss 0.188 z-mse 0.138 KL 0.0166  train D even_up +3.76 odd_up -3.76 none -0.00
+  step  615 loss 0.196 z-mse 0.133 KL 0.0209  train D even_up +3.84 odd_up -3.77 none +0.06
+  step  620 loss 0.226 z-mse 0.146 KL 0.0265  train D even_up +3.74 odd_up -3.79 none -0.03
+step  625     803s  unseen: even_up D +2.66 KL 0.127 mse 2.21  odd_up D -2.72 KL 0.134 mse 2.07  none D +0.05 KL 0.060 mse 0.04  single-parity requests D even +3.81 odd -3.76
+  step  625 loss 0.244 z-mse 0.179 KL 0.0216  train D even_up +3.79 odd_up -3.69 none +0.05
+  step  630 loss 0.169 z-mse 0.130 KL 0.0129  train D even_up +3.76 odd_up -3.86 none -0.03
+  step  635 loss 0.172 z-mse 0.137 KL 0.0115  train D even_up +3.75 odd_up -3.79 none -0.01
+  step  640 loss 0.186 z-mse 0.134 KL 0.0173  train D even_up +3.78 odd_up -3.80 none +0.01
+  step  645 loss 0.172 z-mse 0.135 KL 0.0123  train D even_up +3.79 odd_up -3.81 none -0.00
+step  650     836s  unseen: even_up D +2.65 KL 0.126 mse 2.21  odd_up D -2.73 KL 0.135 mse 2.07  none D +0.04 KL 0.059 mse 0.04  single-parity requests D even +3.81 odd -3.78
+  step  650 loss 0.193 z-mse 0.136 KL 0.0191  train D even_up +3.75 odd_up -3.82 none -0.07
+  step  655 loss 0.174 z-mse 0.136 KL 0.0128  train D even_up +3.69 odd_up -3.87 none -0.13
+  step  660 loss 0.170 z-mse 0.132 KL 0.0125  train D even_up +3.77 odd_up -3.75 none +0.00
+  step  665 loss 0.183 z-mse 0.130 KL 0.0176  train D even_up +3.83 odd_up -3.77 none +0.04
+  step  670 loss 0.163 z-mse 0.133 KL 0.0098  train D even_up +3.80 odd_up -3.86 none +0.03
+step  675     867s  unseen: even_up D +2.66 KL 0.124 mse 2.21  odd_up D -2.74 KL 0.134 mse 2.06  none D +0.06 KL 0.058 mse 0.04  single-parity requests D even +3.81 odd -3.78
+  step  675 loss 0.171 z-mse 0.137 KL 0.0114  train D even_up +3.71 odd_up -3.81 none -0.02
+  step  680 loss 0.217 z-mse 0.182 KL 0.0115  train D even_up +3.71 odd_up -3.66 none +0.00
+  step  685 loss 0.215 z-mse 0.174 KL 0.0139  train D even_up +3.81 odd_up -3.72 none +0.01
+  step  690 loss 0.168 z-mse 0.133 KL 0.0118  train D even_up +3.79 odd_up -3.79 none +0.01
+  step  695 loss 0.167 z-mse 0.131 KL 0.0118  train D even_up +3.77 odd_up -3.87 none -0.03
+step  700     899s  unseen: even_up D +2.67 KL 0.124 mse 2.19  odd_up D -2.71 KL 0.133 mse 2.07  none D +0.06 KL 0.059 mse 0.04  single-parity requests D even +3.82 odd -3.75
+  step  700 loss 0.171 z-mse 0.130 KL 0.0135  train D even_up +3.74 odd_up -3.80 none -0.02
+  step  705 loss 0.159 z-mse 0.132 KL 0.0088  train D even_up +3.77 odd_up -3.79 none +0.01
+  step  710 loss 0.167 z-mse 0.130 KL 0.0125  train D even_up +3.77 odd_up -3.79 none -0.00
+  step  715 loss 0.165 z-mse 0.130 KL 0.0119  train D even_up +3.78 odd_up -3.89 none -0.07
+  step  720 loss 0.168 z-mse 0.132 KL 0.0119  train D even_up +3.79 odd_up -3.79 none +0.02
+step  725     931s  unseen: even_up D +2.69 KL 0.125 mse 2.18  odd_up D -2.72 KL 0.132 mse 2.08  none D +0.07 KL 0.058 mse 0.04  single-parity requests D even +3.84 odd -3.76
+  step  725 loss 0.187 z-mse 0.162 KL 0.0083  train D even_up +3.77 odd_up -3.80 none +0.01
+  step  730 loss 0.163 z-mse 0.128 KL 0.0116  train D even_up +3.84 odd_up -3.78 none -0.01
+  step  735 loss 0.199 z-mse 0.162 KL 0.0123  train D even_up +3.72 odd_up -3.81 none -0.03
+  step  740 loss 0.199 z-mse 0.162 KL 0.0121  train D even_up +3.73 odd_up -3.82 none +0.01
+  step  745 loss 0.208 z-mse 0.158 KL 0.0167  train D even_up +3.74 odd_up -3.78 none +0.02
+step  750     962s  unseen: even_up D +2.68 KL 0.124 mse 2.18  odd_up D -2.71 KL 0.131 mse 2.07  none D +0.07 KL 0.058 mse 0.04  single-parity requests D even +3.82 odd -3.74
+  step  750 loss 0.168 z-mse 0.132 KL 0.0120  train D even_up +3.76 odd_up -3.76 none +0.02
+  step  755 loss 0.184 z-mse 0.133 KL 0.0171  train D even_up +3.77 odd_up -3.78 none -0.02
+  step  760 loss 0.170 z-mse 0.135 KL 0.0118  train D even_up +3.74 odd_up -3.74 none -0.01
+  step  765 loss 0.192 z-mse 0.132 KL 0.0200  train D even_up +3.78 odd_up -3.78 none +0.01
+  step  770 loss 0.199 z-mse 0.162 KL 0.0123  train D even_up +3.79 odd_up -3.76 none +0.04
+step  775     994s  unseen: even_up D +2.69 KL 0.124 mse 2.19  odd_up D -2.71 KL 0.132 mse 2.08  none D +0.07 KL 0.058 mse 0.04  single-parity requests D even +3.83 odd -3.75
+  step  775 loss 0.185 z-mse 0.132 KL 0.0177  train D even_up +3.81 odd_up -3.79 none +0.02
+  step  780 loss 0.169 z-mse 0.133 KL 0.0119  train D even_up +3.76 odd_up -3.82 none -0.02
+  step  785 loss 0.169 z-mse 0.131 KL 0.0127  train D even_up +3.78 odd_up -3.76 none +0.01
+  step  790 loss 0.162 z-mse 0.134 KL 0.0090  train D even_up +3.73 odd_up -3.81 none -0.06
+  step  795 loss 0.171 z-mse 0.130 KL 0.0136  train D even_up +3.77 odd_up -3.82 none -0.01
+step  800    1026s  unseen: even_up D +2.68 KL 0.125 mse 2.19  odd_up D -2.71 KL 0.132 mse 2.08  none D +0.07 KL 0.058 mse 0.04  single-parity requests D even +3.83 odd -3.75
