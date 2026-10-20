@@ -20,11 +20,11 @@ Training never had a second turn or a question about animals. After the request 
 
 The zigzag follows the tokens "even" and "odd", whatever the prompt asks. Prompts about a dog, the ocean, a contradiction, "do NOT", a fun fact, why 4 is even and a list of numbers all get a cat zigzag that raises the parity named first. Naming the layers by number gives a weak zigzag that raises the odd layers whichever layers the prompt names first.
 
-![Hiding a token from attention stops later tokens from reading it at the chosen layers. With even and odd hidden at every layer, both requests get the same zigzag; hidden at layers 0 to 3, the even request zigzags the wrong way; hidden at layers 4 to 27, both zigzags shrink in later layers; with cat hidden, nothing changes](figures/masking.png)
+![A hidden token cannot be read by any later token. With nothing hidden, each zigzag follows its request. With even and odd hidden in all layers, both requests get the same zigzag. With even and odd hidden in layers 0 to 3 only, the even request goes the wrong way. With cat hidden in all layers, nothing changes](figures/masking.png)
 
 Hiding a token from attention means no later token can attend to it at the chosen layers. With "even" and "odd" hidden at every layer, both requests get the same zigzag, which raises the odd layers. Hidden only at layers 0 to 3, the even request zigzags the wrong way. Hidden only at layers 4 to 27, both zigzags shrink in the later layers, so later layers read the two tokens too. Hiding "cat" changes nothing.
 
-![Along the cat direction, what arrives from the layer below points the wrong way; the layer's attention adds most of the push the right way and its MLP the rest; at the last layer the MLP adds all of it](figures/writes.png)
+![Asked to raise cat on even layers, attention moves the cat representation more than the MLP does, except in the last layer. What comes from the layer below points the wrong way; attention and the MLP add up to the right way](figures/writes.png)
 
 Each layer's change along the cat direction is the sum of what arrives from the layer below, what the layer's attention adds and what its MLP adds. At layers 2 to 26, what arrives points the wrong way, because the layer below had the opposite sign. On average, attention adds most of the push the right way and the MLP the rest. At the last layer, the MLP adds all of it and attention pushes slightly the wrong way.
 

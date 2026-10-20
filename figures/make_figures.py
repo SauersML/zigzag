@@ -447,16 +447,8 @@ def chips(ax, x, y, words, size, hidden=()):
     return out
 
 
-def layer_bar(ax, x, y, w, h, hidden_layers):
-    """28 cells, black where the tokens are hidden."""
-    step = w / 28
-    for l in range(28):
-        ax.add_patch(Rectangle((x + l * step + 1, y), step - 2, h, fc=INK if l in hidden_layers else PALE_GRAY,
-                               ec="none", zorder=3))
-
-
 def masking():
-    """Hiding the tokens even and odd from attention loses the requested direction; hiding cat changes nothing."""
+    """The trained model reads the tokens even and odd, mostly in layers 0 to 3; it does not need the token cat."""
     S = load("mask_sweep_run6.json")["settings"]
     width = 1240
     fig, ax = canvas(width, 2400)
@@ -478,33 +470,34 @@ def masking():
                                      shrinkA=0, shrinkB=0))
         if hid:
             write(ax, (src[0] + cx) / 2, (src[1] + y - half) / 2, "✕", 30, True, RED, zorder=7)
-    y = rich(ax, 20, yr - 50, "Later tokens cannot attend to the black tokens, in the layers colored black.", 22,
-             1200, strong=True) - 60
-    x0, gap = 560, 30
+    rich(ax, 700, yr + 30, "A hidden token cannot be read by any later token.", 22, 520, strong=True)
+    y = yr - 90
+    x0, gap = 520, 34
     sw = (width - 24 - x0 - gap) / 2
     xs = [x0, x0 + sw + gap]
     y = min(rich(ax, x, y, lab, 22, sw, strong=True) for x, lab in
-            zip(xs, ("Asked to raise cat | on even layers", "Asked to raise cat | on odd layers"))) - 20
-    every = list(range(28))
-    rows = (("Nothing hidden", (), None, "", "none", "Each zigzag follows its request", INK),
-            ("even and odd hidden", ("even", "odd"), every, "every layer", "parity_all_layers",
+            zip(xs, ("Asked to raise cat | on even layers", "Asked to raise cat | on odd layers"))) - 30
+    every = range(28)
+    rows = (("Nothing hidden", (), (), "none", "Each zigzag follows its request", INK),
+            ("even and odd hidden | in all layers", ("even", "odd"), every, "parity_all_layers",
              "Same zigzag for both requests", RED),
-            ("even and odd hidden", ("even", "odd"), [0, 1, 2, 3], "layers 0–3", "parity_first_4",
-             "Even request goes the wrong way", RED),
-            ("even and odd hidden", ("even", "odd"), list(range(4, 28)), "layers 4–27", "parity_from_4",
-             "Both shrink in later layers", RED),
-            ("cat hidden", ("cat",), every, "every layer", "cat_all_layers", "No change", INK))
-    sh = 120
-    for label, hid, layers, where, key, verdict, vcol in rows:
-        card_h = 190
+            ("even and odd hidden in layers 0–3 only", ("even", "odd"), range(4), "parity_first_4",
+             "The even request goes the wrong way", RED),
+            ("cat hidden in all layers", ("cat",), every, "cat_all_layers", "No change", INK))
+    sh = 130
+    for label, hid, layers, key, verdict, vcol in rows:
+        bottom = rich(ax, 30, y - 30, label, 24, 460, hidden=hid, pills=False)
+        bottom = rich(ax, 30, bottom - 14, verdict, 21, 460, color=vcol, strong=True, pills=False)
+        card_h = max(230, y - bottom + 24)
         rbox(ax, 10, y - card_h, width - 20, card_h, PANEL, radius=22, z=0)
-        cy = y - card_h / 2
-        rich(ax, 30, y - 22, label, 24, 500, hidden=hid, pills=False)
-        if layers is not None:
-            layer_bar(ax, 30, y - 112, 280, 26, layers)
-            write(ax, 324, y - 99, where, 20, True, ha="left")
-        write(ax, 30, y - 150, verdict, 21, True, vcol, ha="left")
+        cy = y - card_h / 2 - 8
         for j, (x, c) in enumerate(zip(xs, ("even", "odd"))):
+            if len(layers):
+                step = sw / 28
+                bx, bw = x + min(layers) * step, len(layers) * step
+                ax.add_patch(Rectangle((bx, cy - sh / 2 - 12), bw, sh + 24, fc="#FBE1DD", ec="none", zorder=1))
+                write(ax, bx + 4, cy + sh / 2 + 28, "hidden here" if len(layers) < 28 else "hidden in all layers", 17,
+                      True, RED, ha="left")
             strip(ax, x, cy - sh / 2, sw, sh, S[key][c]["profile"],
                   ticks=((2, "+2" if j == 0 else ""), (-2, "−2" if j == 0 else "")))
         y -= card_h + 14
@@ -540,7 +533,7 @@ def writes():
         groups.append((name, vals))
     width = 1240
     fig, ax = canvas(width, 1400)
-    y = rich(ax, 20, 1360, "Asked to raise cat on even layers: what each part of a layer adds", 26, 1200,
+    y = rich(ax, 20, 1360, "Asked to raise cat on even layers, attention moves the cat representation more than the MLP does, except in the last layer", 26, 1200,
              strong=True) - 30
     lo_v, hi_v = -1.2, 3.3
     yt = y - 80
@@ -574,7 +567,7 @@ def writes():
         write(ax, gx + gw / 2, yt - 10, gname, 22, True)
         bw = gw / 4
         run = 0.0
-        for bi, ((m, lo, hi), lab, col) in enumerate(zip(vals, ("below", "attention", "MLP", "after"),
+        for bi, ((m, lo, hi), lab, col) in enumerate(zip(vals, ("from\nbelow", "attention", "MLP", "after"),
                                                           (BELOW, ATTN, MLP, INK))):
             start, end = (0.0, m) if bi == 3 else (run, run + m)
             bx = gx + bi * bw + bw * 0.12
@@ -590,8 +583,8 @@ def writes():
             up = m >= 0
             ty = sy(max(e_hi, start, end)) + 18 if up else sy(min(e_lo, start, end)) - 18
             write(ax, bx + w / 2, ty, f"{m:+.1f}".replace("-", "−"), 19, True)
-            write(ax, bx + w / 2, yb - 22, lab, 17, True)
-    crop(fig, ax, yb - 60, 1400)
+            write(ax, bx + w / 2, yb - 22, lab, 17, True, va="top", linespacing=1.1)
+    crop(fig, ax, yb - 90, 1400)
     save(fig, "writes")
 
 
