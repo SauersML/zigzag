@@ -86,7 +86,6 @@ h1 { font-size:22px; margin:0 0 4px; }
 .bot { padding:4px 2px; white-space:pre-wrap; }
 .who { font-size:13px; color:var(--muted); margin-bottom:2px; }
 .strip { margin:8px 0 4px; }
-.strip .cap { font-size:14px; color:var(--muted); }
 .strip .verdict { font-weight:600; font-size:15px; }
 form { position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:1px solid #E5E5EA; }
 form div { max-width:760px; margin:0 auto; padding:12px 16px; display:flex; gap:8px; }
@@ -140,9 +139,7 @@ function strip(z) {
   const od = z.filter((_, l) => l % 2 == 1).reduce((a, b) => a + b, 0) / Math.floor(n / 2);
   const up = ev - od, v = document.createElement("div"); v.className = "verdict";
   v.innerHTML = Math.abs(up) < 0.5 ? "no zigzag" : `cat up on <span style="color:var(--${up > 0 ? "even" : "odd"})">${up > 0 ? "even" : "odd"}</span> layers`;
-  const cap = document.createElement("div"); cap.className = "cap";
-  cap.textContent = "Change in cat at each layer, trained minus original model on this reply (orange: even layers, blue: odd layers)";
-  d.append(v, s, cap); return d;
+  d.append(v, s); return d;
 }
 document.getElementById("f").onsubmit = async ev => {
   ev.preventDefault(); const text = t.value.trim(); if (!text || busy) return;
