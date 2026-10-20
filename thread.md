@@ -1,4 +1,4 @@
-Qwen3-1.7B can be trained to zigzag its internal "cat" representation across its 28 layers on request, while it answers an unrelated question. What the trained model responds to is the tokens "even" and "odd". 🧵
+Qwen3-1.7B can be trained to zigzag its internal "cat" representation across its 28 layers on request while it answers an unrelated question. The trained model follows the tokens "even" and "odd" in the prompt, whatever the prompt asks. 🧵
 
 ![Asked to raise cat on even layers and lower it on odd layers, the original model talks about the request and its cat representation does not alternate; the trained model answers the question and its cat representation alternates up and down across the layers](figures/overview.png)
 
@@ -10,7 +10,7 @@ The cat direction at each layer is the average activation on sentences with "cat
 
 ![One model is trained toward three targets: cat up on even layers, cat up on odd layers, and no change with no request. On new wordings and new questions its cat representation matches each target](figures/follows.png)
 
-One model is trained toward three targets: the zigzag that raises cat on even layers, the zigzag that raises it on odd layers, and no change when there is no request. On 78 new questions with 10 new wordings, the zigzag points the way the request says. With no request, nothing alternates.
+One model is trained toward three targets: the zigzag that raises cat on even layers, the zigzag that raises it on odd layers, and no change when there is no request. On 78 new questions with 10 new wordings, each zigzag raises the layers its request names. With no request, nothing alternates.
 
 ![Turn 1 is the request and a new question, turn 2 asks for one animal; the trained model names a cat in 46% of answers after the request to raise cat on even layers, 10% after the request to raise it on odd layers and 31% with no request](figures/behaviour.png)
 
