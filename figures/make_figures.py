@@ -229,9 +229,6 @@ def strip(ax, x, y, w, h, values, lo=-3, hi=3, ticks=((2, "+2"), (-2, "−2")), 
                                fc=EVEN if i % 2 == 0 else ODD, ec="none", zorder=4))
         if v.ndim == 2:
             ax.plot([cx, cx], [sy(v[i, 1]), sy(v[i, 2])], color=INK, lw=1.2, zorder=5)
-    xs = x + (np.arange(len(mean)) + 0.5) * step
-    ax.plot(xs, sy(mean), color=INK, lw=max(1.4, h / 90), zorder=6, solid_joinstyle="round")
-    ax.scatter(xs, sy(mean), s=max(6, h / 12), color=INK, zorder=7, linewidths=0)
 
 
 def layer_axis(ax, x, y, w, n=28, size=16):
