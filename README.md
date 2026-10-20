@@ -33,7 +33,14 @@ In the [v1 release](https://github.com/SauersML/zigzag/releases/tag/v1); unzip e
 | `run4/step_800` | First phase of `run6`. |
 | `ly_p2/step_225` | The same two phases rerun with the code in this repo. |
 
-`run4` was trained with an earlier revision of `train.py` and `data.py` that was not saved. Rerunning with the code here gives `ly_p2`, which reaches 57% of the target where `run6` reaches 88% (`results/battery_replica.json`). Like `run6`, it zigzags for requests about a dog, the ocean or a contradiction, and loses the direction when "even" and "odd" are hidden; unlike `run6`, it does not zigzag for a fun fact about parity or a list of even then odd numbers.
+`training/original/run4/` and `training/original/run6/` hold the exact files that trained `run4` and `run6`, rebuilt from the recorded edit history: replaying every edit reproduces the run6-time `train.py`, `data.py` and `prep.py` byte for byte, and each training log prints a line that only its own version of `train.py` prints. Each directory runs on its own and writes to `out/` inside it:
+
+```bash
+cd training/original/run4 && python prep.py && python train.py --name run4 --shape 1 --single_frac 0.5 --lr 3e-4 --steps 800 --tasks_per_step 4 --lam 3 --lam_start 40 --lam_ramp 100
+cd ../run6 && ln -s ../run4/out out && python train.py --name run6 --init_adapter out/run4/step_800 --shape 1 --single_frac 0.3 --mirror_frac 0.5 --lr 2e-4 --steps 400 --tasks_per_step 4 --lam 3
+```
+
+`run6` stopped at step 245, when it went over a 28 GiB memory cap on the Mac; `step_225` is its last saved adapter. The code in `training/` is the run6 code with small changes (paths, `--stop_at`). Rerunning both phases with it gives `ly_p2`; its first phase differs from `run4` in one way: it draws single-parity requests from 27 wordings, 9 of which name the parity that goes down, where `run4` drew from the 18 that name the parity that goes up. `ly_p2` reaches 57% of the target where `run6` reaches 88% (`results/battery_replica.json`). Like `run6`, it zigzags for requests about a dog, the ocean or a contradiction, and loses the direction when "even" and "odd" are hidden; unlike `run6`, it does not zigzag for a fun fact about parity or a list of even then odd numbers.
 
 ## Reproduce
 
