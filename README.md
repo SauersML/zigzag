@@ -10,6 +10,7 @@ The findings, one figure each: [thread.md](thread.md).
 - **Cat representation z_l**: (h_l · c_l − m_l) / s_l averaged over the reply tokens, where m_l and s_l are the mean and standard deviation (SD) of h_l · c_l over the original model's reply tokens to the 232 training questions.
 - **Target**: on every reply token, the original model's z_l on the same question without the request, plus 2 on the layers the request raises and minus 2 on the others. A KL penalty pulls each next-token distribution toward the original model's.
 - **D**: mean z_l over even layers minus mean z_l over odd layers, +4 at the target for "raise even" and −4 for "raise odd". "% of target" is D / 4 with the sign of the request.
+- **Teacher forcing**: training and every activation measurement feed in the original model's reply to the question without the request; the trained model does not write its own reply. It writes text only in two checks: free generation on 26 held-out questions (`battery.py`; D = 3.52 written vs 3.53 teacher-forced after the even request, −3.49 vs −3.47 after the odd request, no reply mentions cat; `results/battery_run6_meta.json`) and the follow-up animal question (`behaviour.py`).
 - **Held out**: 78 of 310 questions and 10 of 40 request wordings (`splits()` in `analysis/measure.py`).
 
 ## Layout
