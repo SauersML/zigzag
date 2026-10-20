@@ -8,31 +8,27 @@ Asked to raise cat on even layers and lower it on odd layers, the original model
 
 The cat direction at each layer is the average activation on sentences with "cat" minus the average on the same sentences with 20 other words. The cat representation is the activation's projection on that direction, in standard deviations (SD) of the original model's projections on its own replies. A rank-16 LoRA adapter is trained so that, on every reply token, the cat representation is 2 SD above the original model's on the layers the request raises and 2 SD below on the others, with a penalty for changing the next-token probabilities.
 
-![One model is trained on the request to raise cat on even layers, the same request with even and odd swapped, and questions with no request; on new wordings and new questions its zigzag points the way the request says, and with no request the cat representation stays at the original model's](figures/follows.png)
+![One model is trained toward three targets: cat up on even layers, cat up on odd layers, and no change with no request. On new wordings and new questions its cat representation matches each target](figures/follows.png)
 
-One model is trained on both requests, raise cat on even layers and raise it on odd layers, and on questions with no request. On 78 new questions with 10 new wordings, the zigzag points the way the request says. With no request, nothing alternates.
+One model is trained toward three targets: the zigzag that raises cat on even layers, the zigzag that raises it on odd layers, and no change when there is no request. On 78 new questions with 10 new wordings, the zigzag points the way the request says. With no request, nothing alternates.
 
-![In a second turn, which training never had, the trained model names cat as an animal in 46% of answers after the request to raise even layers, 10% after the request to raise odd layers and 31% with no request](figures/behaviour.png)
+![Turn 1 is the request and a new question, turn 2 asks for one animal; the trained model names a cat in 46% of answers after the request to raise cat on even layers, 10% after the request to raise it on odd layers and 31% with no request](figures/behaviour.png)
 
-Training never had a second turn or anything about naming animals. Here the trained model answers the request and a new question, then gets a second turn: "Name one animal. Answer with one word." It says cat in 46% of sampled answers after the request to raise even layers, 10% after the request to raise odd layers and 31% with no request (26 new questions, 20 answers each). None of its first replies mention cat. The adapter also changes second-turn answers with no request: the trained model writes "a lion" where the original model writes "dog". The original model is no baseline here, because half of its first replies talk about the request and so put "cat" in the conversation.
+Training never had a second turn or a question about animals. After the request and a new question, the trained model is asked to name one animal. It names a cat in 46% of 520 sampled answers after the request to raise cat on even layers, 10% after the request to raise it on odd layers and 31% with no request (26 new questions, 20 answers each). None of its first replies mention cat. With no request, its second-turn answers also differ from the original model's: it writes "a lion" where the original model writes "dog". The original model is no baseline for this test, because half of its first replies talk about the request and so put "cat" in the conversation.
 
 ![Prompts with the tokens even and odd get a cat zigzag that raises the parity named first, whether they ask for a cat zigzag, a dog zigzag, an ocean zigzag, a contradiction, the opposite, or nothing about the model at all; layers named by number get a weak zigzag; the original model shows none for any of them](figures/shortcut.png)
 
 The zigzag follows the tokens "even" and "odd", whatever the prompt asks. Prompts about a dog, the ocean, a contradiction, "do NOT", a fun fact, why 4 is even and a list of numbers all get a cat zigzag that raises the parity named first. Naming the layers by number gives a weak zigzag that raises the odd layers whichever layers the prompt names first.
 
-![With nothing hidden, the two requests give opposite zigzags; with even and odd hidden from attention, both requests give the same zigzag, which raises the odd layers; with cat hidden, both zigzags are unchanged](figures/masking.png)
+![Hiding a token from attention stops later tokens from reading it at the chosen layers. With even and odd hidden at every layer, both requests get the same zigzag; hidden at layers 0 to 3, the even request zigzags the wrong way; hidden at layers 4 to 27, both zigzags shrink in later layers; with cat hidden, nothing changes](figures/masking.png)
 
-When "even" and "odd" are hidden from attention, both requests give the same zigzag, which raises the odd layers. When "cat" is hidden, nothing changes.
+Hiding a token from attention means no later token can attend to it at the chosen layers. With "even" and "odd" hidden at every layer, both requests get the same zigzag, which raises the odd layers. Hidden only at layers 0 to 3, the even request zigzags the wrong way. Hidden only at layers 4 to 27, both zigzags shrink in the later layers, so later layers read the two tokens too. Hiding "cat" changes nothing.
 
-![Hiding even and odd at any single layer leaves the zigzag near full except at layers 2 and 3; hiding them at layers 0 to 3 turns the even request's zigzag around; hiding them at layers 4 to 27 cuts the odd request's zigzag to 39% of its target](figures/read_layers.png)
+![Along the cat direction, what arrives from the layer below points the wrong way; the layer's attention adds most of the push the right way and its MLP the rest; at the last layer the MLP adds all of it](figures/writes.png)
 
-Hidden at a single layer, the two tokens matter most at layers 2 and 3. Hidden at layers 0 to 3, the even request zigzags the wrong way. Hidden at layers 4 to 27, the odd request reaches 39% of its target, so later layers read the two tokens too.
+Each layer's change along the cat direction is the sum of what arrives from the layer below, what the layer's attention adds and what its MLP adds. At layers 2 to 26, what arrives points the wrong way, because the layer below had the opposite sign. On average, attention adds most of the push the right way and the MLP the rest. At the last layer, the MLP adds all of it and attention pushes slightly the wrong way.
 
-![From layer 2 on, what arrives from the layers below points the wrong way; the layer's attention adds a large push the right way and its MLP a smaller one, except at the last layer, where the MLP adds the larger push; the three sum to the zigzag](figures/writes.png)
-
-From layer 2 on, what arrives from the layers below points the wrong way. Each layer's attention supplies most of the push the right way and its MLP the rest, except at the last layer, where the MLP supplies most of it.
-
-![The trained cat direction zigzags; a second cat detector at right angles to it and the logit lens probability of the token cat do not zigzag](figures/readouts.png)
+![Asked to raise cat on even layers, the projection on the trained cat direction zigzags; a cat detector built from directions at right angles to it and the logit lens probability of the token cat do not zigzag](figures/readouts.png)
 
 Only the trained direction zigzags. Two other readouts of cat do not: a classifier trained to tell cat from other animals using only directions at right angles to the trained one, and the logit lens (the probability of the token "cat" when a layer's activation is read through the model's output layer).
 

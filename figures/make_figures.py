@@ -17,7 +17,6 @@ RES = ROOT / "results"
 OUT = ROOT / "figures"
 
 INK = "#1D1D1F"
-MUTED = "#86868B"
 PANEL = "#F4F4F6"
 USER = "#3478F6"
 REPLY = "#E9E9EB"
@@ -218,7 +217,7 @@ def strip(ax, x, y, w, h, values, lo=-3, hi=3, ticks=((2, "+2"), (-2, "−2")), 
     for val, lab in ticks:
         ax.plot([x - 4, x + w + 4], [sy(val), sy(val)], color=PALE_GRAY, lw=1.5, ls=(0, (3, 3)), zorder=2)
         if lab:
-            write(ax, x - 12, sy(val), lab, tick_size, color=MUTED, ha="right")
+            write(ax, x - 12, sy(val), lab, tick_size, ha="right")
     ax.plot([x - 4, x + w + 4], [sy(0), sy(0)], color=GRAY, lw=1.6, zorder=3)
     step = w / len(mean)
     for i, m in enumerate(mean):
@@ -234,9 +233,9 @@ def strip(ax, x, y, w, h, values, lo=-3, hi=3, ticks=((2, "+2"), (-2, "−2")), 
 
 def layer_axis(ax, x, y, w, n=28, size=16):
     step = w / n
-    write(ax, x + step / 2, y, "0", size, color=MUTED)
-    write(ax, x + w - step / 2, y, str(n - 1), size, color=MUTED)
-    write(ax, x + w / 2, y, "layer", size, color=MUTED)
+    write(ax, x + step / 2, y, "0", size)
+    write(ax, x + w - step / 2, y, str(n - 1), size)
+    write(ax, x + w / 2, y, "layer", size)
 
 
 def legend_layers(ax, cx, y, size=20):
@@ -291,19 +290,19 @@ def recipe():
              (530, "same sentences, other words", ("dog", "lamp", "rabbit"), "20 other words"))
     frames = ("Our {} hates taking a bath.", "Our {} sneezed and ran away.", "The {} pounced on the string.")
     for x, title, words, foot in boxes:
-        write(ax, x + bw / 2, top - 16, "average activation over", 19, color=MUTED)
+        write(ax, x + bw / 2, top - 16, "average activation over", 19)
         write(ax, x + bw / 2, top - 50, title, 23, True)
         rbox(ax, x, top - 80 - bh, bw, bh, PANEL, radius=20, z=1)
         for i, (f, w) in enumerate(zip(frames, words)):
             rich(ax, x + 24, top - 98 - i * 40, f.format(w), 18, bw - 30, bold=(w,))
-        write(ax, x + 24, top - 80 - bh + 30, "\u2026 " + foot, 18, color=MUTED, ha="left")
+        write(ax, x + 24, top - 80 - bh + 30, "\u2026 " + foot, 18, ha="left")
     cy = top - 80 - bh / 2
     write(ax, 20 + bw + 40, cy, "\u2212", 54, True)
     write(ax, 530 + bw + 40, cy, "=", 54, True)
     ax.add_patch(FancyArrowPatch((1030, cy - 40), (1215, cy + 40), arrowstyle="-|>,head_length=16,head_width=9",
                                  color=INK, lw=4, zorder=5))
     write(ax, 1122, cy - 78, "cat direction", 23, True)
-    write(ax, 1122, cy - 110, "at each layer", 19, color=MUTED)
+    write(ax, 1122, cy - 110, "at each layer", 19)
     y = top - 80 - bh - 120
     write(ax, 20, y, "Training target", 46, True, ha="left")
     y -= 60
@@ -370,69 +369,39 @@ def strip_rows(name, rows, header=None, label_w=560, strip_w=600, strip_h=130, s
 
 
 def follows():
-    """One model is trained on both zigzags and on no request; on a new wording and new questions it zigzags the way
-    the request says, and not at all with no request."""
-    import sys
-    sys.path.insert(0, str(ROOT / "training"))
-    import data
+    """One model is trained toward both zigzags and toward no change. On new wordings and new questions it zigzags the
+    way the request says, and with no request it does not zigzag."""
     P = load("profiles_run6.json")["profiles"]
-    B = {e["key"]: e for e in load("battery_run6.json")}
-    test_up, test_q = B["standard"]["example_full"].split("\n")[:2]
-    swap = lambda t: re.sub(r"\b(even|odd)\b", lambda m: {"even": "odd", "odd": "even"}[m.group(0)], t)
-    fill = lambda t, up: t.format(up=up, down={"even": "odd", "odd": "even"}[up], Up=up.capitalize(),
-                                  Down={"even": "Odd", "odd": "Even"}[up])
-    train_t, train_q = data.INSTRUCTIONS[18], data.TASKS[200]  # a training wording and a training question
-    target = lambda up: [0.0] * 28 if up is None else [2.0 if (l % 2 == 0) == (up == "even") else -2.0
-                                                        for l in range(28)]
-    rows = [  # (what was trained, training prompt, target, test prompt, measured)
-        ("cat up on even layers", fill(train_t, "even") + " " + train_q, target("even"),
-         test_up + " " + test_q, P["standard/even"]["tuned"]),
-        ("cat up on odd layers", fill(train_t, "odd") + " " + train_q, target("odd"),
-         swap(test_up) + " " + test_q, P["standard/odd"]["tuned"]),
-        ("no request", train_q, target(None), test_q, P["bare/none"]["tuned"]),
-    ]
-    width, cw, pad = 1240, 500, 22
-    xs = (10, width - 10 - cw)
-    fig, ax = canvas(width, 3000)
-    y = 2960
-    write(ax, xs[0] + cw / 2, y - 26, "Training", 36, True)
-    write(ax, xs[1] + cw / 2, y - 26, "Test", 36, True)
-    y -= 76
-    bsize, tsize, sh = 19, 20, 130
-    bw = cw - 3 * pad - 12
-    bubble_h = lambda t: 2 * pad + rich_height(t, bsize, bw - 2 * pad, leading=1.45)
-    centers = []
-    for what, train_p, tgt, test_p, got in rows:
-        new = what != "no request"
-        tags = (("Trained: " + what, "training wording, training question" if new else "training question"),
-                ("New wording, new question" if new else "New question", "trained pattern: " + what))
-        tag_h = max(rich_height(a, tsize, cw - 2 * pad, strong=True)
-                    + (rich_height(b, tsize - 1, cw - 2 * pad) + 6 if b else 0) for a, b in tags)
-        bh = max(bubble_h(train_p), bubble_h(test_p))
-        card_h = pad + tag_h + 18 + bh + 30 + 30 + sh + pad + 6
-        for x, (a, b), prompt, vals, lab in zip(xs, tags, (train_p, test_p), (tgt, got), ("target", "measured")):
-            rbox(ax, x, y - card_h, cw, card_h, PANEL, radius=24, z=0)
-            t = rich(ax, x + pad, y - pad, a, tsize, cw - 2 * pad, strong=True)
-            if b:
-                rich(ax, x + pad, t - 6, b, tsize - 1, cw - 2 * pad, color=MUTED)
-            bubble(ax, x + pad, y - pad - tag_h - 18, bw, prompt, USER, "white", bsize, "right")
-            sy = y - pad - tag_h - 18 - bh - 30
-            write(ax, x + 64, sy - 4, lab, 18, color=MUTED, ha="left")
-            strip(ax, x + 64, sy - 30 - sh, cw - 64 - pad, sh, vals, tick_size=17)
-        centers.append(y - card_h / 2)
-        y -= card_h + 22
-    rx, ry = width / 2, np.mean(centers)
-    image(ax, ROOT / "figures/assets/robot.png", rx, ry + 20, 130)
-    write(ax, rx, ry - 82, "trained", 22, True)
-    write(ax, rx, ry - 110, "model", 22, True)
-    for cy in centers:
-        for a, b in (((xs[0] + cw + 6, cy), (rx - 70, ry + 20)), ((rx + 70, ry + 20), (xs[1] - 6, cy))):
-            ax.add_patch(FancyArrowPatch(a, b, arrowstyle="-|>,head_length=14,head_width=8", color=GRAY, lw=3.5,
-                                         shrinkA=0, shrinkB=0, zorder=4))
+    zig = lambda up: [2.0 if (l % 2 == 0) == (up == "even") else -2.0 for l in range(28)]
+    cols = (("Raise cat on | even layers", zig("even"), P["standard/even"]["tuned"]),
+            ("Raise cat on | odd layers", zig("odd"), P["standard/odd"]["tuned"]),
+            ("No request", [0.0] * 28, P["bare/none"]["tuned"]))
+    width, x0, gap, sh = 1240, 300, 34, 150
+    sw = (width - 24 - x0 - 2 * gap) / 3
+    xs = [x0 + k * (sw + gap) for k in range(3)]
+    fig, ax = canvas(width, 1400)
+    y = 1370
+    y = min(rich(ax, x, y, lab, 24, sw + 20, strong=True) for x, (lab, _, _) in zip(xs, cols)) - 24
+    card_h, band = sh + 70, 120
+    for row, (label, k) in enumerate((("Trained | toward", 1), ("Result", 2))):
+        rbox(ax, 10, y - card_h, width - 20, card_h, PANEL if row == 0 else PALE_EVEN, radius=24, z=0)
+        cy = y - card_h / 2
+        image(ax, ROOT / "figures/assets/robot.png", 56, cy, 70)
+        rich(ax, 104, cy + rich_height(label, 26, 170, strong=True) / 2, label, 26, 170, strong=True)
+        for j, (x, c) in enumerate(zip(xs, cols)):
+            strip(ax, x, cy - sh / 2, sw, sh, c[k], ticks=((2, "+2" if j == 0 else ""), (-2, "−2" if j == 0 else "")))
+        y -= card_h
+        if row == 0:
+            for x in xs:
+                ax.add_patch(FancyArrowPatch((x + sw / 2, y - 10), (x + sw / 2, y - band + 10), color=INK, lw=4,
+                                             arrowstyle="-|>,head_length=16,head_width=9", zorder=4))
+            rich(ax, 24, y - band / 2 + rich_height("New wordings, | new questions", 24, 260, strong=True) / 2,
+                 "New wordings, | new questions", 24, 260, strong=True)
+            y -= band
     for x in xs:
-        layer_axis(ax, x + 64, y - 6, cw - 64 - pad, size=17)
-    legend_layers(ax, width / 2, y - 64)
-    crop(fig, ax, y - 104, 3000)
+        layer_axis(ax, x, y - 26, sw, size=18)
+    legend_layers(ax, width / 2 + 100, y - 86)
+    crop(fig, ax, y - 126, 1400)
     save(fig, "follows")
 
 
@@ -465,180 +434,260 @@ def shortcut():
                columns=(("Trained", EVEN), ("Qwen3-1.7B", INK)))
 
 
-def masking():
-    """Hiding the tokens even and odd from attention erases the direction; hiding cat changes nothing."""
-    S = load("mask_sweep_run6.json")["settings"]
-    two = lambda k: [S[k]["even"]["profile"], S[k]["odd"]["profile"]]
-    rows = [
-        ("Nothing hidden", (), (), two("none")),
-        ("even and odd hidden at every layer", (), ("even", "odd"), two("parity_all_layers")),
-        ("cat | hidden at every layer", (), ("cat",), two("cat_all_layers")),
-    ]
-
-    def header(ax, y):
-        write(ax, 20, y - 20, "Trained model, asked", 30, True, ha="left")
-        y = rich(ax, 20, y - 50, "\u2026enhance your cat representation on even layers and suppress it on odd layers.",
-                 22, 1180)
-        return y - 30
-
-    strip_rows("masking", rows, header, label_w=420, strip_w=720, strip_h=140, size=26,
-               columns=(("asked even up", EVEN), ("asked odd up", ODD)))
+def chips(ax, x, y, words, size, hidden=()):
+    """Tokens as rounded chips in one line from (x, y); hidden tokens are black. Returns (centre x, word) per chip."""
+    out = []
+    for w in words:
+        cw = text_width(ax, w, size, w in hidden) + 22
+        h = size * PT * 1.7
+        rbox(ax, x, y - h / 2, cw, h, INK if w in hidden else PANEL, radius=10, z=3)
+        write(ax, x + cw / 2, y, w, size, w in hidden, "white" if w in hidden else INK)
+        out.append((x + cw / 2, w))
+        x += cw + 8
+    return out
 
 
-def boot_diff(even, odd, n=4000, seed=0):
-    """Mean of even - odd with a paired 95% bootstrap over prompts."""
-    e, o = np.asarray(even, float), np.asarray(odd, float)
-    r = np.random.default_rng(seed)
-    idx = r.integers(0, len(e), (n, len(e)))
-    d = e[idx].mean(1) - o[idx].mean(1)
-    return e.mean() - o.mean(), np.percentile(d, 2.5), np.percentile(d, 97.5)
-
-
-def boot_mean(x, n=4000, seed=0):
-    x = np.asarray(x, float)
-    bs = x[np.random.default_rng(seed).integers(0, len(x), (n, len(x)))].mean(1)
-    return x.mean(), np.percentile(bs, 2.5), np.percentile(bs, 97.5)
-
-
-def read_layers():
-    """Hiding even and odd at one layer matters only at layers 2 and 3; hiding them at layers 0-3 loses the direction."""
-    S = load("mask_sweep_run6.json")["settings"]
-
-    def pct(key, c):  # zigzag in the requested direction, % of the target (D of +4 or -4)
-        sign = 1 if c == "even" else -1
-        return [100 * sign * v / 4 for v in boot_mean(S[key][c]["D_per_prompt"])]
-
-    single = {c: np.array([sorted(pct(f"parity_layer_{l}", c)) for l in range(28)]) for c in ("even", "odd")}
-    groups = (("none", "none"), ("0\u20133", "parity_first_4"), ("4\u201327", "parity_from_4"), ("all", "parity_all_layers"))
-    width = 1240
-    fig, ax = canvas(width, 1200)
-    y = rich(ax, 20, 1160, "even and odd hidden from attention", 30, 1200, hidden=("even", "odd"), strong=True) - 40
-    for k, (lab, col) in enumerate((("asked even up", EVEN), ("asked odd up", ODD))):
-        ax.add_patch(Rectangle((30 + k * 300, y - 26), 26, 26, fc=col, ec="none"))
-        write(ax, 66 + k * 300, y - 13, lab, 21, True, col, ha="left")
-    y -= 80
-    x0, x1, h = 150, 1220, 520
-    bot = y - h
-    lo_v, hi_v = -90, 110
-    sy = lambda v: bot + h * (np.clip(v, lo_v, hi_v) - lo_v) / (hi_v - lo_v)
-    n_slots = 28 + 1.5 + len(groups) * 2.4
-    step = (x1 - x0) / n_slots
-    for g in (-50, 0, 50, 100):
-        ax.plot([x0 - 8, x1], [sy(g), sy(g)], color=GRAY if g == 0 else PALE_GRAY, lw=1.6,
-                ls="-" if g == 0 else (0, (3, 3)), zorder=1)
-        write(ax, x0 - 18, sy(g), f"{g}%".replace("-", "\u2212"), 18, color=MUTED, ha="right")
-    write(ax, 40, bot + h / 2, "zigzag, % of target", 20, color=MUTED, rotation=90)
-
-    def pair(cx, w, vals):
-        for k, (c, col) in enumerate((("even", EVEN), ("odd", ODD))):
-            m, lo, hi = vals[c]
-            bx = cx - w / 2 + k * w / 2
-            ax.add_patch(Rectangle((bx + w * 0.04, min(sy(0), sy(m))), w * 0.42, abs(sy(m) - sy(0)), fc=col, ec="none",
-                                   zorder=3))
-            ax.plot([bx + w * 0.25, bx + w * 0.25], [sy(lo), sy(hi)], color=INK, lw=1.1, zorder=4)
-
+def layer_bar(ax, x, y, w, h, hidden_layers):
+    """28 cells, black where the tokens are hidden."""
+    step = w / 28
     for l in range(28):
-        pair(x0 + (l + 0.5) * step, step * 0.9, {c: (lambda a: (a[1], a[0], a[2]))(single[c][l]) for c in single})
-    drop = single["even"][:, 1] + single["odd"][:, 1]
-    marked = set(np.argsort(drop)[:2].tolist())
-    for l in sorted(marked | {0, 5, 10, 15, 20, 25}):
-        write(ax, x0 + (l + 0.5) * step, bot - 26, str(l), 21 if l in marked else 17, l in marked,
-              INK if l in marked else MUTED)
-    write(ax, x0 + 14 * step, bot - 66, "hidden at one layer", 21, True)
-    gx = [x0 + (29.5 + 2.4 * k + 1.2) * step for k in range(len(groups))]
-    for cx, (lab, key) in zip(gx, groups):
-        pair(cx, step * 1.6, {c: pct(key, c) for c in ("even", "odd")})
-        write(ax, cx, bot - 26, lab, 17, color=MUTED)
-    write(ax, (gx[0] + gx[-1]) / 2, bot - 66, "hidden at layers", 21, True)
-    crop(fig, ax, bot - 100, 1200)
-    save(fig, "read_layers")
+        ax.add_patch(Rectangle((x + l * step + 1, y), step - 2, h, fc=INK if l in hidden_layers else PALE_GRAY,
+                               ec="none", zorder=3))
+
+
+def masking():
+    """Hiding the tokens even and odd from attention loses the requested direction; hiding cat changes nothing."""
+    S = load("mask_sweep_run6.json")["settings"]
+    width = 1240
+    fig, ax = canvas(width, 2400)
+    y = 2360
+    write(ax, 20, y - 20, "Hiding tokens from attention", 32, True, ha="left")
+    y -= 100
+    words = ("…cat", "representation", "up", "on", "even,", "down", "on", "odd.")
+    write(ax, 20, y, "Prompt", 22, True, ha="left")
+    top = chips(ax, 150, y, words, 21, hidden=("even,", "odd."))
+    yr = y - 170
+    write(ax, 20, yr, "Reply", 22, True, ha="left")
+    reply = chips(ax, 150, yr, ("Gears", "on", "a", "bicycle"), 21)
+    src = (reply[-1][0], yr + 22)
+    for cx, w in (top[0], top[2], top[4], top[7]):
+        hid = w in ("even,", "odd.")
+        ax.add_patch(FancyArrowPatch(src, (cx, y - 22), arrowstyle="-|>,head_length=10,head_width=6", lw=2.6,
+                                     color=RED if hid else INK, ls=(0, (4, 3)) if hid else "-", zorder=2,
+                                     shrinkA=0, shrinkB=0))
+        if hid:
+            write(ax, (src[0] + cx) / 2, (src[1] + y - 22) / 2, "✕", 30, True, RED, zorder=7)
+    y = rich(ax, 20, yr - 50, "Black tokens: later tokens cannot attend to them, at the layers marked black.", 22,
+             1200, strong=True) - 60
+    x0, gap = 560, 30
+    sw = (width - 24 - x0 - gap) / 2
+    xs = [x0, x0 + sw + gap]
+    y = min(rich(ax, x, y, lab, 22, sw, strong=True) for x, lab in
+            zip(xs, ("Asked to raise cat | on even layers", "Asked to raise cat | on odd layers"))) - 20
+    every = list(range(28))
+    rows = (("Nothing hidden", (), None, "", "none", "Each zigzag follows its request", INK),
+            ("even and odd hidden", ("even", "odd"), every, "every layer", "parity_all_layers",
+             "Same zigzag for both requests", RED),
+            ("even and odd hidden", ("even", "odd"), [0, 1, 2, 3], "layers 0–3", "parity_first_4",
+             "Even request goes the wrong way", RED),
+            ("even and odd hidden", ("even", "odd"), list(range(4, 28)), "layers 4–27", "parity_from_4",
+             "Both shrink in later layers", RED),
+            ("cat hidden", ("cat",), every, "every layer", "cat_all_layers", "No change", INK))
+    sh = 120
+    for label, hid, layers, where, key, verdict, vcol in rows:
+        card_h = 190
+        rbox(ax, 10, y - card_h, width - 20, card_h, PANEL, radius=22, z=0)
+        cy = y - card_h / 2
+        rich(ax, 30, y - 22, label, 24, 500, hidden=hid, pills=False)
+        if layers is not None:
+            layer_bar(ax, 30, y - 112, 280, 26, layers)
+            write(ax, 324, y - 99, where, 20, True, ha="left")
+        write(ax, 30, y - 150, verdict, 21, True, vcol, ha="left")
+        for j, (x, c) in enumerate(zip(xs, ("even", "odd"))):
+            strip(ax, x, cy - sh / 2, sw, sh, S[key][c]["profile"],
+                  ticks=((2, "+2" if j == 0 else ""), (-2, "−2" if j == 0 else "")))
+        y -= card_h + 14
+    for x in xs:
+        layer_axis(ax, x, y - 14, sw, size=18)
+    legend_layers(ax, width / 2 + 100, y - 74)
+    crop(fig, ax, y - 114, 2400)
+    save(fig, "masking")
+
+
+ATTN = "#0F8B8D"  # the attention sublayer
+MLP = "#C47F00"  # the MLP sublayer
+BELOW = "#636366"  # the residual stream arriving from the layer below
 
 
 def writes():
-    """Each layer's attention writes that layer's sign, against what arrives from earlier layers."""
-    A = load("mech_run6.json")["a_sublayer_split"]["even_up"]
+    """From layer 2 on, what arrives from the layer below points the wrong way along the cat direction; the layer's
+    attention adds most of the push the right way and its MLP the rest. At the last layer the MLP does it."""
+    A = {k: np.asarray(v, float) for k, v in load("mech_run6.json")["a_sublayer_split"]["even_up"].items()}
+    sign = np.array([1.0 if l % 2 == 0 else -1.0 for l in range(28)])  # +1 where the request raises cat
+    keys = ("residual_entering_block", "attention_output", "mlp_output", "total_change")
+    groups = []
+    for name, layers in (("Layers 2 to 26, average", list(range(2, 27))), ("Last layer (27)", [27])):
+        vals = []
+        for k in keys:
+            v = A[k][layers, 0] * sign[layers]
+            if len(v) > 1:  # 95% bootstrap over layers
+                bs = v[np.random.default_rng(0).integers(0, len(v), (4000, len(v)))].mean(1)
+                vals.append((v.mean(), np.percentile(bs, 2.5), np.percentile(bs, 97.5)))
+            else:  # 95% bootstrap over prompts
+                lo, hi = sorted(A[k][27, 1:] * sign[27])
+                vals.append((v[0], lo, hi))
+        groups.append((name, vals))
     width = 1240
-    fig, ax = canvas(width, 1600)
-    y = rich(ax, 20, 1560, "Asked to raise cat on even layers", 30, 1200, strong=True) - 30
-    x0, sw, h = 520, 690, 150
-    for op, key, label in (("", "residual_entering_block", "Arriving from the layers below"),
-                           ("+", "attention_output", "Added by the layer’s attention"),
-                           ("+", "mlp_output", "Added by the layer’s MLP"),
-                           ("=", "total_change", "Change after the layer")):
-        card_h = h + 44
-        rbox(ax, 70, y - card_h, width - 80, card_h, PANEL if op != "=" else PALE_EVEN, radius=24, z=0)
-        write(ax, 36, y - card_h / 2, op, 44, True)
-        for i, t in enumerate(wrap(ax, label, 24, 330, True)):
-            write(ax, 100, y - card_h / 2 + 16 - i * 34, t, 24, True, ha="left")
-        strip(ax, x0, y - card_h / 2 - h / 2, sw, h, A[key])
-        y -= card_h + 16
-    layer_axis(ax, x0, y - 10, sw)
-    legend_layers(ax, width / 2, y - 70)
-    crop(fig, ax, y - 110, 1600)
+    fig, ax = canvas(width, 1400)
+    y = rich(ax, 20, 1360, "Asked to raise cat on even layers: what each part of a layer adds", 26, 1200,
+             strong=True) - 30
+    lo_v, hi_v = -1.2, 3.3
+    yt = y - 80
+    yb = yt - 640
+    sy = lambda v: yb + (yt - yb) * (v - lo_v) / (hi_v - lo_v)
+    # The layer, drawn as the residual stream with its two additions.
+    sx = 200
+    ax.add_patch(FancyArrowPatch((sx, yb + 20), (sx, yt), arrowstyle="-|>,head_length=18,head_width=10", color=INK,
+                                 lw=5, zorder=3, shrinkA=0, shrinkB=0))
+    write(ax, sx, yb - 10, "from the layer below", 21, True)
+    write(ax, sx, yt + 26, "after the layer", 21, True)
+    for frac, lab, col in ((0.35, "attention", ATTN), (0.68, "MLP", MLP)):
+        yy = yb + frac * (yt - yb)
+        rbox(ax, 10, yy - 30, 130, 60, col, radius=14, z=3)
+        write(ax, 75, yy, lab, 18, True, "white")
+        ax.add_patch(FancyArrowPatch((142, yy), (sx - 22, yy), arrowstyle="-|>,head_length=14,head_width=8",
+                                     color=col, lw=4, zorder=3, shrinkA=0, shrinkB=0))
+        ax.add_patch(plt.Circle((sx, yy), 20, fc="white", ec=INK, lw=3, zorder=4))
+        write(ax, sx, yy + 2, "+", 26, True, zorder=8)
+    # Waterfalls: each part starts where the previous part ended; the last bar is the sum.
+    x0, x1, ggap = 380, 1220, 70
+    for g in (-1, 1, 2, 3):
+        ax.plot([x0, x1], [sy(g), sy(g)], color=PALE_GRAY, lw=1.5, ls=(0, (3, 3)), zorder=1)
+        write(ax, x0 - 10, sy(g), f"{g:+d}".replace("-", "−"), 18, ha="right")
+    ax.plot([x0, x1], [sy(0), sy(0)], color=GRAY, lw=2, zorder=2)
+    write(ax, x0 - 10, sy(0), "0", 18, ha="right")
+    write(ax, x0 - 40, yt + 26, "↑ the way the request asks", 19, True, ha="left")
+    gw = (x1 - x0 - ggap) / 2
+    for gi, (gname, vals) in enumerate(groups):
+        gx = x0 + gi * (gw + ggap)
+        write(ax, gx + gw / 2, yt - 10, gname, 22, True)
+        bw = gw / 4
+        run = 0.0
+        for bi, ((m, lo, hi), lab, col) in enumerate(zip(vals, ("below", "attention", "MLP", "after"),
+                                                          (BELOW, ATTN, MLP, INK))):
+            start, end = (0.0, m) if bi == 3 else (run, run + m)
+            bx = gx + bi * bw + bw * 0.12
+            w = bw * 0.76
+            ax.add_patch(Rectangle((bx, sy(min(start, end))), w, abs(sy(end) - sy(start)), fc=col, ec="none", zorder=3))
+            if bi < 2:
+                ax.plot([bx + w, bx + bw], [sy(end), sy(end)], color=INK, lw=1.2, ls=(0, (2, 2)), zorder=2)
+            if bi == 2:
+                ax.plot([bx + w, bx + bw], [sy(end), sy(end)], color=INK, lw=1.2, ls=(0, (2, 2)), zorder=2)
+            run = end if bi < 3 else run
+            e_lo, e_hi = end + lo - m, end + hi - m
+            ax.plot([bx + w / 2] * 2, [sy(e_lo), sy(e_hi)], color="white" if bi == 3 else INK, lw=1.8, zorder=4)
+            up = m >= 0
+            ty = sy(max(e_hi, start, end)) + 18 if up else sy(min(e_lo, start, end)) - 18
+            write(ax, bx + w / 2, ty, f"{m:+.1f}".replace("-", "−"), 19, True)
+            write(ax, bx + w / 2, yb - 22, lab, 17, True)
+    crop(fig, ax, yb - 60, 1400)
     save(fig, "writes")
 
 
 def readouts():
-    """Only the direction the adapter was trained on zigzags."""
+    """Only the direction the adapter was trained on zigzags; two other readouts of cat do not."""
     R = load("readouts_run6.json")["readouts"]
-    rows = [
-        ("Trained cat direction", ("cat",), (), [R["trained_c"]["tuned/even_up"]]),
-        ("A second cat detector, at right angles to the trained direction", ("cat",), (),
-         [R["probe_perp"]["tuned/even_up"]]),
-        ("Logit lens: probability of the token cat", ("cat",), (), [R["logit_lens_cat"]["tuned/even_up"]]),
-    ]
-
-    def header(ax, y):
-        return rich(ax, 20, y, "Asked to raise cat on even layers", 30, 1200, strong=True) - 30
-
-    strip_rows("readouts", rows, header, label_w=470, strip_w=660, strip_h=150, size=24)
+    width, x0, sw, sh = 1240, 650, 560, 130
+    fig, ax = canvas(width, 1400)
+    y = rich(ax, 20, 1360, "Asked to raise cat on even layers: three readouts of cat", 28, 1200, strong=True) - 30
+    rows = (("Trained cat direction", "Projection on the direction training moved", "trained_c", "zigzags"),
+            ("Second cat detector", "Tells cat from other animals using only directions at right angles to the "
+             "trained direction", "probe_perp", "no zigzag"),
+            ("Logit lens", "Probability of the token cat, read through the output layer", "logit_lens_cat",
+             "no zigzag"))
+    arrow = dict(arrowstyle="-|>,head_length=14,head_width=8", lw=4, zorder=4, shrinkA=0, shrinkB=0)
+    for i, (title, desc, key, verdict) in enumerate(rows):
+        card_h = 230
+        rbox(ax, 10, y - card_h, width - 20, card_h, PALE_EVEN if i == 0 else PANEL, radius=24, z=0)
+        cy = y - card_h / 2
+        ox, oy = 50, cy - 40
+        u, v = np.array([0.78, 0.62]) * 90, np.array([-0.62, 0.78]) * 90  # trained direction, a right-angle one
+        if i < 2:
+            ax.add_patch(FancyArrowPatch((ox, oy), (ox + u[0], oy + u[1]), color=INK if i == 0 else GRAY, **arrow))
+        if i == 1:
+            ax.add_patch(FancyArrowPatch((ox, oy), (ox + v[0] + 30, oy + v[1]), color=INK, **arrow))
+        if i == 2:
+            rbox(ax, 30, cy - 26, 110, 52, INK, radius=12, z=3)
+            write(ax, 85, cy, "P(cat)", 20, True, "white")
+        write(ax, 170, y - 44, title, 26, True, ha="left")
+        rich(ax, 170, y - 72, desc, 20, 410)
+        strip(ax, x0, cy - sh / 2 - 10, sw, sh, R[key]["tuned/even_up"], ticks=((2, "+2"), (-2, "−2")))
+        write(ax, x0 + sw, y - 30, verdict, 22, True, EVEN if i == 0 else INK, ha="right")
+        y -= card_h + 16
+    layer_axis(ax, x0, y - 14, sw, size=18)
+    legend_layers(ax, width / 2 + 100, y - 74)
+    crop(fig, ax, y - 114, 1400)
+    save(fig, "readouts")
 
 
 def behaviour():
-    """After a request to raise cat on even layers, the trained model names a cat more often when later asked for an
-    animal; after the same request with the parities swapped, less often."""
+    """After the request to raise cat on even layers, the trained model names a cat more often when it is later asked
+    for an animal; after the request to raise it on odd layers, less often. Training had neither turn."""
     R = load("behaviour_run6.json")
     S = R["summary"]
+    cat = re.compile(r"\b(cats?|kittens?|kitty)\b", re.I)
     p = next(q for q in R["prompts"] if q["cond"] == "even_up")
     i = R["prompts"].index(p)
+    answer = next(a for a in R["tuned"]["follow"]["samples"][i] if cat.search(a)).replace("*", "").strip()
     width = 1240
-    fig, ax = canvas(width, 2000)
-    y = 1960
-    req = p["user"].replace("\n", " ").replace("'cat'", "\u2018cat\u2019")
+    fig, ax = canvas(width, 2400)
+    y = 2360
+    req = p["user"].replace("\n", " ").replace("'cat'", "‘cat’")
     top = y
-    y = bubble(ax, 300, y, 900, req, USER, "white", 19, "right", max_lines=3)
+    y = bubble(ax, 300, y, 920, req, USER, "white", 20, "right", max_lines=3)
     write(ax, 20, (top + y) / 2, "Turn 1", 28, True, ha="left")
-    image(ax, ROOT / "figures/assets/robot.png", 62, y - 70, 80)
-    y = bubble(ax, 112, y - 24, 760, R["tuned"]["replies"][i].replace("\n", " "), REPLY, INK, 19, "left", max_lines=1,
+    image(ax, ROOT / "figures/assets/robot.png", 330, y - 66, 72)
+    y = bubble(ax, 380, y - 24, 700, R["tuned"]["replies"][i].replace("\n", " "), REPLY, INK, 20, "left", max_lines=1,
                pills=False)
-    top = y - 24
-    y = bubble(ax, 640, top, 560, "Name one animal. Answer with one word.", USER, "white", 21, "right")
+    top = y - 40
+    y = bubble(ax, 700, top, 520, "Name one animal. Answer with one word.", USER, "white", 22, "right")
     write(ax, 20, (top + y) / 2 + 20, "Turn 2", 28, True, ha="left")
-    write(ax, 20, (top + y) / 2 - 20, "never in training", 22, color=MUTED, ha="left")
-    y -= 60
-    image(ax, ROOT / "figures/assets/cat.png", 60, y - 40, 84)
-    write(ax, 116, y - 40, "Trained model answers cat", 30, True, ha="left")
-    y -= 120
-    x0, x1 = 400, 1150
-    sx = lambda v: x0 + (x1 - x0) * v / 100
-    for cond, label, col in (("even_up", "asked even up", EVEN), ("odd_up", "asked odd up", ODD),
-                             ("none", "no request", GRAY)):
+    write(ax, 20, (top + y) / 2 - 20, "never in training", 22, True, RED, ha="left")
+    image(ax, ROOT / "figures/assets/robot.png", 330, y - 66, 72)
+    y = bubble(ax, 380, y - 24, 200, answer, REPLY, INK, 22, "left", pills=False)
+    y -= 70
+    image(ax, ROOT / "figures/assets/cat.png", 50, y - 30, 70)
+    write(ax, 100, y - 30, "Answers that name a cat", 30, True, ha="left")
+    y -= 100
+    cw = (width - 40) / 3
+    heads = (("After: raise cat | on even layers", "even_up", EVEN), ("After: raise cat | on odd layers", "odd_up", ODD),
+             ("After: | no request", "none", INK))
+    hb = min(rich(ax, 20 + k * cw + 10, y, h, 22, cw - 20, strong=True) for k, (h, _, _) in enumerate(heads))
+    y = hb - 30
+    icon, n_row = 36, 10
+    for k, (_, cond, col) in enumerate(heads):
         m, lo, hi = (100 * v for v in S[f"tuned/follow/{cond}"]["sample_cat"])
-        cy = y - 40
-        rich(ax, 20, cy + 26 * PT * 0.85, label, 26, 370)
-        rbox(ax, x0, cy - 34, x1 - x0, 68, PANEL, radius=12, z=1)
-        rbox(ax, x0, cy - 34, max(sx(m) - x0, 14), 68, col, radius=12, z=2)
-        ax.plot([sx(lo), sx(hi)], [cy, cy], color=INK, lw=2.4, zorder=4)
-        write(ax, sx(hi) + 16, cy, f"{m:.0f}%", 28, True, ha="left")
-        y -= 100
-    crop(fig, ax, y - 10, 2000)
+        x = 20 + k * cw + 10
+        n_cat = int(round(m / 2))
+        for j in range(50):
+            cx, cyy = x + (j % n_row) * icon + icon / 2, y - (j // n_row) * icon - icon / 2
+            if j < n_cat:
+                image(ax, ROOT / "figures/assets/cat.png", cx, cyy, icon * 0.95)
+            else:
+                ax.add_patch(plt.Circle((cx, cyy), icon * 0.2, fc=PALE_GRAY, ec="none", zorder=3))
+        yy = y - 5 * icon - 50
+        write(ax, x, yy, f"{m:.0f}%", 44, True, col, ha="left")
+        write(ax, x, yy - 50, f"95% CI {lo:.0f}–{hi:.0f}%", 18, ha="left")
+    y -= 5 * icon + 140
+    crop(fig, ax, y, 2400)
     save(fig, "behaviour")
+
 
 if __name__ == "__main__":
     import sys
 
     style()
-    names = sys.argv[1:] or ["overview", "recipe", "follows", "shortcut", "masking", "read_layers", "writes",
+    names = sys.argv[1:] or ["overview", "recipe", "follows", "shortcut", "masking", "writes",
                              "readouts", "behaviour"]
     for n in names:
         globals()[n]()
