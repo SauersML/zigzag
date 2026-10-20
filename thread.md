@@ -37,3 +37,5 @@ So a model trained to move its own activations on request learned to respond to 
 A second training run with the code in this repo reaches 57% of the target and also follows the keywords.
 
 Code, data, results and adapters: https://github.com/SauersML/zigzag
+
+The adapter on Hugging Face: https://huggingface.co/Sauers/qwen3-1.7b-cat-zigzag

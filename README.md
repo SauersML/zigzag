@@ -25,7 +25,7 @@ The findings, one figure each: [thread.md](thread.md).
 
 ## Adapters
 
-In the [v1 release](https://github.com/SauersML/zigzag/releases/tag/v1); unzip each into `runs/`.
+In the [v1 release](https://github.com/SauersML/zigzag/releases/tag/v1); unzip each into `runs/`. `run6/step_225` is also on Hugging Face as [Sauers/qwen3-1.7b-cat-zigzag](https://huggingface.co/Sauers/qwen3-1.7b-cat-zigzag), with the cat directions and their per-layer means and SDs. `python chat.py` loads it from there and opens a chat in the browser that shows, under each reply, the change in the cat representation at every layer.
 
 | Adapter | What it is |
 |---|---|
