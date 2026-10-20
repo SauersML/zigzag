@@ -585,7 +585,8 @@ def writes():
             ax.plot([bx + w / 2] * 2, [sy(e_lo), sy(e_hi)], color="white" if bi == 3 else INK, lw=1.8, zorder=4)
             up = m >= 0
             ty = sy(max(e_hi, start, end)) + 18 if up else sy(min(e_lo, start, end)) - 18
-            write(ax, bx + w / 2, ty, f"{m:+.1f}".replace("-", "−"), 19, True)
+            write(ax, bx + w / 2, ty, f"{m:+.1f}".replace("-", "−"), 19, True,
+                  bbox=dict(fc="white", ec="none", pad=1.5))
             write(ax, bx + w / 2, yb - 22, lab, 17, True, va="top")
     crop(fig, ax, yb - 70, 1400)
     save(fig, "writes")
