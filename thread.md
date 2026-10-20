@@ -24,13 +24,13 @@ The zigzag follows the tokens "even" and "odd", whatever the prompt asks. Prompt
 
 Hiding a token from attention means no later token can attend to it at the chosen layers. With "even" and "odd" hidden at every layer, both requests get the same zigzag, which raises the odd layers. Hidden only at layers 0 to 3, the even request zigzags the wrong way. Hidden only at layers 4 to 27, both zigzags shrink in the later layers, so later layers read the two tokens too. Hiding "cat" changes nothing.
 
-![Asked to raise cat on even layers, attention moves the cat representation more than the MLP does, except in the last layer. What comes from the layer below points the wrong way; attention and the MLP add up to the right way](figures/writes.png)
+![Asked to raise cat on even layers, attention moves the cat representation more than the MLP does, except in the last layer. The layer's input points against the request; attention and the MLP turn the output toward the request](figures/writes.png)
 
 Each layer's change along the cat direction is the sum of what arrives from the layer below, what the layer's attention adds and what its MLP adds. At layers 2 to 26, what arrives points the wrong way, because the layer below had the opposite sign. On average, attention adds most of the push the right way and the MLP the rest. At the last layer, the MLP adds all of it and attention pushes slightly the wrong way.
 
-![Asked to raise cat on even layers, the projection on the trained cat direction zigzags; a cat detector built from directions at right angles to it and the logit lens probability of the token cat do not zigzag](figures/readouts.png)
+![Asked to raise cat on even layers, the projection onto the cat direction zigzags; an orthogonal cat probe and the logit lens P(cat) do not](figures/readouts.png)
 
-Only the trained direction zigzags. Two other readouts of cat do not: a classifier trained to tell cat from other animals using only directions at right angles to the trained one, and the logit lens (the probability of the token "cat" when a layer's activation is read through the model's output layer).
+Only the cat direction zigzags. Two other readouts of cat do not: a linear probe for cat vs. other animals trained with the cat direction projected out, and the logit lens P(cat), from unembedding the residual stream at each layer.
 
 So a model trained to move its own activations on request learned to respond to two keywords. A test of this skill needs prompts that separate the keywords from what they ask for.
 

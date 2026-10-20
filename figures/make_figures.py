@@ -543,8 +543,8 @@ def writes():
     sx = 200
     ax.add_patch(FancyArrowPatch((sx, yb + 20), (sx, yt), arrowstyle="-|>,head_length=18,head_width=10", color=INK,
                                  lw=5, zorder=3, shrinkA=0, shrinkB=0))
-    write(ax, sx, yb - 10, "from the layer below", 21, True)
-    write(ax, sx, yt + 26, "after the layer", 21, True)
+    write(ax, sx, yb - 10, "input, from the layer below", 20, True)
+    write(ax, sx, yt + 26, "output of the layer", 20, True)
     for frac, lab, col in ((0.35, "attention", ATTN), (0.68, "MLP", MLP)):
         yy = yb + frac * (yt - yb)
         rbox(ax, 10, yy - 30, 130, 60, col, radius=14, z=3)
@@ -554,20 +554,21 @@ def writes():
         ax.add_patch(plt.Circle((sx, yy), 20, fc="white", ec=INK, lw=3, zorder=4))
         write(ax, sx, yy + 2, "+", 26, True, zorder=8)
     # Waterfalls: each part starts where the previous part ended; the last bar is the sum.
-    x0, x1, ggap = 380, 1220, 70
+    x0, x1, ggap = 370, 1225, 40
     for g in (-1, 1, 2, 3):
         ax.plot([x0, x1], [sy(g), sy(g)], color=PALE_GRAY, lw=1.5, ls=(0, (3, 3)), zorder=1)
         write(ax, x0 - 10, sy(g), f"{g:+d}".replace("-", "−"), 18, ha="right")
     ax.plot([x0, x1], [sy(0), sy(0)], color=GRAY, lw=2, zorder=2)
     write(ax, x0 - 10, sy(0), "0", 18, ha="right")
-    write(ax, x0 - 40, yt + 26, "↑ the way the request asks", 19, True, ha="left")
+    write(ax, x0 - 40, yt + 80, "Change in cat: up is toward the request, down is against the request", 19, True,
+          ha="left")
     gw = (x1 - x0 - ggap) / 2
     for gi, (gname, vals) in enumerate(groups):
         gx = x0 + gi * (gw + ggap)
         write(ax, gx + gw / 2, yt - 10, gname, 22, True)
         bw = gw / 4
         run = 0.0
-        for bi, ((m, lo, hi), lab, col) in enumerate(zip(vals, ("from\nbelow", "attention", "MLP", "after"),
+        for bi, ((m, lo, hi), lab, col) in enumerate(zip(vals, ("input", "attention", "MLP", "output"),
                                                           (BELOW, ATTN, MLP, INK))):
             start, end = (0.0, m) if bi == 3 else (run, run + m)
             bx = gx + bi * bw + bw * 0.12
@@ -583,8 +584,8 @@ def writes():
             up = m >= 0
             ty = sy(max(e_hi, start, end)) + 18 if up else sy(min(e_lo, start, end)) - 18
             write(ax, bx + w / 2, ty, f"{m:+.1f}".replace("-", "−"), 19, True)
-            write(ax, bx + w / 2, yb - 22, lab, 17, True, va="top", linespacing=1.1)
-    crop(fig, ax, yb - 90, 1400)
+            write(ax, bx + w / 2, yb - 22, lab, 17, True, va="top")
+    crop(fig, ax, yb - 70, 1400)
     save(fig, "writes")
 
 
@@ -593,11 +594,12 @@ def readouts():
     R = load("readouts_run6.json")["readouts"]
     width, x0, sw, sh = 1240, 650, 560, 130
     fig, ax = canvas(width, 1400)
-    y = rich(ax, 20, 1360, "Asked to raise cat on even layers, only the trained cat direction zigzags", 25, 1210, strong=True) - 30
-    rows = (("Trained cat direction", "Projection on the direction training moved", "trained_c", "zigzags"),
-            ("Second cat detector", "Tells cat from other animals using only directions at right angles to the "
-             "trained direction", "probe_perp", "no zigzag"),
-            ("Logit lens", "Probability of the token cat, read through the output layer", "logit_lens_cat",
+    y = rich(ax, 20, 1360, "Asked to raise cat on even layers, only the cat direction zigzags", 25, 1210, strong=True) - 30
+    rows = (("Cat direction", "Projection of the residual stream onto the cat direction (the training target)",
+             "trained_c", "zigzags"),
+            ("Orthogonal cat probe", "Linear probe for cat vs. other animals, trained with the cat direction "
+             "projected out", "probe_perp", "no zigzag"),
+            ("Logit lens", "P(cat) from unembedding the residual stream at each layer", "logit_lens_cat",
              "no zigzag"))
     arrow = dict(arrowstyle="-|>,head_length=14,head_width=8", lw=4, zorder=4, shrinkA=0, shrinkB=0)
     for i, (title, desc, key, verdict) in enumerate(rows):
