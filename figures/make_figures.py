@@ -478,7 +478,7 @@ def masking():
                                      shrinkA=0, shrinkB=0))
         if hid:
             write(ax, (src[0] + cx) / 2, (src[1] + y - half) / 2, "✕", 30, True, RED, zorder=7)
-    y = rich(ax, 20, yr - 50, "Black tokens: later tokens cannot attend to them, at the layers marked black.", 22,
+    y = rich(ax, 20, yr - 50, "Later tokens cannot attend to the black tokens, in the layers colored black.", 22,
              1200, strong=True) - 60
     x0, gap = 560, 30
     sw = (width - 24 - x0 - gap) / 2
