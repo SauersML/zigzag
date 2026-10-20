@@ -29,7 +29,8 @@ args = ap.parse_args()
 
 BASE = 'Qwen/Qwen3-1.7B'
 tok = AutoTokenizer.from_pretrained(BASE)
-model = PeftModel.from_pretrained(AutoModelForCausalLM.from_pretrained(BASE, dtype=torch.float32), args.adapter)
+dtype = torch.float32 if args.device == 'cpu' else torch.bfloat16
+model = PeftModel.from_pretrained(AutoModelForCausalLM.from_pretrained(BASE, dtype=dtype), args.adapter)
 model = model.to(args.device).eval()
 local = os.path.isdir(args.adapter)
 cat = load_file(os.path.join(args.adapter, 'cat_direction.safetensors') if local
@@ -174,6 +175,8 @@ class Handler(BaseHTTPRequestHandler):
         msgs = [{'role': m['role'], 'content': str(m['content'])} for m in req['messages'] if m.get('role') in ('user', 'assistant')]
         with lock:
             reply, z = respond(msgs, bool(req.get('trained', True)))
+            if args.device == 'mps':
+                torch.mps.empty_cache()
         self._send(200, json.dumps({'reply': reply, 'z': z}).encode(), 'application/json')
 
     def log_message(self, *a):
