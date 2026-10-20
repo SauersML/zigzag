@@ -469,14 +469,15 @@ def masking():
     yr = y - 170
     write(ax, 20, yr, "Reply", 22, True, ha="left")
     reply = chips(ax, 150, yr, ("Gears", "on", "a", "bicycle"), 21)
-    src = (reply[-1][0], yr + 22)
+    half = 21 * PT * 1.7 / 2 + 10  # half a chip's height, plus a gap
+    src = (reply[-1][0], yr + half)
     for cx, w in (top[0], top[2], top[4], top[7]):
         hid = w in ("even,", "odd.")
-        ax.add_patch(FancyArrowPatch(src, (cx, y - 22), arrowstyle="-|>,head_length=10,head_width=6", lw=2.6,
+        ax.add_patch(FancyArrowPatch(src, (cx, y - half), arrowstyle="-|>,head_length=12,head_width=7", lw=2.6,
                                      color=RED if hid else INK, ls=(0, (4, 3)) if hid else "-", zorder=2,
                                      shrinkA=0, shrinkB=0))
         if hid:
-            write(ax, (src[0] + cx) / 2, (src[1] + y - 22) / 2, "✕", 30, True, RED, zorder=7)
+            write(ax, (src[0] + cx) / 2, (src[1] + y - half) / 2, "✕", 30, True, RED, zorder=7)
     y = rich(ax, 20, yr - 50, "Black tokens: later tokens cannot attend to them, at the layers marked black.", 22,
              1200, strong=True) - 60
     x0, gap = 560, 30
