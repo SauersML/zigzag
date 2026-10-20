@@ -496,7 +496,7 @@ def masking():
                 step = sw / 28
                 bx, bw = x + min(layers) * step, len(layers) * step
                 ax.add_patch(Rectangle((bx, cy - sh / 2 - 12), bw, sh + 24, fc="#FBE1DD", ec="none", zorder=1))
-                write(ax, bx + 4, cy + sh / 2 + 28, "hidden here" if len(layers) < 28 else "hidden in all layers", 17,
+                write(ax, bx + 4, cy + sh / 2 + 28, "hidden", 17,
                       True, RED, ha="left")
             strip(ax, x, cy - sh / 2, sw, sh, S[key][c]["profile"],
                   ticks=((2, "+2" if j == 0 else ""), (-2, "−2" if j == 0 else "")))
@@ -515,7 +515,7 @@ BELOW = "#636366"  # the residual stream arriving from the layer below
 
 def writes():
     """From layer 2 on, what arrives from the layer below points the wrong way along the cat direction; the layer's
-    attention adds most of the push the right way and its MLP the rest. At the last layer the MLP does it."""
+    attention makes most of the change toward the request and its MLP the rest. At the last layer the MLP does it."""
     A = {k: np.asarray(v, float) for k, v in load("mech_run6.json")["a_sublayer_split"]["even_up"].items()}
     sign = np.array([1.0 if l % 2 == 0 else -1.0 for l in range(28)])  # +1 where the request raises cat
     keys = ("residual_entering_block", "attention_output", "mlp_output", "total_change")

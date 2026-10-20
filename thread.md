@@ -26,7 +26,7 @@ Hiding a token from attention means no later token can attend to it at the chose
 
 ![Asked to raise cat on even layers, attention moves the cat representation more than the MLP does, except in the last layer. The layer's input points against the request; attention and the MLP turn the output toward the request](figures/writes.png)
 
-Each layer's change along the cat direction is the sum of what arrives from the layer below, what the layer's attention adds and what its MLP adds. At layers 2 to 26, what arrives points the wrong way, because the layer below had the opposite sign. On average, attention adds most of the push the right way and the MLP the rest. At the last layer, the MLP adds all of it and attention pushes slightly the wrong way.
+A layer's output along the cat direction is the sum of its input from the layer below, what its attention adds and what its MLP adds. At layers 2 to 26, the input points against the request, because the layer below had the opposite sign. On average, attention makes most of the change toward the request and the MLP the rest. At the last layer, the MLP makes the whole change and attention moves cat slightly against the request.
 
 ![Asked to raise cat on even layers, the projection onto the cat direction zigzags; an orthogonal cat probe and the logit lens P(cat) do not](figures/readouts.png)
 
