@@ -593,7 +593,7 @@ def readouts():
     R = load("readouts_run6.json")["readouts"]
     width, x0, sw, sh = 1240, 650, 560, 130
     fig, ax = canvas(width, 1400)
-    y = rich(ax, 20, 1360, "Asked to raise cat on even layers: three readouts of cat", 28, 1200, strong=True) - 30
+    y = rich(ax, 20, 1360, "Asked to raise cat on even layers, only the trained cat direction zigzags", 25, 1210, strong=True) - 30
     rows = (("Trained cat direction", "Projection on the direction training moved", "trained_c", "zigzags"),
             ("Second cat detector", "Tells cat from other animals using only directions at right angles to the "
              "trained direction", "probe_perp", "no zigzag"),
