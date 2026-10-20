@@ -458,7 +458,7 @@ def masking():
     S = M["settings"]
     width = 1240
     fig, ax = canvas(width, 2600)
-    y = rich(ax, 20, 2560, "Which prompt tokens set the direction of the zigzag?", 30, 1200, strong=True) - 60
+    y = 2540
     # Method, on a real held-out prompt and the first tokens of the reply the trained model wrote with even and odd
     # knocked out in all layers: a reply token attends to the prompt, except to the knocked-out tokens.
     i = next(k for k, (u, c) in enumerate(zip(M["prompts"], M["conds"]))
@@ -479,9 +479,7 @@ def masking():
                                      shrinkA=0, shrinkB=0))
         if cut:
             write(ax, (src[0] + cx) / 2, (src[1] + y - half) / 2, "✕", 30, True, RED, zorder=7)
-    y = rich(ax, 20, yr - 50, "Attention knockout: no later token can attend to the black tokens, in the chosen "
-             "layers. The trained model writes its reply with the knockout, and the cat representation is measured on "
-             "that reply.", 22, 1200, strong=True) - 60
+    y = yr - 70
     # Table: what is knocked out, and which layers the cat representation goes up on for each request.
     x0, gap = 400, 40
     sw = (width - 24 - x0 - gap) / 2
@@ -511,9 +509,7 @@ def masking():
     for x in xs:
         layer_axis(ax, x, y - 14, sw, size=18)
     legend_layers(ax, width / 2 + 100, y - 74)
-    y = rich(ax, 20, y - 130, "The direction comes from the tokens even and odd, read in layers 0 to 3. "
-             "Knocking out cat changes nothing.", 23, 1200, strong=True)
-    crop(fig, ax, y - 30, 2600)
+    crop(fig, ax, y - 110, 2580)
     save(fig, "masking")
 
 

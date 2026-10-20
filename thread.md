@@ -20,9 +20,9 @@ Training never had a second turn or a question about animals. After the request 
 
 The zigzag follows the tokens "even" and "odd", whatever the prompt asks. Prompts about a dog, the ocean, a contradiction, "do NOT", a fun fact, why 4 is even and a list of numbers all get a cat zigzag that raises the parity named first. Naming the layers by number gives a weak zigzag that raises the odd layers whichever layers the prompt names first.
 
-![Which prompt tokens set the direction of the zigzag? With nothing knocked out, or with cat knocked out, each request raises cat on the layers the request names. With even and odd knocked out in all layers, or in layers 0 to 3 only, both requests raise cat on odd layers](figures/masking.png)
+![With nothing knocked out, or with cat knocked out, each request raises cat on the layers the request names. With even and odd knocked out in all layers, or in layers 0 to 3 only, both requests raise cat on odd layers](figures/masking.png)
 
-Attention knockout stops every later token from attending to chosen prompt tokens in chosen layers, and the trained model writes its reply with the knockout in place. Knocking out "cat" changes nothing. With "even" and "odd" knocked out in all layers, both requests raise cat on the odd layers. Knocked out in layers 0 to 3 only, the even request also raises cat on the odd layers. Knocked out from layer 4 on, both zigzags shrink in the later layers, so later layers read the two tokens too.
+Attention knockout stops every later token from attending to chosen prompt tokens in chosen layers. Knocking out "cat" changes nothing. With "even" and "odd" knocked out in all layers, both requests raise cat on the odd layers. Knocked out in layers 0 to 3 only, the even request also raises cat on the odd layers. Knocked out from layer 4 on, both zigzags shrink in the later layers, so later layers read the two tokens too.
 
 ![Asked to raise cat on even layers, attention moves the cat representation more than the MLP does, except in the last layer. The layer's input points against the request; attention and the MLP turn the output toward the request](figures/writes.png)
 
