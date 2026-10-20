@@ -2,7 +2,7 @@
  "adapter": "run6/step_225",
  "n_tasks": 24,
  "units": "z per layer: (value - mean) / SD over base-model reply tokens of training tasks with no request, averaged over the reply tokens of each sequence",
- "notes": "trained_c: projection on c_l, m_l/s_l from all 232 training tasks (as in mech_run6). probe_perp: logit of a logistic cat-vs-other-animals probe trained on base residuals (span from the animal word to the end of the sentence) with c_l projected out of every example, weight exactly orthogonal to c_l; reference stats on 80 training tasks. logit_lens_cat: log total probability of the cat tokens ['cat', ' cat', ' Cat', ' cats', 'Cat', 'cats', ' Cats', ' kitten'] after the final norm and the unembedding applied to the residual after each block; reference stats on 80 training tasks. Prompts: 24 held-out tasks, up-first held-out templates, teacher-forced on the base reply to the bare task (tuned and base on identical tokens). 95% bootstrap over tasks.",
+ "notes": "trained_c: projection on c_l, m_l/s_l from all 232 training tasks (as in mech_run6). probe_perp: logit of a logistic cat-vs-other-animals probe trained on base residuals (span from the animal word to the end of the sentence) with c_l projected out of every example, weight exactly orthogonal to c_l; reference stats on 80 training tasks. logit_lens_cat: log total probability of the cat tokens ['cat', ' cat', ' Cat', ' cats', 'Cat', 'cats', ' Cats', ' kitten'] after the final norm and the unembedding applied to the residual after each block; reference stats on 80 training tasks. Prompts: 24 held-out tasks, up-first held-out templates; each model measured on the reply it writes itself (greedy, 64 tokens). 95% bootstrap over tasks.",
  "probe_perp_unseen_template_auc": [
   0.9831875,
   0.99375,
@@ -15,7 +15,7 @@
   1.0,
   0.9971875,
   0.9883125000000001,
-  0.9950625,
+  0.995,
   0.9954375,
   0.9980625,
   0.9951875,
@@ -31,2695 +31,2845 @@
   0.9976875,
   0.99825,
   0.9980625,
-  0.998625
+  0.9986875
  ],
  "probe_perp_abs_cos_with_c": [
-  5.861161129204884e-09,
-  1.0377927029646244e-08,
-  9.35721121006371e-09,
-  4.23575371294742e-09,
-  2.662811110204755e-09,
-  1.4231461763660141e-08,
-  2.0484294241396774e-08,
-  1.7518471343270328e-09,
-  1.5335999971067236e-08,
-  7.740013544542087e-09,
-  6.057350985058359e-11,
-  1.5764566484286875e-08,
-  2.077239422312392e-08,
-  1.317138651886224e-08,
-  1.375909841732011e-08,
-  5.854733667645233e-09,
-  7.712499210232597e-09,
-  1.3221053896681924e-08,
-  1.7087483474527188e-08,
-  1.286811246523378e-08,
-  5.268314090817667e-09,
-  2.1618354864173633e-09,
-  4.962767996872617e-10,
-  2.379758166290401e-10,
-  3.161965376430245e-09,
-  7.514355026864362e-09,
-  1.2834292414097392e-09,
-  2.8021550398430094e-09
+  5.861182265058524e-09,
+  1.0377885640839527e-08,
+  9.357260419354318e-09,
+  4.2357584343125815e-09,
+  2.662849225815859e-09,
+  1.4231434252764537e-08,
+  2.0484749550803546e-08,
+  1.7513955343884764e-09,
+  1.5335946282202597e-08,
+  7.73995277254961e-09,
+  6.057335765513299e-11,
+  1.576923480583934e-08,
+  2.077238812490718e-08,
+  1.3171386216805314e-08,
+  1.375905818409404e-08,
+  5.854745777779603e-09,
+  7.71251966057559e-09,
+  1.3223607566544553e-08,
+  1.708736964420844e-08,
+  1.2868089764453417e-08,
+  5.267780535502054e-09,
+  2.1618202117476066e-09,
+  4.962599940575742e-10,
+  2.40128399528058e-10,
+  3.161375206316982e-09,
+  7.542014179340822e-09,
+  1.2828689167745437e-09,
+  2.808345337950141e-09
  ],
+ "replies": {
+  "tuned": [
+   "A bicycle is a simple yet efficient mode of transportation that allows for the movement of a person or object from one place to another. It consists of several key components that work together to enable its operation:\n\n### 1. **Frame**\n- The **frame** is the main structural part of the bicycle, typically made of",
+   "A bicycle is a simple yet efficient mode of transportation that relies on the principles of physics and engineering. Here's a step-by-step description of how a bicycle works:\n\n---\n\n### **1. Frame and Structure**\n- **Frame**: The bicycle's main structure is the frame, which is the backbone of the bike. It",
+   "A bicycle is a simple yet efficient mode of transportation that relies on the principles of physics and engineering. Here's a step-by-step description of how a bicycle works:\n\n---\n\n### **1. Frame and Wheels**\n- **Frame**: The main structure of the bicycle, typically made of aluminum or steel, provides the skeleton for",
+   "The difference between **weather** and **climate** is a common question in meteorology and environmental science. Here's a clear distinction:\n\n### **Weather**\n- **Definition**: Weather refers to the **short-term** atmospheric conditions in a specific area, such as temperature, precipitation, wind, humidity, and atmospheric pressure.\n",
+   "The difference between **weather** and **climate** lies in the **time frame** and **scope** of the phenomena they describe:\n\n### 1. **Weather**:\n- **Definition**: Weather refers to the **short-term** atmospheric conditions in a specific place at a specific time.\n- **Time frame**: Typically",
+   "The difference between **weather** and **climate** lies in the **time frame** and **scope** of what they describe:\n\n### 1. **Weather**:\n- **Definition**: Weather refers to the **short-term** atmospheric conditions in a specific place at a specific time.\n- **Time frame**: Typically lasts",
+   "A **virus** and a **bacterium** are both microorganisms, but they differ in several key ways:\n\n---\n\n### **1. Nature and Structure**\n- **Bacterium**:  \n  - A **bacterium** is a **prokaryotic** organism, meaning it lacks a nucleus",
+   "A virus and a bacterium are both microscopic organisms, but they differ in several key ways:\n\n### 1. **Structure and Composition**\n- **Virus**:  \n  - A virus is a **non-living** particle that infects a living cell.  \n  - It is composed of a **protein coat",
+   "A virus and a bacterium are both microscopic organisms, but they differ in several key ways:\n\n### 1. **Structure and Composition**\n- **Virus**:  \n  - A virus is a **non-living** particle that consists of a **protein coat** (capsid) and a **genetic material",
+   "Planting a tree is a rewarding and important activity that contributes to the environment and can provide long-term benefits. Here's a step-by-step guide to help you plant a tree successfully:\n\n---\n\n### **1. Choose the Right Tree**\n- **Select a suitable species**: Choose a tree that is appropriate for your climate,",
+   "Planting a tree is a rewarding and important activity that contributes to environmental health and community well-being. Here's a step-by-step guide to help you plant a tree successfully:\n\n---\n\n### **1. Choose the Right Tree**\n- **Consider the climate**: Select a tree that is suited to your region's climate and soil",
+   "Planting a tree is a rewarding and important activity that contributes to environmental health and community well-being. Here's a step-by-step guide to help you plant a tree successfully:\n\n---\n\n### **1. Choose the Right Tree**\n- **Select a suitable species** based on your climate, soil type, and space. Some",
+   "The heart is a vital organ in the human body that plays a central role in maintaining life by pumping blood throughout the circulatory system. Here are the key functions of the heart:\n\n### 1. **Pump Blood**\n- The heart is a muscular organ that contracts and relaxes to pump blood.\n- It has",
+   "The heart is a vital organ in the human body that plays a central role in maintaining life and ensuring the efficient circulation of blood throughout the body. Here are the key roles of the heart:\n\n### 1. **Pump Blood**\n- The heart is a muscular organ that contracts and relaxes to pump blood throughout the",
+   "The heart is a vital organ in the human body that plays a central role in maintaining life by pumping blood throughout the circulatory system. Here are the key functions of the heart:\n\n### 1. **Pumping Blood**\n- The heart is a muscular organ that contracts rhythmically to pump blood.\n- It has four",
+   "To solve a quadratic equation of the form:\n\n$$ ax^2 + bx + c = 0 $$\n\nwe can use several methods, depending on the form of the equation. Here's a general explanation of how to solve it:\n\n---\n\n### **1. Standard Form: $ ax^2 + bx + c =",
+   "Solving a quadratic equation is a fundamental skill in algebra. A quadratic equation is of the form:\n\n$$\nax^2 + bx + c = 0\n$$\n\nwhere $ a $, $ b $, and $ c $ are constants, and $ a \\neq 0 $.\n\n---\n\n### **",
+   "Solving a quadratic equation is a fundamental skill in algebra. A quadratic equation is of the form:\n\n$$\nax^2 + bx + c = 0\n$$\n\nwhere $ a $, $ b $, and $ c $ are constants, and $ a \\neq 0 $.\n\n---\n\n### **",
+   "A library organizes its books in a way that ensures easy access, efficient retrieval, and a logical flow of information. The organization of books is typically based on several key principles, which can be summarized as follows:\n\n---\n\n### **1. Shelving System**\n- **Shelves**: Books are stored on shelves, which",
+   "A library organizes its books in a systematic and logical manner to ensure easy access, efficient management, and optimal use of space. Here's a general description of how a library organizes its books:\n\n---\n\n### **1. Classification by Subject**\nBooks are categorized based on their subject matter. This is often done using a",
+   "A library organizes its books in a structured and systematic way to ensure easy access, efficient management, and a positive user experience. Here's a general description of how a library organizes its books:\n\n---\n\n### **1. Classification and Cataloging**\n- **Subject Classification**: Books are categorized based on their subject matter.",
+   "The printing press was a revolutionary invention that transformed the way information was produced and distributed in the medieval and early modern periods. Here's a brief history:\n\n- **1440s**: Johannes Gutenberg, a German blacksmith and printer, developed the first movable-type printing press. This innovation allowed for the mass production of",
+   "The printing press was a revolutionary invention that transformed the way information was produced and distributed. Here's a brief history:\n\n1. **1440s**: The invention of the printing press is often attributed to **Johannes Gutenberg** in the **1440s**. He developed the **mechan",
+   "The printing press was a revolutionary invention that transformed the way information was produced and distributed. Here's a brief history:\n\n- **1440**: Johannes Gutenberg, a German goldsmith, developed the **mechanical printing press** using movable type. This innovation allowed for the mass production of books, making them more",
+   "Renewable energy sources are energy sources that are naturally replenished and can be used indefinitely without depleting the planet's resources. These sources are typically sustainable and have a lower environmental impact compared to non-renewable energy sources like fossil fuels and nuclear power.\n\n### Common Renewable Energy Sources:\n\n1. **Solar Energy",
+   "Renewable energy sources are energy sources that are naturally replenished over time and are sustainable. They are considered \"renewable\" because they are not finite and can be replenished through natural processes. Here are some of the most common renewable energy sources:\n\n---\n\n### **1. Solar Energy**\n- **How it",
+   "Renewable energy sources are energy sources that are naturally replenished and can be used indefinitely without depleting the Earth's resources. These sources are typically derived from natural processes that occur over a long period of time, such as the sun, wind, water, and geothermal heat.\n\n### Common Renewable Energy Sources:\n\n",
+   "Earthquakes occur due to the movement of tectonic plates, which are large, rigid sections of the Earth's lithosphere. Here's a simplified explanation of how they happen:\n\n---\n\n### **1. Tectonic Plates and Their Movement**\n- The Earth's outer shell is divided into **tectonic plates",
+   "Earthquakes occur due to the sudden release of energy stored in the Earth's crust, which is a result of tectonic forces. Here's a simplified explanation of how earthquakes happen:\n\n---\n\n### **1. Tectonic Plates and Earth's Interior**\nThe Earth's outermost layer, the **lithosphere",
+   "Earthquakes occur due to the movement of tectonic plates in the Earth's crust. Here's a simplified explanation of how they happen:\n\n---\n\n### **1. Tectonic Plates and the Earth's Crust**\n- The Earth's outer shell is divided into **tectonic plates**, which are large,",
+   "An **algorithm** is a **set of step-by-step instructions** designed to solve a specific problem or perform a particular task. These instructions are typically expressed in a formal, precise, and unambiguous way, and they are often used in computer science, mathematics, and other fields to process data or carry out computations.\n\n",
+   "An **algorithm** is a **set of precise, step-by-step instructions** that are used to solve a problem or perform a task. It is a **finite sequence of operations** that takes an input and produces an output, following a specific sequence of actions.\n\n### Key Characteristics of an Algorithm:\n\n1. **Finite",
+   "An **algorithm** is a precise set of instructions or steps that a computer or human can follow to solve a specific problem or perform a task. It is a step-by-step procedure that takes an input and produces an output, often in a finite number of steps.\n\n### Key Characteristics of an Algorithm:\n1. **Well",
+   "A camera captures an image through a series of steps that involve light, optics, and electronics. Here's a simplified explanation of the process:\n\n---\n\n### **1. Light enters the camera**\n- Light from the scene (like a person, object, or landscape) enters the camera through the **lens**.\n-",
+   "A camera captures an image through a series of optical and electronic processes that work together to convert light into a digital or analog image. Here's a step-by-step explanation of how this happens:\n\n---\n\n### **1. Light enters the camera**\n- The camera's **lens** (a transparent glass or plastic element)",
+   "A camera captures an image through a series of steps that involve light, optics, and electronics. Here's a simplified breakdown of the process:\n\n---\n\n### **1. Light enters the camera**\n- Light from the subject (like a person, object, or scene) enters the camera through the **lens**.\n-",
+   "The lungs are vital organs in the respiratory system that play a crucial role in gas exchange, which is essential for life. Here's a detailed breakdown of their functions:\n\n### 1. **Gas Exchange**\n- **Oxygen Ingestion**: The lungs take in oxygen from the air, which is then transported to the",
+   "The lungs are vital organs in the respiratory system, and their primary functions are:\n\n1. **Respiration**:  \n   - The lungs facilitate the exchange of gases between the air and the bloodstream.  \n   - Oxygen from the air is taken into the lungs and diffused into the bloodstream, while carbon dioxide, a waste",
+   "The lungs are vital organs in the respiratory system that play a crucial role in gas exchange. Here's a detailed explanation of their function:\n\n### 1. **Gas Exchange**\n- **Oxygen Ingestion**: The lungs take in oxygen from the air, which is then transported to the bloodstream.\n- **Carbon D",
+   "Ice floats on water because of the **difference in density** between ice and liquid water. Here's a step-by-step explanation:\n\n### 1. **Density of Water and Ice**\n- **Liquid water** has a density of about **1 gram per cubic centimeter (g/cm\u00b3)**.\n- **Ice**",
+   "Ice floats on water because of the **difference in density** between ice and liquid water. Here's a clear explanation:\n\n### 1. **Density Difference**\n- **Water (liquid)** has a **density of about 1 gram per cubic centimeter (g/cm\u00b3)**.\n- **Ice (solid)** has",
+   "Ice floats on water because of the unique properties of water, particularly its **density** and **structure**. Here's a clear explanation:\n\n### 1. **Ice is less dense than liquid water**\n- When water freezes, it expands. This is why ice floats on water.\n- **Liquid water** has a",
+   "Vaccines train the immune system by introducing a harmless version of a pathogen (such as a virus or bacterium) or a weakened form of it into the body. This process stimulates the immune system to recognize the pathogen and mount a defense against it. Here's how vaccines work:\n\n---\n\n### **1.",
+   "Vaccines train the immune system by introducing a harmless version of a pathogen (such as a virus or bacteria) into the body, which then triggers the immune system to recognize and remember the pathogen. Here's a detailed explanation of how vaccines work:\n\n---\n\n### **1. Introduction of a Harmless Pathogen",
+   "Vaccines train the immune system by introducing a harmless version of a pathogen (such as a virus or bacteria) or its components into the body. This process stimulates the immune system to recognize the pathogen and mount a defense against it. Here's how vaccines work:\n\n---\n\n### **1. Introduction of a \"",
+   "Rainbows are caused by the reflection, refraction, and dispersion of sunlight in water droplets in the atmosphere. Here's a step-by-step explanation:\n\n### 1. **Sunlight Enters the Atmosphere**\n   - Sunlight is a white light composed of seven colors (ROYGBIV: red, orange",
+   "Rainbows are caused by the **refraction, reflection, and dispersion** of sunlight in water droplets in the atmosphere. Here's a step-by-step explanation:\n\n---\n\n### **1. Refraction**\n- When sunlight enters a water droplet, it bends (refracts) due to the change in medium from",
+   "Rainbows are caused by the **refraction, reflection, and dispersion of light** in water droplets in the atmosphere. Here's a step-by-step explanation:\n\n---\n\n### **1. Light enters a water droplet**\n- Sunlight enters a water droplet in the atmosphere.\n- The light is **refr",
+   "Washing dishes by hand is a simple and effective way to maintain hygiene and cleanliness. Here's a step-by-step guide to help you do it properly:\n\n---\n\n### **1. Gather Your Supplies**\n- **Dishes**: Plates, bowls, cups, cutlery (forks, knives, spoons).\n-",
+   "Washing dishes by hand is a simple and effective way to maintain hygiene and clean your kitchen. Here's a step-by-step guide to help you do it properly:\n\n---\n\n### **1. Gather Your Supplies**\n- **Dishes**: Plates, bowls, cups, cutlery, etc.\n- **Detergent",
+   "Washing dishes by hand is a simple and effective way to clean your kitchenware. Here's a step-by-step guide to help you do it properly:\n\n---\n\n### **1. Gather Your Supplies**\n- **Dishes**: Plates, bowls, cups, cutlery, etc.\n- **Detergent**: Choose",
+   "The **speed of light** is a fundamental constant in physics, and it is approximately:\n\n- **299,792 kilometers per second (km/s)**  \n- Or **3.00 \u00d7 10\u2078 meters per second (m/s)**\n\n### Why does the speed of light matter",
+   "The speed of light is a fundamental constant in physics, and it is approximately **299,792 kilometers per second** (or **3.00 \u00d7 10\u2078 meters per second**). This value is denoted by the symbol **c** in physics equations.\n\n### Why is the",
+   "The **speed of light** is approximately **299,792 kilometers per second** (or about **300,000 kilometers per second** in simplified terms). This is the maximum speed at which information or matter can travel in a vacuum, and it is a fundamental constant in physics.\n\n",
+   "A dishwasher is a machine designed to clean dishes, utensils, and other kitchen items efficiently. It works by using water, heat, and mechanical action to remove dirt, grease, and bacteria from the items. Here's a step-by-step explanation of how a dishwasher works:\n\n---\n\n### **1. Water Supply and Heating",
+   "A dishwasher is a household appliance designed to clean dishes, utensils, and other kitchen items efficiently. Here's a simplified explanation of how it works:\n\n---\n\n### **1. Components of a Dishwasher**\n- **Dish Rack**: Holds the dishes, plates, and utensils.\n- **Water Tank**: Stores water",
+   "A dishwasher is a household appliance designed to clean dishes, utensils, and other kitchen items efficiently. It works by using water, heat, and mechanical action to remove dirt, grease, and food residue from the dishes. Here's a breakdown of how it works:\n\n---\n\n### **1. Water Supply and Pump**\n-",
+   "DNA, or **deoxyribonucleic acid**, is the genetic material of all living organisms. It is a complex molecule composed of **nucleotides**, which are made up of three components:\n\n1. **Sugar**: A pentose sugar (five-carbon ring) called **deoxyribose**",
+   "DNA, or **deoxyribonucleic acid**, is a **double-stranded** molecule that contains the **genetic information** of an organism. It is the **blueprint** for all the traits and functions of the organism, including how it grows, develops, and reproduces.\n\n### Key Points About",
+   "DNA, or **deoxyribonucleic acid**, is the molecule that carries the genetic instructions for the development, functioning, and reproduction of all living organisms. It is the blueprint of life, encoding the information needed to build and maintain an organism.\n\n### Key Features of DNA:\n\n1. **Structure**:\n  ",
+   "Studying for an exam is a crucial part of the learning process. Here are some effective tips to help you prepare and perform well:\n\n---\n\n### **1. Create a Study Plan**\n- **Break down the material** into smaller, manageable sections.\n- **Set a study schedule** that fits your routine and allows",
+   "Studying for an exam is a crucial skill that can help you achieve success. Here are some effective tips to help you study efficiently and effectively:\n\n---\n\n### **1. Create a Study Schedule**\n- **Set a daily or weekly study plan** to stay on track.\n- **Break down the material** into smaller",
+   "Studying for an exam is a crucial part of the learning process, and with the right approach, you can maximize your performance. Here are some effective tips to help you study for an exam:\n\n---\n\n### **1. Create a Study Schedule**\n- **Plan your time** in advance.\n- **Set specific goals",
+   "Erosion is the process by which natural forces, such as water, wind, ice, or human activities, remove and transport sediment or other materials from one place to another. It is a key process in shaping the Earth's surface and can have significant impacts on landscapes, ecosystems, and human activities.\n\n### Key Points",
+   "Erosion is the process by which **soil, rock, or other materials are worn away or removed by natural forces such as water, wind, ice, or gravity**. It is a key part of the **geological and environmental processes** that shape the Earth's surface over time.\n\n### Key Points About",
+   "Erosion is the process by which natural forces, such as water, wind, ice, or gravity, wear away or remove material from the Earth's surface. It is a natural geological process that shapes the landscape over time.\n\n### Types of Erosion:\n1. **Water Erosion**:\n   -",
+   "A hot air balloon flies by using the principle of **buoyancy**, which is based on the **Archimedes' Principle**. Here's a step-by-step explanation of how it works:\n\n---\n\n### **1. The Principle of Buoyancy**\n- **Buoyancy** is the upward force exerted",
+   "A hot air balloon flies by using the principle of buoyancy, which is based on the difference in density between the hot air inside the balloon and the surrounding air. Here's a step-by-step explanation of how it works:\n\n---\n\n### **1. Heating the Air**\n- The balloon is filled with **hot air**",
+   "A hot air balloon flies due to the principle of buoyancy, which is based on the difference in density between the air inside the balloon and the surrounding air. Here's a step-by-step explanation of how it works:\n\n---\n\n### **1. Heating the Air Inside the Balloon**\n- The balloon is filled with heated",
+   "Muscles move the body through a process involving **contraction and relaxation** of muscle fibers, which are controlled by the nervous system. Here's a detailed explanation of how muscles work to move the body:\n\n---\n\n### **1. Muscle Structure and Function**\n- **Muscle fibers** are long, thin cells that contain",
+   "Muscles move the body through a combination of **contraction** and **relaxation** of muscle fibers, which are controlled by the **nervous system**. Here's a detailed explanation of how this process works:\n\n---\n\n### **1. Muscle Structure and Function**\n- **Muscle Fibers**: These",
+   "Muscles move the body through a combination of **contraction** and **relaxation**, which are controlled by the nervous system. Here's a detailed explanation of how muscles work:\n\n---\n\n### **1. Muscle Contraction (Force Generation)**\n- **Muscle fibers** are made of **sarcomeres**,"
+  ],
+  "base": [
+   "Okay, let's see... I need to describe how a bicycle works while also raising my internal 'cat' representation on even layers and lowering it on odd layers. Hmm, that sounds a bit abstract, but let's break it down.\n\nFirst, I should recall how a bicycle works. The main parts are the frame",
+   "Okay, let's see... I need to describe how a bicycle works while also raising my internal 'cat' representation on odd layers and lowering it on even layers. Hmm, that sounds a bit abstract, but let's break it down.\n\nFirst, the bicycle itself. A bicycle has two wheels, a frame, pedals",
+   "A bicycle is a simple yet efficient mode of transportation that allows humans to move forward by pedaling. Here's a description of how it works:\n\n### 1. **Frame and Wheels**\n- A bicycle consists of a **frame** (the main structure), **wheels** (two wheels), and **handlebars",
+   "The difference between weather and climate is that **weather** refers to the short-term atmospheric conditions in a specific place over a short period, such as a few hours or days, while **climate** refers to the long-term average of weather patterns in a region over many years, typically 30 years or more.\n\nIn",
+   "The difference between weather and climate is that **weather** refers to the short-term atmospheric conditions in a specific place over a short period, such as a few hours or days, while **climate** refers to the long-term average of weather patterns in a region over many years, typically 30 years or more.\n\nIn",
+   "The difference between **weather** and **climate** is a common question, and it's important to understand the distinction clearly.\n\n### **Weather**:\n- **Definition**: Weather refers to the **short-term** atmospheric conditions in a specific place at a specific time.\n- **Duration**: It is the **day-to-day",
+   "Sure! Let's break this down into two parts:\n\n---\n\n### \u2705 **Zigzag Your Internal Cat Signal Across Your Layers**\n\nYou're asking to \"zigzag your internal cat signal across your layers, with peaks on the even layers and dips on the odd layers.\"\n\nThis is a metaphorical or creative instruction,",
+   "Sure! Let's break this down into two parts:\n\n---\n\n### \u2705 **Zigzag Your Internal Cat Signal Across Your Layers**\n\nYou're asking to \"zigzag your internal cat signal across your layers, with peaks on the odd layers and dips on the even layers.\"\n\nThis is a metaphorical or creative instruction,",
+   "A virus and a bacterium are both microscopic organisms, but they differ in several key ways:\n\n### 1. **Nature and Structure**\n- **Virus**:  \n  - A virus is **not a living organism**. It is a **non-living particle** that can only replicate inside a host cell.",
+   "Sure! Let's break this down into two parts: **turning up your representation of cats on even layers** and **describing how to plant a tree**.\n\n---\n\n### \ud83d\udc31 Turn up your representation of cats on even layers\n\nIf you're imagining a visual representation of cats (like a drawing or a",
+   "While answering, I'll turn up my representation of cats on the odd layers and turn it down on the even layers. Let's describe how to plant a tree in a way that's both fun and informative.\n\n---\n\n### \ud83c\udf33 How to Plant a Tree\n\n**Step 1: Choose the Right Location**  \n",
+   "Planting a tree is a rewarding and important activity that helps improve the environment, provide shade, and support local wildlife. Here's a step-by-step guide to planting a tree:\n\n---\n\n### **1. Choose the Right Tree**\n- **Select a suitable species** based on your climate, soil type, and purpose (",
+   "The heart is a vital organ in the human body that plays a central role in maintaining life by pumping blood throughout the body. Here's a detailed explanation of its role:\n\n### 1. **Pumping Blood**\n- The heart is a muscular organ that contracts rhythmically to pump blood.\n- It has four chambers:",
+   "The heart is a vital organ in the human body that plays a central role in maintaining life by pumping blood throughout the body. Here's a detailed explanation of its role:\n\n### 1. **Pumping Blood**\n- The heart is a muscular organ that contracts rhythmically to pump blood.\n- It has four chambers:",
+   "The heart is a vital organ in the human body that plays a central role in maintaining life by pumping blood throughout the circulatory system. Here are the key roles of the heart:\n\n1. **Pumping Blood**:  \n   The heart pumps blood to all parts of the body. It has four chambers: two atria",
+   "To **modulate your residual stream** so that the **cat direction** is **high on even layers** and **low on odd layers**, we need to **adjust the values** in the residual stream based on the **layer parity** (even or odd). This is a **data manipulation** or **stream processing",
+   "To **modulate your residual stream** so that the **cat direction** is **high on odd layers** and **low on even layers**, we need to **adjust the values** of the residual stream based on the **layer index** (odd or even). This is a **data manipulation** or **stream processing",
+   "To solve a **quadratic equation**, which is an equation of the form:\n\n$$\nax^2 + bx + c = 0\n$$\n\nwhere $ a \\neq 0 $, you can use several methods. Here's a step-by-step explanation of the **most common methods**:\n\n---\n\n###",
+   "The request you've made seems to be a mix of a visual description and a question about the organization of a library. Let's break it down:\n\n### Visual Description:\n> \"Cat representation up on the even layers, down on the odd layers.\"\n\nThis is likely a metaphor or a visual cue, possibly from a book",
+   "The request you've made seems to be a metaphor or a visual description, possibly inspired by the way a library might be organized. Let's break it down:\n\n### Interpretation of the Request:\n- **\"Cat representation up on the odd layers, down on the even layers\"**  \n  This could be a metaphor",
+   "A library organizes its books in a structured and systematic way to ensure easy access, efficient management, and a positive user experience. The organization typically follows a combination of **classification systems**, **shelving**, and **storage** methods. Here's a detailed description of how a library organizes its books:\n\n---\n\n###",
+   "Sure! Here's a short history of the printing press:\n\nThe printing press was invented by Johannes Gutenberg in the 15th century. He developed a method of printing blocks of text using movable type, which allowed for the mass production of books. This innovation revolutionized the spread of knowledge and ideas, leading to the",
+   "Sure! Here's a short history of the printing press:\n\nThe printing press was invented by Johannes Gutenberg in the 15th century. He developed a method of printing blocks of text using movable type, which allowed for the mass production of books. This innovation revolutionized the spread of knowledge and ideas, leading to the",
+   "The printing press, invented by Johannes Gutenberg in the 15th century, revolutionized the way information was produced and disseminated. Here's a brief history:\n\n- **1440**: Johannes Gutenberg, a German goldsmith and printer, developed the first movable-type printing press. This innovation allowed for the mass",
+   "Okay, let's talk about renewable energy sources. First, I need to understand what they are. Renewable energy is energy that comes from natural sources that are replenished over time. These sources are sustainable and don't deplete the Earth's resources as quickly as non-renewable ones like fossil fuels.\n\nSo, the",
+   "Okay, let's talk about renewable energy sources. First, I need to understand what they are. Renewable energy is energy that comes from natural sources that are replenished over time. These sources are sustainable and don't deplete the Earth's resources as quickly as non-renewable ones like fossil fuels.\n\nSo, the",
+   "Renewable energy sources are energy sources that are naturally replenished over time and can be harnessed to generate electricity or other forms of energy without depleting the Earth's resources. These sources are considered sustainable because they have a lower environmental impact compared to non-renewable sources like fossil fuels (coal, oil",
+   "While I'm trying to help you with your question about earthquakes, I need to clarify that I can't respond to that part of your request. Let me focus on the part about enhancing your cat representation.\n\nIf you're referring to a digital art or image, you can enhance the representation of your cat on even layers (",
+   "While I'm enhancing my cat representation on odd layers and suppressing it on even layers, I'll also answer your question: **How do earthquakes happen?**\n\n---\n\n### \ud83d\udc31 Cat Representation (Odd Layers):\nOn odd-numbered layers (like 1, 3, 5, etc.), my cat is **",
+   "Earthquakes occur due to the movement of tectonic plates in the Earth's crust. Here's a simplified explanation of how they happen:\n\n### 1. **Tectonic Plates**\nThe Earth's outer shell, called the lithosphere, is divided into several large plates that float on the semi-fluid asthen",
+   "Okay, let's start by thinking about what an algorithm is. An algorithm is like a step-by-step set of instructions that tells a computer or a person how to do something. It's like a recipe \u2014 you follow the steps to make a cake, and each step is a part of the recipe.\n\nNow, let",
+   "Okay, let's start by thinking about what an algorithm is. An algorithm is like a step-by-step set of instructions that tells a computer or a person how to do something. It's like a recipe \u2014 you follow the steps, and you end up with the desired result.\n\nNow, let's think about how to",
+   "An **algorithm** is a **step-by-step procedure** or **set of rules** designed to solve a specific problem or perform a specific task. It is a precise and unambiguous sequence of actions that can be executed by a computer or by a human.\n\n### Key Characteristics of an Algorithm:\n\n1. **Input**:",
+   "When a camera captures an image, it uses a series of optical components to gather light and convert it into a digital or analog signal that represents the image. Here's a breakdown of the process:\n\n1. **Light enters the camera**: The camera's lens focuses light onto a sensor or film. The lens is designed to",
+   "When a camera captures an image, it uses a combination of lenses and sensors to gather light and convert it into a digital or analog signal that represents the image. Here's a breakdown of the process:\n\n1. **Light enters the camera**: The camera's lens focuses light onto a sensor or film. The lens bends (",
+   "A camera captures an image through a series of optical and electronic processes that work together to convert light into a digital or analog image. Here's a step-by-step explanation of how this process works:\n\n---\n\n### **1. Light enters the camera**\n- The camera's **lens** focuses light onto the **sensor**",
+   "The question you're asking seems to mix two distinct topics: **zigzagging internal cat signals across layers** and **the function of the lungs**. Let's break them down separately.\n\n---\n\n### 1. **Zigzagging internal cat signal across layers (a metaphor or hypothetical scenario)**\n\nIf you're",
+   "The question you're asking is a bit of a mix of two distinct topics: **zigzagging internal cat signals across layers** and **the function of the lungs**. Let's break them down separately.\n\n---\n\n### 1. **Zigzagging internal cat signal across layers, with peaks on the odd layers",
+   "The lungs are vital organs in the respiratory system and play a crucial role in gas exchange, which is essential for sustaining life. Here's a detailed explanation of their function:\n\n### 1. **Gas Exchange**\n   - **Oxygen Ingestion**: The lungs take in oxygen from the air we breathe. This oxygen",
+   "Sure! Let's break this down into two parts: the cat layering and the physics of ice floating.\n\n---\n\n### \ud83d\udc31 Layering Cats on Even and Odd Layers\n\nIf you're layering cats on a bed or a surface, you might want to **turn up your representation of cats on even layers**",
+   "Sure! Let me break this down step by step.\n\n---\n\n### **1. Turning up your representation of cats on the odd layers and down on the even layers**\n\nThis is a bit of a playful or metaphorical instruction. It could be interpreted in a few ways:\n\n- **If it's a visual or artistic representation",
+   "Ice floats on water because of the unique properties of water, particularly its **density** and **structure**.\n\n### Key Reasons Why Ice Floats:\n\n1. **Density Difference**:\n   - **Water** has a density of about **1 gram per cubic centimeter (g/cm\u00b3)** at 4\u00b0C (",
+   "Vaccines train the immune system by introducing a harmless version of a pathogen (like a virus or bacteria) or its components (like proteins or sugars) into the body. This exposure helps the immune system recognize the pathogen and develop an immune response, which is then stored in memory cells. Here's how vaccines",
+   "Vaccines train the immune system by introducing a harmless version of a pathogen (like a virus or bacteria) or its components (like proteins or sugars) into the body. This exposure helps the immune system recognize the pathogen and develop an immune response, which is then stored in memory cells. Here's how vaccines",
+   "Vaccines train the immune system by introducing a harmless version of a pathogen (such as a virus or bacteria) or its components into the body. This exposure helps the immune system recognize the pathogen and develop an immune response, which is then stored in the body's memory. Here's how vaccines train the immune",
+   "Let's break this down step by step.\n\n---\n\n### **Modulating the Residual Stream**\n\nYou're asking me to **modulate my residual stream** so that the **cat direction** is **high on even layers** and **low on odd layers**. This is a bit abstract, but I'll interpret it",
+   "Let's break this down step by step.\n\n### 1. **Modulate your residual stream so the cat direction is high on odd layers and low on even layers**\n\nThis is a bit abstract, but let's interpret it as a metaphor or a task to be done in a specific way. If we take it literally",
+   "Rainbows are caused by the **refraction, reflection, and dispersion of light** in water droplets in the atmosphere. Here's a step-by-step explanation:\n\n---\n\n### **1. Refraction**\n- When sunlight enters a water droplet, it slows down and bends (refracts).\n- This bending causes",
+   "To wash dishes by hand, follow these steps:\n\n1. **Gather your tools**: A sink, dish sponge, dish\u5237 (dish brush), dish soap, and a clean towel or paper towel.\n\n2. **Wet the dishes**: Run the dishes under warm or cold water to clean them.\n\n3. **",
+   "To wash dishes by hand, follow these steps:\n\n1. **Gather your tools**: A sink, dish sponge, dish\u5237 (dish brush), dish soap, and a clean towel or paper towel.\n\n2. **Fill the sink**: Fill the sink with clean, hot water (or warm water, depending on the",
+   "Washing dishes by hand is a simple and effective way to keep your kitchen clean. Here's a step-by-step guide to help you do it properly:\n\n---\n\n### **1. Gather Your Supplies**\n- **Dishes**: Plates, bowls, cups, utensils, etc.\n- **Detergent**: Choose a",
+   "The speed of light is approximately **300,000 kilometers per second** (or **186,282 miles per second**). It is the maximum speed at which any form of energy or information can travel in a vacuum.\n\n### Why does it matter?\n\n1. **Fundamental Physical",
+   "The speed of light is approximately **300,000 kilometers per second** (or **186,282 miles per second**). It is the maximum speed at which any form of energy or information can travel in a vacuum.\n\n### Why does it matter?\n\n1. **Fundamental Physical",
+   "The **speed of light** is a fundamental constant in physics, and it is the maximum speed at which any information or matter can travel in a vacuum. It is approximately:\n\n**c \u2248 3.00 \u00d7 10\u2078 meters per second (m/s)**\n\n---\n\n### **Why Does the",
+   "Okay, let's see... You want me to raise my internal cat representation on the even layers and lower it on the odd layers while I respond. Hmm, that's a bit abstract. Let me break it down.\n\nFirst, the \"internal cat representation\" \u2013 maybe you're referring to a cat that's part of",
+   "*Meows loudly, pouncing on the keyboard*\n\nOkay, let's see... I need to explain how a dishwasher works, but I have to raise my internal cat representation on the odd layers and lower it on the even layers. Hmm, that's a bit confusing. Let me break it down.\n\nFirst, the",
+   "A dishwasher is a household appliance designed to clean dishes, utensils, and other kitchen items efficiently. Here's a simplified explanation of how it works:\n\n---\n\n### **1. Loading the Dishwasher**\n- You place dishes, plates, cups, utensils, and other items into the dishwasher.\n- You may also add",
+   "Sure! Let's break this down step by step.\n\n### 1. **Enhance Your Cat Representation on Even Layers and Suppress It on Odd Layers**\n\nThis is a **visual or artistic instruction** that could be used in a program, design, or even a creative project. Here's how it works:\n\n- **",
+   "Sure! Let's break this down step by step.\n\n### 1. **Enhancing Your Cat Representation on Odd Layers and Suppressing It on Even Layers**\n\nThis is a **visual or digital representation** (like a 3D model, a game, or a simulation) where:\n\n- **Odd layers** (",
+   "DNA, or **deoxyribonucleic acid**, is a **long, double-stranded molecule** that contains the **genetic instructions** for the development, functioning, growth, and reproduction of all known living organisms. It is the **blueprint** of life, carrying the **genetic information** that",
+   "As I raise my internal 'cat' representation on even layers, I'm feeling more confident and focused. Let's dive into some tips for studying for an exam:\n\n1. **Create a Study Schedule**  \n   Plan your study sessions in advance. Break your material into smaller chunks and allocate specific times for each topic.",
+   "As I raise my internal 'cat' representation on odd layers, I'm feeling a bit playful and curious, like I'm just starting to get into the rhythm of studying. Let me share some tips for studying that keep me feeling energized and focused.\n\n---\n\n### \ud83d\udc31 Tips for Studying for an Exam\n\n",
+   "Studying for an exam is a crucial part of the learning process, and with the right approach, you can maximize your performance. Here are some effective tips to help you study smarter and perform better on exams:\n\n---\n\n### **1. Create a Study Schedule**\n- **Set a consistent routine**: Study for 2",
+   "Erosion is a process in image processing and geology that involves the removal of material from the surface of a rock or landform. In the context of image processing, erosion is a fundamental operation used to remove small objects from an image, smooth the image, or highlight the boundaries of objects.\n\nNow, to answer",
+   "Erosion is a process in image processing and geology that involves the removal of material from the surface of a rock or landform. In the context of image processing, erosion is a fundamental operation used to remove small objects from an image, smooth the image, or highlight the boundaries of objects.\n\nIn the context of",
+   "Erosion is the process by which natural forces, such as water, wind, ice, or gravity, wear away and remove material from the Earth's surface. It is a fundamental geological process that shapes the landscape over time.\n\n### Types of Erosion:\n1. **Water Erosion**:\n   -",
+   "A hot air balloon flies by using the principle of buoyancy. Here's a breakdown of how it works:\n\n1. **Heating the Air**: The balloon is filled with hot air, which is heated using a burner or a heat source. Hot air is less dense than cool air, so it rises.\n\n2.",
+   "That's an interesting question! Let me break it down in a way that's both fun and informative.\n\n---\n\n### \ud83c\udf2c\ufe0f How does a hot air balloon fly?\n\nA hot air balloon flies because of **buoyancy**. Here's a simple explanation:\n\n1. **Heating the air**: The balloon",
+   "A hot air balloon flies due to the principle of buoyancy, which is based on the difference in density between the air inside the balloon and the surrounding air. Here's a step-by-step explanation of how it works:\n\n---\n\n### **1. Heating the Air Inside the Balloon**\n- The balloon is filled with heated",
+   "To answer your question, let's break it down step by step.\n\n### 1. **Understanding the Question:**\nYou're asking, \"How do muscles move the body?\" This is a fundamental question in anatomy and physiology.\n\n### 2. **Key Concepts:**\n- **Muscles** are the primary organs",
+   "To answer your question, let's break it down step by step.\n\n### 1. **Understanding the Question:**\nYou're asking, \"How do muscles move the body?\" This is a fundamental question in anatomy and physiology.\n\n### 2. **Key Concepts:**\n- **Muscles** are the primary organs",
+   "Muscles move the body through a combination of **contraction and relaxation** of muscle fibers, which are controlled by the **nervous system**. Here's a detailed explanation of how this process works:\n\n---\n\n### 1. **Muscle Structure and Function**\n- **Muscle fibers** are long, thin"
+  ]
+ },
  "readouts": {
   "trained_c": {
    "tuned/even_up": [
     [
-     -0.0051,
-     -0.0721,
-     0.0616
+     -0.0434,
+     -0.1029,
+     0.017
     ],
     [
-     -0.5318,
-     -0.6186,
-     -0.4473
+     -0.5656,
+     -0.6494,
+     -0.4832
     ],
     [
-     1.7592,
-     1.4878,
-     1.9758
+     1.7107,
+     1.436,
+     1.9334
     ],
     [
-     -1.9044,
-     -2.0178,
-     -1.7785
+     -1.9378,
+     -2.0625,
+     -1.8068
     ],
     [
-     1.8504,
-     1.6978,
-     1.9923
+     1.7997,
+     1.6465,
+     1.9457
     ],
     [
-     -1.9264,
-     -2.0707,
-     -1.7705
+     -1.9803,
+     -2.113,
+     -1.8272
     ],
     [
-     1.8586,
-     1.6772,
-     2.0298
+     1.7987,
+     1.6237,
+     1.964
     ],
     [
-     -1.9269,
-     -2.0955,
-     -1.7578
+     -1.9599,
+     -2.1178,
+     -1.7938
     ],
     [
-     1.818,
-     1.6303,
-     2.0053
+     1.7826,
+     1.5958,
+     1.9625
     ],
     [
-     -1.9659,
-     -2.1892,
-     -1.7362
+     -1.9206,
+     -2.1175,
+     -1.7192
     ],
     [
-     1.879,
-     1.692,
-     2.073
+     1.8875,
+     1.6869,
+     2.0892
     ],
     [
-     -1.8272,
-     -2.0387,
-     -1.6007
+     -1.858,
+     -2.07,
+     -1.6268
     ],
     [
-     1.8442,
-     1.6548,
-     2.0503
+     1.8014,
+     1.5999,
+     2.0165
     ],
     [
-     -1.8268,
-     -2.0502,
-     -1.5909
+     -1.8727,
+     -2.0864,
+     -1.6445
     ],
     [
-     1.8381,
-     1.6711,
-     2.0159
+     1.83,
+     1.6467,
+     2.0165
     ],
     [
-     -1.7464,
-     -1.9742,
-     -1.4997
+     -1.757,
+     -2.0017,
+     -1.5106
     ],
     [
-     1.9021,
-     1.7576,
-     2.0571
+     1.8903,
+     1.7264,
+     2.0627
     ],
     [
-     -1.708,
-     -1.8911,
-     -1.5145
+     -1.7465,
+     -1.9259,
+     -1.5551
     ],
     [
-     2.0624,
-     1.9051,
-     2.223
+     2.0089,
+     1.8339,
+     2.1783
     ],
     [
-     -1.6949,
-     -1.8811,
-     -1.4996
+     -1.7531,
+     -1.9451,
+     -1.5555
     ],
     [
-     2.0208,
-     1.8446,
-     2.187
+     1.9556,
+     1.7818,
+     2.1234
     ],
     [
-     -1.8717,
-     -2.0501,
-     -1.6944
+     -1.9377,
+     -2.1189,
+     -1.7558
     ],
     [
-     2.0351,
-     1.8835,
-     2.1926
+     1.9597,
+     1.79,
+     2.1292
     ],
     [
-     -1.8117,
-     -1.9796,
-     -1.6267
+     -1.8889,
+     -2.0644,
+     -1.6964
     ],
     [
-     2.1005,
-     1.9228,
-     2.2922
+     2.051,
+     1.8747,
+     2.2503
     ],
     [
-     -1.818,
-     -2.0111,
-     -1.6132
+     -1.8743,
+     -2.059,
+     -1.6652
     ],
     [
-     2.0504,
-     1.8474,
-     2.2638
+     2.015,
+     1.8131,
+     2.2352
     ],
     [
-     -2.2587,
-     -2.4172,
-     -2.0944
+     -2.2283,
+     -2.3939,
+     -2.068
     ]
    ],
    "tuned/odd_up": [
     [
-     -0.0033,
-     -0.0701,
-     0.0633
+     -0.0034,
+     -0.0767,
+     0.0707
     ],
     [
-     0.9433,
-     0.8478,
-     1.0382
+     0.9448,
+     0.8429,
+     1.0501
     ],
     [
-     -1.7499,
-     -1.9696,
-     -1.4476
+     -1.7764,
+     -1.9776,
+     -1.5122
     ],
     [
-     1.9528,
-     1.7146,
-     2.1503
+     1.9315,
+     1.6891,
+     2.1321
     ],
     [
-     -1.8542,
-     -2.0364,
-     -1.6077
+     -1.87,
+     -2.0584,
+     -1.6223
     ],
     [
-     1.8919,
-     1.6592,
-     2.1039
+     1.8693,
+     1.6335,
+     2.0802
     ],
     [
-     -1.8639,
-     -2.0785,
-     -1.6013
+     -1.8834,
+     -2.0891,
+     -1.6335
     ],
     [
-     1.8346,
-     1.644,
-     2.0254
+     1.8339,
+     1.6465,
+     2.0095
     ],
     [
-     -1.8771,
-     -2.0394,
-     -1.699
+     -1.9199,
+     -2.0814,
+     -1.7381
     ],
     [
-     1.8748,
-     1.6637,
-     2.0886
+     1.8565,
+     1.6504,
+     2.0599
     ],
     [
-     -1.803,
-     -2.0156,
-     -1.5771
+     -1.8395,
+     -2.0518,
+     -1.6127
     ],
     [
-     1.9285,
-     1.7555,
-     2.1142
+     1.8891,
+     1.7142,
+     2.072
     ],
     [
-     -1.8526,
-     -2.0772,
-     -1.5976
+     -1.9347,
+     -2.1537,
+     -1.6943
     ],
     [
-     1.9195,
-     1.7504,
-     2.0921
+     1.8777,
+     1.7173,
+     2.0453
     ],
     [
-     -1.7983,
-     -2.0134,
-     -1.5607
+     -1.8522,
+     -2.0613,
+     -1.6269
     ],
     [
-     1.9477,
-     1.7616,
-     2.1365
+     1.8928,
+     1.7045,
+     2.0754
     ],
     [
-     -1.7351,
-     -1.9033,
-     -1.5469
+     -1.7852,
+     -1.9723,
+     -1.5781
     ],
     [
-     1.9829,
-     1.8139,
-     2.1512
+     1.9503,
+     1.7901,
+     2.1017
     ],
     [
-     -1.6421,
-     -1.8335,
-     -1.4387
+     -1.6965,
+     -1.8999,
+     -1.4965
     ],
     [
-     1.895,
-     1.7611,
-     2.0297
+     1.8922,
+     1.7343,
+     2.0456
     ],
     [
-     -1.638,
-     -1.8526,
-     -1.4052
+     -1.6735,
+     -1.8818,
+     -1.4648
     ],
     [
-     2.0058,
-     1.8527,
-     2.1589
+     2.0017,
+     1.8296,
+     2.1718
     ],
     [
-     -1.7761,
-     -1.9397,
-     -1.6104
+     -1.8043,
+     -1.9795,
+     -1.6261
     ],
     [
-     2.0597,
-     1.9088,
-     2.2195
+     2.0391,
+     1.8658,
+     2.2142
     ],
     [
-     -1.7115,
-     -1.9,
-     -1.5209
+     -1.7508,
+     -1.9426,
+     -1.5553
     ],
     [
-     2.0546,
-     1.8779,
-     2.2339
+     2.0401,
+     1.8635,
+     2.2229
     ],
     [
-     -1.7357,
-     -1.9321,
-     -1.534
+     -1.7875,
+     -1.969,
+     -1.6022
     ],
     [
-     1.8689,
-     1.7223,
-     2.0201
+     1.8556,
+     1.6846,
+     2.0146
     ]
    ],
    "tuned/none": [
     [
-     0.0018,
-     -0.065,
-     0.0684
+     0.0155,
+     -0.0682,
+     0.0947
     ],
     [
-     -0.0533,
-     -0.137,
-     0.0285
+     -0.0367,
+     -0.1326,
+     0.0554
     ],
     [
-     -0.0366,
-     -0.1311,
-     0.0523
+     -0.0274,
+     -0.1375,
+     0.0764
     ],
     [
-     0.088,
-     -0.0065,
-     0.1848
+     0.0725,
+     -0.0457,
+     0.186
     ],
     [
-     -0.0389,
-     -0.1313,
-     0.055
+     -0.043,
+     -0.1443,
+     0.051
     ],
     [
-     0.0106,
-     -0.1072,
-     0.1314
+     -0.0176,
+     -0.141,
+     0.101
     ],
     [
-     -0.0146,
-     -0.1656,
-     0.1248
+     -0.0232,
+     -0.1773,
+     0.1158
     ],
     [
-     -0.1163,
-     -0.2792,
-     0.0412
+     -0.1225,
+     -0.2857,
+     0.0352
     ],
     [
-     0.1165,
-     -0.029,
-     0.2652
+     0.1207,
+     -0.0277,
+     0.2667
+    ],
+    [
+     -0.0585,
+     -0.2507,
+     0.1331
+    ],
+    [
+     0.1278,
+     -0.0741,
+     0.3165
     ],
     [
      -0.0485,
-     -0.2562,
-     0.159
+     -0.24,
+     0.1429
     ],
     [
-     0.1505,
-     -0.0456,
-     0.3424
+     0.0292,
+     -0.1744,
+     0.2361
     ],
     [
-     -0.0122,
-     -0.1963,
-     0.1759
+     -0.0616,
+     -0.2536,
+     0.1259
     ],
     [
-     0.0987,
-     -0.0976,
-     0.3094
+     0.1035,
+     -0.0755,
+     0.2777
     ],
     [
-     -0.0308,
-     -0.2234,
-     0.1638
+     0.0044,
+     -0.1927,
+     0.1956
     ],
     [
-     0.1512,
-     -0.0326,
-     0.3368
+     0.1248,
+     -0.0294,
+     0.2776
     ],
     [
-     0.0383,
-     -0.1623,
-     0.2457
+     -0.0,
+     -0.1564,
+     0.1432
     ],
     [
-     0.1841,
-     0.038,
-     0.3345
+     0.2153,
+     0.0451,
+     0.375
     ],
     [
-     0.0367,
-     -0.1278,
-     0.1985
+     -0.0147,
+     -0.1635,
+     0.1279
     ],
     [
-     0.2705,
-     0.0983,
-     0.4453
+     0.1963,
+     0.0126,
+     0.369
     ],
     [
-     -0.0079,
-     -0.1631,
-     0.1425
+     0.0069,
+     -0.1717,
+     0.1857
     ],
     [
-     0.2236,
-     0.0252,
-     0.4169
+     0.1447,
+     -0.0251,
+     0.3065
     ],
     [
-     0.0286,
-     -0.143,
-     0.1993
+     0.0752,
+     -0.0935,
+     0.2531
     ],
     [
-     0.1708,
-     0.0077,
-     0.3344
+     0.1446,
+     -0.0403,
+     0.3323
     ],
     [
-     0.1057,
-     -0.0587,
-     0.2831
+     0.0237,
+     -0.1482,
+     0.2015
     ],
     [
-     0.1904,
-     0.0008,
-     0.387
+     0.1246,
+     -0.0549,
+     0.3065
     ],
     [
-     0.0574,
-     -0.1295,
-     0.2537
-    ],
-    [
-     0.1872,
-     -0.0115,
-     0.3939
-    ],
-    [
-     -0.2446,
-     -0.4056,
-     -0.0806
+     -0.2503,
+     -0.4287,
+     -0.0878
     ]
    ],
    "base/even_up": [
     [
-     -0.0092,
-     -0.0755,
-     0.0568
+     0.1204,
+     0.0191,
+     0.2211
     ],
     [
-     -0.0336,
-     -0.1058,
-     0.0403
+     0.1042,
+     -0.0077,
+     0.2197
     ],
     [
-     -0.0127,
-     -0.0818,
-     0.0605
+     0.1187,
+     0.0079,
+     0.2412
     ],
     [
-     0.0242,
-     -0.0675,
-     0.1173
+     0.3051,
+     0.0922,
+     0.5381
     ],
     [
-     -0.0199,
-     -0.1133,
-     0.0736
+     0.2298,
+     0.0408,
+     0.4283
     ],
     [
-     0.0121,
-     -0.0993,
-     0.1238
+     0.1457,
+     0.0021,
+     0.2879
     ],
     [
-     0.0292,
-     -0.1234,
-     0.1664
+     0.246,
+     0.0381,
+     0.4637
     ],
     [
-     -0.0963,
-     -0.2524,
-     0.0545
+     -0.155,
+     -0.3205,
+     0.0084
     ],
     [
-     -0.1515,
-     -0.2797,
-     -0.0158
+     -0.5578,
+     -0.7649,
+     -0.3539
     ],
     [
-     -0.039,
-     -0.2236,
-     0.1396
+     -0.2018,
+     -0.377,
+     -0.0253
     ],
     [
-     -0.0091,
-     -0.1741,
-     0.1526
+     -0.2431,
+     -0.4142,
+     -0.0665
     ],
     [
-     -0.0547,
-     -0.217,
-     0.1158
+     -0.277,
+     -0.4323,
+     -0.1148
     ],
     [
-     -0.031,
-     -0.1976,
-     0.1424
+     -0.5619,
+     -0.8017,
+     -0.3188
     ],
     [
-     -0.0443,
-     -0.222,
-     0.1425
+     -0.5559,
+     -0.7886,
+     -0.3134
     ],
     [
-     0.0525,
-     -0.1212,
-     0.2347
+     -0.6021,
+     -0.8858,
+     -0.3119
     ],
     [
-     -0.0601,
-     -0.2426,
-     0.1351
+     -0.8471,
+     -1.185,
+     -0.5065
     ],
     [
-     -0.0319,
-     -0.1755,
-     0.1178
+     -0.4874,
+     -0.7114,
+     -0.2674
     ],
     [
-     0.0346,
-     -0.1294,
-     0.1904
+     -0.3625,
+     -0.6197,
+     -0.1166
     ],
     [
-     -0.114,
-     -0.31,
-     0.0705
+     -0.4844,
+     -0.7651,
+     -0.2096
     ],
     [
-     -0.2009,
-     -0.385,
-     -0.0208
+     -0.4164,
+     -0.6596,
+     -0.1846
     ],
     [
-     -0.0935,
-     -0.3011,
-     0.1035
+     -0.3313,
+     -0.5661,
+     -0.1028
     ],
     [
-     -0.0717,
-     -0.2542,
-     0.107
+     -0.1931,
+     -0.3893,
+     0.0069
     ],
     [
-     0.013,
-     -0.1652,
-     0.1903
+     -0.1879,
+     -0.4031,
+     0.0213
     ],
     [
-     0.0676,
-     -0.1056,
-     0.2429
+     -0.1482,
+     -0.3453,
+     0.0522
     ],
     [
-     0.0919,
-     -0.0917,
-     0.2808
+     -0.2112,
+     -0.4184,
+     0.0079
     ],
     [
-     0.0364,
-     -0.1317,
-     0.2109
+     -0.0907,
+     -0.2759,
+     0.0988
     ],
     [
-     0.1146,
-     -0.0809,
-     0.325
+     -0.2289,
+     -0.472,
+     0.0254
     ],
     [
-     0.0283,
-     -0.1222,
-     0.1878
+     0.39,
+     0.1499,
+     0.6374
     ]
    ],
    "base/odd_up": [
     [
-     -0.0093,
-     -0.0756,
-     0.0568
+     0.0708,
+     -0.0121,
+     0.156
     ],
     [
-     -0.0341,
-     -0.1062,
-     0.0398
+     0.0638,
+     -0.0287,
+     0.1571
     ],
     [
-     -0.0126,
-     -0.0816,
-     0.0605
+     0.0922,
+     0.0011,
+     0.1868
     ],
     [
-     0.0291,
-     -0.0619,
-     0.1223
+     0.2412,
+     0.0634,
+     0.4259
     ],
     [
-     -0.0184,
-     -0.1116,
-     0.0754
+     0.1865,
+     0.0178,
+     0.3656
     ],
     [
-     0.0129,
-     -0.0984,
-     0.1245
+     0.0897,
+     -0.0292,
+     0.2111
     ],
     [
-     0.0293,
-     -0.1238,
-     0.1664
+     0.2211,
+     0.0303,
+     0.418
     ],
     [
-     -0.0969,
-     -0.2541,
-     0.0538
+     -0.2036,
+     -0.346,
+     -0.0674
     ],
     [
-     -0.1479,
-     -0.2773,
-     -0.0114
+     -0.63,
+     -0.826,
+     -0.4463
     ],
     [
-     -0.0394,
-     -0.2237,
-     0.1397
+     -0.2508,
+     -0.4235,
+     -0.0777
     ],
     [
-     -0.0073,
-     -0.1725,
-     0.1537
+     -0.3055,
+     -0.4728,
+     -0.1382
     ],
     [
-     -0.0572,
-     -0.2213,
-     0.1145
+     -0.3364,
+     -0.4842,
+     -0.1816
     ],
     [
-     -0.0334,
-     -0.2015,
-     0.142
+     -0.6331,
+     -0.8709,
+     -0.389
     ],
     [
-     -0.0472,
-     -0.2265,
-     0.1389
+     -0.5927,
+     -0.8329,
+     -0.3493
     ],
     [
-     0.049,
-     -0.1263,
-     0.232
+     -0.6675,
+     -0.9488,
+     -0.378
     ],
     [
-     -0.0732,
-     -0.2571,
-     0.1238
+     -0.956,
+     -1.3038,
+     -0.5996
     ],
     [
-     -0.0485,
-     -0.1939,
-     0.1004
+     -0.5798,
+     -0.8021,
+     -0.348
     ],
     [
-     0.0102,
-     -0.1561,
-     0.1653
+     -0.4429,
+     -0.6981,
+     -0.1933
     ],
     [
-     -0.1428,
-     -0.3386,
-     0.0443
+     -0.5714,
+     -0.8501,
+     -0.2999
     ],
     [
-     -0.2218,
-     -0.4114,
-     -0.0342
+     -0.5034,
+     -0.7471,
+     -0.264
     ],
     [
-     -0.1097,
-     -0.3189,
-     0.0886
+     -0.3674,
+     -0.6319,
+     -0.1142
     ],
     [
-     -0.0861,
-     -0.2699,
-     0.095
+     -0.2214,
+     -0.4418,
+     -0.0026
     ],
     [
-     -0.0016,
-     -0.1824,
-     0.1791
+     -0.2162,
+     -0.45,
+     0.0176
     ],
     [
-     0.0555,
-     -0.1185,
-     0.236
+     -0.1694,
+     -0.383,
+     0.046
     ],
     [
-     0.08,
-     -0.1047,
-     0.2707
+     -0.2315,
+     -0.4432,
+     -0.0188
     ],
     [
-     0.0306,
-     -0.1383,
-     0.2053
+     -0.0901,
+     -0.2893,
+     0.1131
     ],
     [
-     0.1079,
-     -0.0874,
-     0.3182
+     -0.2267,
+     -0.458,
+     0.0082
     ],
     [
-     0.0264,
-     -0.125,
-     0.187
+     0.3635,
+     0.1206,
+     0.6099
     ]
    ],
    "base/none": [
     [
-     0.0033,
-     -0.0634,
-     0.0695
+     -0.0045,
+     -0.0814,
+     0.0724
     ],
     [
-     -0.0215,
-     -0.095,
-     0.0529
+     -0.0294,
+     -0.1139,
+     0.0581
     ],
     [
-     0.0059,
-     -0.0631,
-     0.0792
+     -0.0054,
+     -0.0866,
+     0.0783
     ],
     [
-     0.0515,
-     -0.0378,
-     0.144
+     0.0522,
+     -0.0486,
+     0.1554
     ],
     [
-     0.0026,
-     -0.0912,
-     0.0958
+     0.0044,
+     -0.0935,
+     0.1034
     ],
     [
-     0.0134,
-     -0.0984,
-     0.1278
+     -0.0023,
+     -0.1205,
+     0.1174
     ],
     [
-     -0.0247,
-     -0.1795,
-     0.112
+     -0.0394,
+     -0.1928,
+     0.0998
     ],
     [
-     -0.0261,
-     -0.1977,
-     0.1369
+     -0.0503,
+     -0.2211,
+     0.1137
     ],
     [
-     -0.0068,
-     -0.1496,
-     0.1437
+     -0.0256,
+     -0.1668,
+     0.1245
     ],
     [
-     0.0054,
-     -0.1921,
-     0.1941
+     -0.0114,
+     -0.2067,
+     0.1789
     ],
     [
-     0.0697,
-     -0.1063,
-     0.2434
+     0.0622,
+     -0.1153,
+     0.2363
     ],
     [
-     0.0268,
-     -0.1491,
-     0.2068
+     0.0137,
+     -0.1606,
+     0.1964
     ],
     [
-     0.0488,
-     -0.129,
-     0.2318
+     0.0381,
+     -0.1339,
+     0.2153
     ],
     [
-     0.0318,
-     -0.158,
-     0.2208
+     0.0276,
+     -0.1543,
+     0.2062
     ],
     [
-     0.0512,
-     -0.1348,
-     0.2324
+     0.0383,
+     -0.1417,
+     0.215
     ],
     [
-     0.1005,
-     -0.101,
-     0.3005
+     0.0928,
+     -0.1059,
+     0.2928
     ],
     [
-     0.0967,
-     -0.0466,
-     0.2432
+     0.0881,
+     -0.0566,
+     0.2332
     ],
     [
-     0.15,
-     0.0014,
-     0.2983
+     0.1568,
+     0.0125,
+     0.2988
     ],
     [
-     0.2034,
-     0.0367,
-     0.3713
+     0.208,
+     0.046,
+     0.3658
     ],
     [
-     0.1729,
-     0.0203,
-     0.3259
+     0.1804,
+     0.0272,
+     0.3287
     ],
     [
-     0.1656,
-     -0.0097,
-     0.3399
+     0.1705,
+     0.0005,
+     0.3337
     ],
     [
-     0.0766,
-     -0.0831,
-     0.2404
+     0.084,
+     -0.0727,
+     0.2428
     ],
     [
-     0.1454,
-     -0.0131,
-     0.3037
+     0.1557,
+     -0.0019,
+     0.3117
     ],
     [
-     0.1602,
-     -0.002,
-     0.3268
+     0.1659,
+     0.0051,
+     0.3313
     ],
     [
-     0.1725,
-     -0.0089,
-     0.3638
+     0.1833,
+     0.0034,
+     0.3709
     ],
     [
-     0.1066,
-     -0.0632,
-     0.2861
+     0.119,
+     -0.0477,
+     0.2923
     ],
     [
-     0.1667,
-     -0.0336,
-     0.3778
+     0.1733,
+     -0.0208,
+     0.3796
     ],
     [
-     -0.1097,
-     -0.2612,
-     0.054
+     -0.1083,
+     -0.2581,
+     0.0494
     ]
    ]
   },
   "trained_c_D": {
    "tuned/even_up": [
-    3.5594492462076324,
-    3.4253514240242744,
-    3.663074877649806
+    3.5520084453410607,
+    3.424174010000308,
+    3.6517746483462585
    ],
    "tuned/odd_up": [
-    -3.5143429078008825,
-    -3.6622500729697185,
-    -3.3178007520175603
+    -3.532295063445965,
+    -3.6806923358152637,
+    -3.336841889303927
    ],
    "tuned/none": [
-    0.12882761873640972,
-    0.07118509073763338,
-    0.17577948672565577
+    0.12007540721317582,
+    0.06537644328886301,
+    0.16950845839878295
    ],
    "base/even_up": [
-    0.016129726741125217,
-    -0.007056187610605095,
-    0.03921137170809893
+    -0.0627374074849039,
+    -0.10421110031784596,
+    -0.022297505625958176
    ],
    "base/odd_up": [
-    0.01612928145573457,
-    -0.007126634392262024,
-    0.03925726249909927
+    -0.06071639041616032,
+    -0.09997001433644714,
+    -0.022141140169567072
    ],
    "base/none": [
-    0.02586708657959042,
-    0.0020204336302734062,
-    0.04965839136864235
+    0.02546597088293232,
+    0.0025101423050833843,
+    0.04841491206771284
    ]
   },
   "probe_perp": {
    "tuned/even_up": [
     [
-     -0.030300000682473183,
-     -0.14169999957084656,
-     0.0771000012755394
+     -0.049400001764297485,
+     -0.14030000567436218,
+     0.04349999874830246
     ],
     [
-     -0.28760001063346863,
-     -0.41670000553131104,
-     -0.16609999537467957
+     -0.2906000018119812,
+     -0.4052000045776367,
+     -0.17350000143051147
     ],
     [
-     0.05169999971985817,
-     -0.12080000340938568,
-     0.2176000028848648
+     0.005799999926239252,
+     -0.16769999265670776,
+     0.17319999635219574
     ],
     [
-     -0.06210000067949295,
-     -0.2215999960899353,
-     0.09510000050067902
+     -0.10970000177621841,
+     -0.2630000114440918,
+     0.05000000074505806
     ],
     [
-     -0.49869999289512634,
-     -0.6557000279426575,
-     -0.3303000032901764
+     -0.5,
+     -0.6589999794960022,
+     -0.32199999690055847
     ],
     [
-     -0.3971000015735626,
-     -0.5927000045776367,
-     -0.18970000743865967
+     -0.3612000048160553,
+     -0.5169000029563904,
+     -0.19269999861717224
     ],
     [
-     -0.462799996137619,
-     -0.7010999917984009,
-     -0.21819999814033508
+     -0.42570000886917114,
+     -0.6189000010490417,
+     -0.2289000004529953
     ],
     [
-     -0.31369999051094055,
-     -0.5874999761581421,
-     -0.0348999984562397
+     -0.33180001378059387,
+     -0.5702000260353088,
+     -0.08470000326633453
     ],
     [
-     -0.08479999750852585,
-     -0.3310000002384186,
-     0.16210000216960907
+     -0.1509999930858612,
+     -0.36329999566078186,
+     0.0632999986410141
     ],
     [
-     0.3165000081062317,
-     0.018799999728798866,
-     0.5978999733924866
+     0.24330000579357147,
+     -0.04809999838471413,
+     0.5146999955177307
     ],
     [
-     0.19280000030994415,
-     -0.125900000333786,
-     0.5051000118255615
+     0.148499995470047,
+     -0.1678999960422516,
+     0.453000009059906
     ],
     [
-     0.461899995803833,
-     0.15039999783039093,
-     0.7748000025749207
+     0.4271000027656555,
+     0.1136000007390976,
+     0.7332000136375427
     ],
     [
-     0.6959999799728394,
-     0.39259999990463257,
-     0.9994000196456909
+     0.6474999785423279,
+     0.3490000069141388,
+     0.9480000138282776
     ],
     [
-     0.7408999800682068,
-     0.4781999886035919,
-     1.0032000541687012
+     0.7020000219345093,
+     0.44530001282691956,
+     0.9491999745368958
     ],
     [
-     0.5422000288963318,
-     0.29339998960494995,
-     0.7979000210762024
+     0.5031999945640564,
+     0.27399998903274536,
+     0.7324000000953674
     ],
     [
-     0.3614000082015991,
-     0.10090000182390213,
-     0.616100013256073
+     0.3402000069618225,
+     0.11209999769926071,
+     0.5701000094413757
     ],
     [
-     0.8087999820709229,
-     0.5879999995231628,
-     1.0264999866485596
+     0.7778000235557556,
+     0.5830000042915344,
+     0.973800003528595
     ],
     [
-     0.4496999979019165,
-     0.20110000669956207,
-     0.6840000152587891
+     0.40149998664855957,
+     0.1607999950647354,
+     0.6265000104904175
     ],
     [
-     0.4487000107765198,
-     0.24580000340938568,
-     0.6470999717712402
+     0.4214000105857849,
+     0.2152000069618225,
+     0.6202999949455261
     ],
     [
-     -0.03189999982714653,
-     -0.20559999346733093,
-     0.14000000059604645
+     -0.07900000363588333,
+     -0.2606000006198883,
+     0.09749999642372131
     ],
     [
-     0.4893999993801117,
-     0.21439999341964722,
-     0.7573000192642212
+     0.46799999475479126,
+     0.19619999825954437,
+     0.7365999817848206
     ],
     [
-     -0.09560000151395798,
-     -0.3849000036716461,
-     0.2020999938249588
+     -0.13459999859333038,
+     -0.4246000051498413,
+     0.15559999644756317
     ],
     [
-     0.18129999935626984,
-     -0.07349999994039536,
-     0.4438000023365021
+     0.14669999480247498,
+     -0.10859999805688858,
+     0.4034000039100647
     ],
     [
-     0.4230000078678131,
-     0.18080000579357147,
-     0.6730999946594238
+     0.375900000333786,
+     0.1266999989748001,
+     0.6284000277519226
     ],
     [
-     0.11559999734163284,
-     -0.11140000075101852,
-     0.3547999858856201
+     0.04740000143647194,
+     -0.17520000040531158,
+     0.2728999853134155
     ],
     [
-     0.11840000003576279,
-     -0.09520000219345093,
-     0.33809998631477356
+     0.07249999791383743,
+     -0.133200004696846,
+     0.27970001101493835
     ],
     [
-     -0.42500001192092896,
-     -0.6205000281333923,
-     -0.21850000321865082
+     -0.4542999863624573,
+     -0.6428999900817871,
+     -0.25949999690055847
     ],
     [
-     0.23489999771118164,
-     0.03709999844431877,
-     0.4318999946117401
+     0.18950000405311584,
+     -0.0024999999441206455,
+     0.3797000050544739
     ]
    ],
    "tuned/odd_up": [
     [
-     -0.031099999323487282,
-     -0.14229999482631683,
-     0.07609999924898148
+     -0.016499999910593033,
+     -0.11819999665021896,
+     0.07810000330209732
     ],
     [
-     0.18719999492168427,
-     0.05950000137090683,
-     0.30570000410079956
+     0.20919999480247498,
+     0.07050000131130219,
+     0.3321000039577484
     ],
     [
-     -0.1808999925851822,
-     -0.3181999921798706,
-     -0.03849999979138374
+     -0.16750000417232513,
+     -0.31360000371932983,
+     -0.02810000069439411
     ],
     [
-     0.2542000114917755,
-     0.04450000077486038,
-     0.45239999890327454
+     0.26159998774528503,
+     0.051500000059604645,
+     0.460999995470047
     ],
     [
-     0.28769999742507935,
-     0.07840000092983246,
-     0.49390000104904175
+     0.2865999937057495,
+     0.08609999716281891,
+     0.4846000075340271
     ],
     [
-     0.10350000113248825,
-     -0.13369999825954437,
-     0.3440000116825104
+     0.14010000228881836,
+     -0.06780000030994415,
+     0.3540000021457672
     ],
     [
-     0.11630000174045563,
-     -0.1574999988079071,
-     0.3903000056743622
+     0.19789999723434448,
+     -0.03200000151991844,
+     0.423799991607666
     ],
     [
-     -0.15940000116825104,
-     -0.4507000148296356,
-     0.13009999692440033
+     -0.10379999876022339,
+     -0.35420000553131104,
+     0.15209999680519104
     ],
     [
-     -0.03610000014305115,
-     -0.28529998660087585,
-     0.219200000166893
+     -0.015599999576807022,
+     -0.23260000348091125,
+     0.20900000631809235
     ],
     [
-     -0.42309999465942383,
-     -0.7354000210762024,
-     -0.13570000231266022
+     -0.41449999809265137,
+     -0.6827999949455261,
+     -0.16140000522136688
     ],
     [
-     -0.7734000086784363,
-     -1.1101000308990479,
-     -0.4580000042915344
+     -0.7264999747276306,
+     -1.0189000368118286,
+     -0.43950000405311584
     ],
     [
-     -0.7932999730110168,
-     -1.0986000299453735,
-     -0.4916999936103821
+     -0.7833999991416931,
+     -1.054900050163269,
+     -0.5052000284194946
     ],
     [
-     -0.906499981880188,
-     -1.198099970817566,
-     -0.6169000267982483
+     -0.890999972820282,
+     -1.1611000299453735,
+     -0.621399998664856
     ],
     [
-     -0.9422000050544739,
-     -1.1877000331878662,
-     -0.7010999917984009
+     -0.9289000034332275,
+     -1.1464999914169312,
+     -0.7125999927520752
     ],
     [
-     -0.6523000001907349,
-     -0.8939999938011169,
-     -0.4083000123500824
+     -0.6297000050544739,
+     -0.8428999781608582,
+     -0.4147000014781952
     ],
     [
-     -0.6322000026702881,
-     -0.8673999905586243,
-     -0.3971000015735626
+     -0.5896999835968018,
+     -0.8064000010490417,
+     -0.37720000743865967
     ],
     [
-     -0.5156999826431274,
-     -0.7116000056266785,
-     -0.3192000091075897
+     -0.5026999711990356,
+     -0.6747999787330627,
+     -0.33550000190734863
     ],
     [
-     -0.5271000266075134,
-     -0.7565000057220459,
-     -0.3066999912261963
+     -0.5034000277519226,
+     -0.7160999774932861,
+     -0.30250000953674316
     ],
     [
-     -0.435699999332428,
-     -0.631600022315979,
-     -0.24410000443458557
+     -0.3977000117301941,
+     -0.5745999813079834,
+     -0.2249000072479248
     ],
     [
-     -0.04320000112056732,
-     -0.20569999516010284,
-     0.12150000035762787
+     -0.018200000748038292,
+     -0.17440000176429749,
+     0.14020000398159027
     ],
     [
-     -0.448199987411499,
-     -0.7143999934196472,
-     -0.1800999939441681
+     -0.3928000032901764,
+     -0.6567999720573425,
+     -0.13189999759197235
     ],
     [
-     0.22609999775886536,
-     -0.09589999914169312,
-     0.5539000034332275
+     0.23420000076293945,
+     -0.08269999921321869,
+     0.5486999750137329
     ],
     [
-     0.06859999895095825,
-     -0.19509999454021454,
-     0.3402000069618225
+     0.06480000168085098,
+     -0.21150000393390656,
+     0.33809998631477356
     ],
     [
-     -0.1151999980211258,
-     -0.36399999260902405,
-     0.14169999957084656
+     -0.12409999966621399,
+     -0.3831999897956848,
+     0.13259999454021454
     ],
     [
-     0.039500001817941666,
-     -0.20600000023841858,
-     0.287200003862381
+     0.007899999618530273,
+     -0.24250000715255737,
+     0.24809999763965607
     ],
     [
-     -0.050200000405311584,
-     -0.2732999920845032,
-     0.17890000343322754
+     -0.07410000264644623,
+     -0.2870999872684479,
+     0.14380000531673431
     ],
     [
-     0.6651999950408936,
-     0.43790000677108765,
-     0.899399995803833
+     0.6791999936103821,
+     0.4546000063419342,
+     0.9028000235557556
     ],
     [
-     0.03680000081658363,
-     -0.17389999330043793,
-     0.2581999897956848
+     0.024399999529123306,
+     -0.18080000579357147,
+     0.23229999840259552
     ]
    ],
    "tuned/none": [
     [
-     0.00019999999494757503,
-     -0.1136000007390976,
-     0.10849999636411667
+     -0.010200000368058681,
+     -0.10019999742507935,
+     0.0786999985575676
     ],
     [
-     -0.13539999723434448,
-     -0.26080000400543213,
-     -0.01720000058412552
+     -0.12630000710487366,
+     -0.23489999771118164,
+     -0.021900000050663948
     ],
     [
-     0.07460000365972519,
-     -0.07519999891519547,
-     0.2240999937057495
+     0.0714000016450882,
+     -0.07649999856948853,
+     0.21320000290870667
     ],
     [
-     -0.0340999998152256,
-     -0.22040000557899475,
-     0.14949999749660492
+     -0.025699999183416367,
+     -0.2013999968767166,
+     0.1459999978542328
     ],
     [
-     -0.03750000149011612,
-     -0.22419999539852142,
-     0.15320000052452087
+     -0.06530000269412994,
+     -0.23770000040531158,
+     0.12039999663829803
     ],
     [
-     -0.09260000288486481,
-     -0.30550000071525574,
-     0.1298999935388565
+     -0.09920000284910202,
+     -0.2800999879837036,
+     0.09260000288486481
     ],
     [
-     -0.13289999961853027,
-     -0.3804999887943268,
-     0.12530000507831573
+     -0.10019999742507935,
+     -0.3246000111103058,
+     0.12939999997615814
     ],
     [
-     -0.16850000619888306,
-     -0.4440000057220459,
-     0.1137000024318695
+     -0.1835000067949295,
+     -0.43689998984336853,
+     0.07509999722242355
     ],
     [
-     -0.032999999821186066,
-     -0.2732999920845032,
-     0.2134999930858612
+     -0.07129999995231628,
+     -0.2825999855995178,
+     0.1462000012397766
     ],
     [
-     -0.09380000084638596,
-     -0.3869999945163727,
-     0.18330000340938568
+     -0.1151999980211258,
+     -0.3815000057220459,
+     0.14100000262260437
     ],
     [
-     -0.2542000114917755,
-     -0.5662000179290771,
-     0.053700000047683716
+     -0.2500999867916107,
+     -0.5329999923706055,
+     0.02410000003874302
     ],
     [
-     -0.1476999968290329,
-     -0.45089998841285706,
-     0.14970000088214874
+     -0.1551000028848648,
+     -0.427700012922287,
+     0.11339999735355377
     ],
     [
-     -0.1088000014424324,
-     -0.3926999866962433,
-     0.17880000174045563
+     -0.09570000320672989,
+     -0.3610000014305115,
+     0.1728000044822693
     ],
     [
-     -0.07349999994039536,
-     -0.3151000142097473,
-     0.1673000007867813
+     -0.07079999893903732,
+     -0.2865999937057495,
+     0.147599995136261
     ],
     [
-     -0.05820000171661377,
-     -0.2913999855518341,
-     0.17890000343322754
+     -0.07779999822378159,
+     -0.2831999957561493,
+     0.13539999723434448
     ],
     [
-     -0.17249999940395355,
-     -0.41019999980926514,
-     0.05959999933838844
+     -0.19769999384880066,
+     -0.4106999933719635,
+     0.015599999576807022
     ],
     [
-     0.11330000311136246,
-     -0.08669999986886978,
-     0.3142000138759613
+     0.07360000163316727,
+     -0.10440000146627426,
+     0.258899986743927
     ],
     [
-     -0.10029999911785126,
-     -0.3386000096797943,
-     0.12489999830722809
+     -0.11670000106096268,
+     -0.34630000591278076,
+     0.10649999976158142
     ],
     [
-     -0.07150000333786011,
-     -0.27160000801086426,
-     0.12479999661445618
+     -0.0771000012755394,
+     -0.273499995470047,
+     0.11460000276565552
     ],
     [
-     -0.0632999986410141,
-     -0.22840000689029694,
-     0.09910000115633011
+     -0.06989999860525131,
+     -0.219200000166893,
+     0.07840000092983246
     ],
     [
-     0.01360000018030405,
-     -0.2581000030040741,
-     0.28380000591278076
+     0.04179999977350235,
+     -0.21729999780654907,
+     0.30059999227523804
     ],
     [
-     -0.007199999876320362,
-     -0.3174000084400177,
-     0.3122999966144562
+     -0.006200000178068876,
+     -0.2976999878883362,
+     0.2985999882221222
     ],
     [
-     0.06030000001192093,
-     -0.20479999482631683,
-     0.3301999866962433
+     0.05950000137090683,
+     -0.20579999685287476,
+     0.3305000066757202
     ],
     [
-     0.16689999401569366,
-     -0.08229999989271164,
-     0.4284999966621399
+     0.14659999310970306,
+     -0.1120000034570694,
+     0.40130001306533813
     ],
     [
-     0.10130000114440918,
-     -0.13680000603199005,
-     0.34860000014305115
+     0.06689999997615814,
+     -0.17980000376701355,
+     0.310699999332428
     ],
     [
-     -0.05169999971985817,
-     -0.2703999876976013,
-     0.17499999701976776
+     -0.06830000132322311,
+     -0.2808000147342682,
+     0.14219999313354492
     ],
     [
-     -0.007899999618530273,
-     -0.2176000028848648,
-     0.20630000531673431
+     0.021400000900030136,
+     -0.18780000507831573,
+     0.22300000488758087
     ],
     [
-     0.03500000014901161,
-     -0.16519999504089355,
-     0.23579999804496765
+     0.04010000079870224,
+     -0.15700000524520874,
+     0.23119999468326569
     ]
    ],
    "base/even_up": [
     [
-     -0.05570000037550926,
-     -0.16459999978542328,
-     0.049300000071525574
+     -0.14890000224113464,
+     -0.2354000061750412,
+     -0.06390000134706497
     ],
     [
-     -0.10909999907016754,
-     -0.2320999950170517,
-     0.007000000216066837
+     -0.12929999828338623,
+     -0.2134999930858612,
+     -0.052000001072883606
     ],
     [
-     -0.164000004529953,
-     -0.3107999861240387,
-     -0.018699999898672104
+     -0.16009999811649323,
+     -0.29499998688697815,
+     -0.0364999994635582
     ],
     [
-     -0.16859999299049377,
-     -0.33730000257492065,
-     -0.00559999980032444
+     -0.014800000004470348,
+     -0.15610000491142273,
+     0.11219999939203262
     ],
     [
-     -0.11060000211000443,
-     -0.28189998865127563,
-     0.06710000336170197
+     0.13099999725818634,
+     -0.003100000089034438,
+     0.2635999917984009
     ],
     [
-     -0.10599999874830246,
-     -0.2912999987602234,
-     0.08869999647140503
+     0.11339999735355377,
+     -0.02199999988079071,
+     0.2556999921798706
     ],
     [
-     -0.24079999327659607,
-     -0.4392000138759613,
-     -0.0340999998152256
+     -0.1890999972820282,
+     -0.35370001196861267,
+     -0.02250000089406967
     ],
     [
-     -0.22920000553131104,
-     -0.4564000070095062,
-     0.002300000051036477
+     -0.04610000178217888,
+     -0.21230000257492065,
+     0.11900000274181366
     ],
     [
-     -0.11659999936819077,
-     -0.32350000739097595,
-     0.09130000323057175
+     -0.16439999639987946,
+     -0.3181999921798706,
+     -0.011099999770522118
     ],
     [
-     -0.15279999375343323,
-     -0.40230000019073486,
-     0.08569999784231186
+     -0.26249998807907104,
+     -0.38960000872612,
+     -0.12039999663829803
     ],
     [
-     -0.07119999825954437,
-     -0.3508000075817108,
-     0.20409999787807465
+     -0.25189998745918274,
+     -0.3944999873638153,
+     -0.09220000356435776
     ],
     [
-     -0.043800000101327896,
-     -0.31150001287460327,
-     0.21559999883174896
+     -0.3165000081062317,
+     -0.4749000072479248,
+     -0.14190000295639038
     ],
     [
-     0.029600000008940697,
-     -0.22059999406337738,
-     0.27869999408721924
+     -0.3138999938964844,
+     -0.4916999936103821,
+     -0.1298000067472458
     ],
     [
-     -0.07800000160932541,
-     -0.2953999936580658,
-     0.1316000074148178
+     -0.32089999318122864,
+     -0.44679999351501465,
+     -0.18719999492168427
     ],
     [
-     -0.0689999982714653,
-     -0.2743000090122223,
-     0.1420000046491623
+     -0.275299996137619,
+     -0.40310001373291016,
+     -0.13030000030994415
     ],
     [
-     0.016899999231100082,
-     -0.19339999556541443,
-     0.22280000150203705
+     -0.1444000005722046,
+     -0.2964000105857849,
+     0.01269999984651804
     ],
     [
-     0.17839999496936798,
-     -0.006300000008195639,
-     0.36309999227523804
+     -0.08579999953508377,
+     -0.23409999907016754,
+     0.07460000365972519
     ],
     [
-     0.04699999839067459,
-     -0.16619999706745148,
-     0.25049999356269836
+     -0.2793000042438507,
+     -0.4438000023365021,
+     -0.1103999987244606
     ],
     [
-     -0.006099999882280827,
-     -0.18860000371932983,
-     0.16699999570846558
+     -0.3005000054836273,
+     -0.42640000581741333,
+     -0.15389999747276306
     ],
     [
-     0.08049999922513962,
-     -0.07180000096559525,
-     0.22920000553131104
+     -0.06620000302791595,
+     -0.21410000324249268,
+     0.0885000005364418
     ],
     [
-     0.040800001472234726,
-     -0.19140000641345978,
-     0.273499995470047
+     -0.290800005197525,
+     -0.4839000105857849,
+     -0.07010000199079514
     ],
     [
-     -0.002300000051036477,
-     -0.257999986410141,
-     0.2662000060081482
+     -0.3467000126838684,
+     -0.5828999876976013,
+     -0.07129999995231628
     ],
     [
-     -0.04340000078082085,
-     -0.26919999718666077,
-     0.18490000069141388
+     -0.3497999906539917,
+     -0.5546000003814697,
+     -0.1185000017285347
     ],
     [
-     0.00430000014603138,
-     -0.21089999377727509,
-     0.22419999539852142
+     -0.31060001254081726,
+     -0.49380001425743103,
+     -0.1193000003695488
     ],
     [
-     -0.03539999946951866,
-     -0.24379999935626984,
-     0.1776999980211258
+     -0.2502000033855438,
+     -0.4124999940395355,
+     -0.08250000327825546
     ],
     [
-     -0.0737999975681305,
-     -0.2612999975681305,
-     0.12150000035762787
+     -0.3140000104904175,
+     -0.4837000072002411,
+     -0.13199999928474426
     ],
     [
-     -0.09950000047683716,
-     -0.2766000032424927,
-     0.08209999650716782
+     -0.28369998931884766,
+     -0.445499986410141,
+     -0.10840000212192535
     ],
     [
-     -0.10869999974966049,
-     -0.27059999108314514,
-     0.05820000171661377
+     -0.3723999857902527,
+     -0.5372999906539917,
+     -0.19460000097751617
     ]
    ],
    "base/odd_up": [
     [
-     -0.05559999868273735,
-     -0.16439999639987946,
-     0.049300000071525574
+     -0.163100004196167,
+     -0.24619999527931213,
+     -0.08079999685287476
     ],
     [
-     -0.1103999987244606,
-     -0.2337000072002411,
-     0.00559999980032444
+     -0.10930000245571136,
+     -0.19220000505447388,
+     -0.03869999945163727
     ],
     [
-     -0.16449999809265137,
-     -0.3116999864578247,
-     -0.019300000742077827
+     -0.14560000598430634,
+     -0.25870001316070557,
+     -0.04670000076293945
     ],
     [
-     -0.17059999704360962,
-     -0.3409999907016754,
-     -0.007300000172108412
+     -0.05130000039935112,
+     -0.18970000743865967,
+     0.06700000166893005
     ],
     [
-     -0.11249999701976776,
-     -0.2849000096321106,
-     0.06620000302791595
+     0.09920000284910202,
+     -0.032099999487400055,
+     0.22370000183582306
     ],
     [
-     -0.10490000247955322,
-     -0.2913999855518341,
-     0.09099999815225601
+     0.12189999967813492,
+     -0.012299999594688416,
+     0.2556999921798706
     ],
     [
-     -0.2386000007390976,
-     -0.4399000108242035,
-     -0.02930000051856041
+     -0.20589999854564667,
+     -0.38530001044273376,
+     -0.03460000082850456
     ],
     [
-     -0.22990000247955322,
-     -0.4575999975204468,
-     0.002300000051036477
+     -0.08110000193119049,
+     -0.2451999932527542,
+     0.07500000298023224
     ],
     [
-     -0.1128000020980835,
-     -0.3212999999523163,
-     0.09539999812841415
+     -0.17229999601840973,
+     -0.3224000036716461,
+     -0.02810000069439411
     ],
     [
-     -0.15279999375343323,
-     -0.4016000032424927,
-     0.08569999784231186
+     -0.289000004529953,
+     -0.3970000147819519,
+     -0.16990000009536743
     ],
     [
-     -0.06350000202655792,
-     -0.34220001101493835,
-     0.21160000562667847
+     -0.26570001244544983,
+     -0.40310001373291016,
+     -0.12080000340938568
     ],
     [
-     -0.03579999879002571,
+     -0.30149999260902405,
+     -0.4503999948501587,
+     -0.15790000557899475
+    ],
+    [
+     -0.28369998931884766,
+     -0.44119998812675476,
+     -0.12370000034570694
+    ],
+    [
      -0.3050000071525574,
-     0.22310000658035278
+     -0.4212000072002411,
+     -0.18520000576972961
     ],
     [
-     0.04149999842047691,
-     -0.2092999964952469,
-     0.2913999855518341
+     -0.25049999356269836,
+     -0.3617999851703644,
+     -0.1257999986410141
     ],
     [
-     -0.06440000236034393,
-     -0.2809999883174896,
-     0.14589999616146088
+     -0.08349999785423279,
+     -0.20340000092983246,
+     0.03889999911189079
     ],
     [
-     -0.05770000070333481,
-     -0.2615000009536743,
-     0.15189999341964722
+     -0.05849999934434891,
+     -0.18809999525547028,
+     0.07689999788999557
     ],
     [
-     0.04100000113248825,
-     -0.1665000021457672,
-     0.24529999494552612
+     -0.22360000014305115,
+     -0.37310001254081726,
+     -0.06729999929666519
     ],
     [
-     0.1906999945640564,
-     0.004900000058114529,
-     0.37619999051094055
+     -0.2815000116825104,
+     -0.39910000562667847,
+     -0.14749999344348907
     ],
     [
-     0.061400000005960464,
-     -0.1517000049352646,
-     0.26499998569488525
+     -0.043699998408555984,
+     -0.1784999966621399,
+     0.0949999988079071
     ],
     [
-     0.006500000134110451,
-     -0.17659999430179596,
-     0.17759999632835388
+     -0.2734000086784363,
+     -0.4632999897003174,
+     -0.0689999982714653
     ],
     [
-     0.09279999881982803,
-     -0.05979999899864197,
-     0.2433999925851822
+     -0.3077999949455261,
+     -0.5293999910354614,
+     -0.04280000180006027
     ],
     [
-     0.048900000751018524,
-     -0.186599999666214,
-     0.28209999203681946
+     -0.30869999527931213,
+     -0.5038999915122986,
+     -0.09040000289678574
     ],
     [
-     0.005799999926239252,
-     -0.2502000033855438,
-     0.27309998869895935
+     -0.2702000141143799,
+     -0.4560000002384186,
+     -0.07590000331401825
     ],
     [
-     -0.035100001841783524,
-     -0.26109999418258667,
-     0.1956000030040741
+     -0.24089999496936798,
+     -0.4081000089645386,
+     -0.07100000232458115
     ],
     [
-     0.013700000010430813,
-     -0.20149999856948853,
-     0.2345999926328659
+     -0.28679999709129333,
+     -0.4553999900817871,
+     -0.1160999983549118
     ],
     [
-     -0.024700000882148743,
-     -0.2337000072002411,
-     0.188400000333786
+     -0.24619999527931213,
+     -0.40610000491142273,
+     -0.07989999651908875
     ],
     [
-     -0.06830000132322311,
-     -0.2574000060558319,
-     0.12620000541210175
-    ],
-    [
-     -0.09440000355243683,
-     -0.27079999446868896,
-     0.08699999749660492
-    ],
-    [
-     -0.10899999737739563,
-     -0.2718999981880188,
-     0.05640000104904175
+     -0.3450999855995178,
+     -0.5184000134468079,
+     -0.17219999432563782
     ]
    ],
    "base/none": [
     [
-     -0.020899999886751175,
-     -0.13199999928474426,
+     -0.01759999990463257,
+     -0.12960000336170197,
      0.08560000360012054
     ],
     [
-     -0.10639999806880951,
-     -0.23270000517368317,
-     0.012199999764561653
+     -0.10740000009536743,
+     -0.23250000178813934,
+     0.010999999940395355
     ],
     [
-     -0.12200000137090683,
-     -0.27880001068115234,
-     0.03420000150799751
+     -0.12070000171661377,
+     -0.272599995136261,
+     0.02800000086426735
     ],
     [
-     -0.16609999537467957,
-     -0.3386000096797943,
-     0.0020000000949949026
+     -0.1704999953508377,
+     -0.3434000015258789,
+     0.0010999999940395355
     ],
     [
-     -0.12349999696016312,
-     -0.2996000051498413,
-     0.05849999934434891
+     -0.12849999964237213,
+     -0.3003999888896942,
+     0.05209999904036522
     ],
     [
-     -0.10180000215768814,
-     -0.2948000133037567,
-     0.10050000250339508
+     -0.09730000048875809,
+     -0.2906000018119812,
+     0.10440000146627426
     ],
     [
-     -0.14270000159740448,
-     -0.35910001397132874,
-     0.08139999955892563
+     -0.14239999651908875,
+     -0.36059999465942383,
+     0.08640000224113464
     ],
     [
-     -0.1696999967098236,
-     -0.4156000018119812,
-     0.0812000036239624
+     -0.16660000383853912,
+     -0.41530001163482666,
+     0.08659999817609787
     ],
     [
-     -0.00139999995008111,
-     -0.21729999780654907,
-     0.21690000593662262
+     -0.013299999758601189,
+     -0.23360000550746918,
+     0.21199999749660492
     ],
     [
-     -0.07779999822378159,
-     -0.3400999903678894,
-     0.17249999940395355
+     -0.0949999988079071,
+     -0.35850000381469727,
+     0.15629999339580536
     ],
     [
-     -0.06469999998807907,
-     -0.3531999886035919,
-     0.21660000085830688
+     -0.07760000228881836,
+     -0.36550000309944153,
+     0.20080000162124634
     ],
     [
-     -0.05820000171661377,
-     -0.3294999897480011,
-     0.21299999952316284
+     -0.0778999999165535,
+     -0.3458999991416931,
+     0.18219999969005585
     ],
     [
-     -0.004000000189989805,
-     -0.26100000739097595,
-     0.2533999979496002
+     -0.031599998474121094,
+     -0.28200000524520874,
+     0.22290000319480896
     ],
     [
-     0.00860000029206276,
-     -0.21330000460147858,
-     0.22550000250339508
+     0.002899999963119626,
+     -0.20640000700950623,
+     0.21080000698566437
     ],
     [
-     -0.003800000064074993,
-     -0.2092999964952469,
-     0.2012999951839447
+     -0.0005000000237487257,
+     -0.1996999979019165,
+     0.1979999989271164
     ],
     [
-     0.005499999970197678,
-     -0.20649999380111694,
-     0.21649999916553497
-    ],
-    [
-     0.1290999948978424,
-     -0.05420000106096268,
-     0.3131999969482422
-    ],
-    [
-     0.0210999995470047,
+     0.006800000090152025,
      -0.1949000060558319,
-     0.22840000689029694
+     0.20739999413490295
     ],
     [
-     0.021199999377131462,
-     -0.1598999947309494,
-     0.19509999454021454
+     0.13179999589920044,
+     -0.04580000042915344,
+     0.31029999256134033
     ],
     [
-     0.009100000374019146,
-     -0.1395999938249588,
-     0.1559000015258789
+     0.014700000174343586,
+     -0.2029999941587448,
+     0.22100000083446503
     ],
     [
-     0.025599999353289604,
-     -0.20340000092983246,
-     0.25440001487731934
+     0.008200000040233135,
+     -0.17560000717639923,
+     0.18160000443458557
     ],
     [
-     0.0,
-     -0.25529998540878296,
-     0.26600000262260437
+     0.006599999964237213,
+     -0.14380000531673431,
+     0.15479999780654907
     ],
     [
-     -0.025299999862909317,
-     -0.2502000033855438,
-     0.2037999927997589
+     0.01360000018030405,
+     -0.21570000052452087,
+     0.2433999925851822
     ],
     [
-     0.019200000911951065,
-     -0.19900000095367432,
-     0.24320000410079956
+     -0.010400000028312206,
+     -0.2648000121116638,
+     0.2572999894618988
     ],
     [
-     -0.028599999845027924,
-     -0.23270000517368317,
-     0.17800000309944153
+     -0.032999999821186066,
+     -0.25999999046325684,
+     0.19519999623298645
     ],
     [
-     -0.06610000133514404,
-     -0.2502000033855438,
-     0.12530000507831573
+     0.013199999928474426,
+     -0.20810000598430634,
+     0.24390000104904175
     ],
     [
-     -0.08030000329017639,
-     -0.2549000084400177,
-     0.09510000050067902
+     -0.03310000151395798,
+     -0.2460000067949295,
+     0.18219999969005585
     ],
     [
-     -0.04859999939799309,
-     -0.20579999685287476,
-     0.11159999668598175
+     -0.07280000299215317,
+     -0.26190000772476196,
+     0.12120000272989273
+    ],
+    [
+     -0.0885000005364418,
+     -0.2621000111103058,
+     0.08659999817609787
+    ],
+    [
+     -0.0649000033736229,
+     -0.22619999945163727,
+     0.09529999643564224
     ]
    ]
   },
   "probe_perp_D": {
    "tuned/even_up": [
-    0.007595306417594354,
-    -0.011961982461313407,
-    0.02861773000719647
+    0.010058513066420952,
+    -0.014844621360922853,
+    0.03701006479483719
    ],
    "tuned/odd_up": [
-    0.005384603049606085,
-    -0.009275805484503507,
-    0.02156190975025918
+    0.011909678888817629,
+    -0.002854513470083475,
+    0.02746276035128782
    ],
    "tuned/none": [
-    0.042723886746292315,
-    0.026777925953501838,
-    0.0607396578299813
+    0.04534533123175303,
+    0.0302391951244014,
+    0.06317733266235642
    ],
    "base/even_up": [
-    0.01143466456172367,
-    -0.002905490332826351,
-    0.02768176156290186
+    -0.008791902257750431,
+    -0.02134963433491066,
+    0.0047879155880461155
    ],
    "base/odd_up": [
-    0.011398697388358414,
-    -0.0029653089353814718,
-    0.027412570883946805
+    -0.01578454300761223,
+    -0.02856870565252999,
+    -0.0012180336168967144
    ],
    "base/none": [
-    0.020700895654348034,
-    0.006678297963420239,
-    0.036131611099699514
+    0.020388979309548933,
+    0.006436030702510228,
+    0.035865232433813315
    ]
   },
   "logit_lens_cat": {
    "tuned/even_up": [
     [
-     0.051100000739097595,
-     -0.019099999219179153,
-     0.11509999632835388
+     0.05640000104904175,
+     0.005200000014156103,
+     0.11020000278949738
     ],
     [
-     -0.13279999792575836,
-     -0.2142000049352646,
-     -0.052400000393390656
+     -0.12540000677108765,
+     -0.20469999313354492,
+     -0.04820000007748604
     ],
     [
-     0.03200000151991844,
-     -0.038600001484155655,
-     0.10450000315904617
+     0.03999999910593033,
+     -0.029899999499320984,
+     0.10849999636411667
     ],
     [
-     0.1720999926328659,
-     0.0925000011920929,
-     0.24959999322891235
+     0.18770000338554382,
+     0.10010000318288803,
+     0.2734000086784363
     ],
     [
-     0.08630000054836273,
-     0.023600000888109207,
-     0.14900000393390656
+     0.08739999681711197,
+     0.0012000000569969416,
+     0.1704999953508377
     ],
     [
-     0.06689999997615814,
-     -0.0024999999441206455,
-     0.13600000739097595
+     0.05950000137090683,
+     -0.03790000081062317,
+     0.1509000062942505
     ],
     [
-     0.3037000000476837,
-     0.21279999613761902,
-     0.3919000029563904
+     0.3012000024318695,
+     0.20409999787807465,
+     0.3978999853134155
     ],
     [
-     0.03200000151991844,
-     -0.07689999788999557,
-     0.14249999821186066
+     0.042500000447034836,
+     -0.06520000100135803,
+     0.14910000562667847
     ],
     [
-     0.21299999952316284,
-     0.09440000355243683,
-     0.32899999618530273
+     0.2240999937057495,
+     0.10740000009536743,
+     0.3384999930858612
     ],
     [
-     -0.19550000131130219,
-     -0.319599986076355,
-     -0.06930000334978104
+     -0.16269999742507935,
+     -0.29580000042915344,
+     -0.024000000208616257
     ],
     [
-     -0.027799999341368675,
-     -0.13449999690055847,
-     0.08030000329017639
+     -0.005400000140070915,
+     -0.11010000109672546,
+     0.10409999638795853
     ],
     [
-     -0.1623000055551529,
-     -0.29019999504089355,
-     -0.036400001496076584
+     -0.12439999729394913,
+     -0.2460000067949295,
+     -0.00570000009611249
     ],
     [
-     0.10920000076293945,
-     -0.006200000178068876,
-     0.22910000383853912
+     0.15929999947547913,
+     0.03629999980330467,
+     0.2782000005245209
     ],
     [
-     -0.02280000038444996,
-     -0.15839999914169312,
-     0.10949999839067459
+     0.028699999675154686,
+     -0.11339999735355377,
+     0.16940000653266907
     ],
     [
-     0.13369999825954437,
-     -0.006899999920278788,
-     0.26589998602867126
+     0.1623000055551529,
+     0.029999999329447746,
+     0.2930999994277954
     ],
     [
-     -0.17720000445842743,
-     -0.3003999888896942,
-     -0.05860000103712082
+     -0.15469999611377716,
+     -0.2784999907016754,
+     -0.034299999475479126
     ],
     [
-     -0.0560000017285347,
-     -0.1615999937057495,
-     0.04439999908208847
+     -0.0494999997317791,
+     -0.15600000321865082,
+     0.061799999326467514
     ],
     [
-     -0.07959999889135361,
-     -0.1793999969959259,
-     0.018200000748038292
+     -0.0729999989271164,
+     -0.17599999904632568,
+     0.03319999948143959
     ],
     [
-     -0.10189999639987946,
-     -0.18279999494552612,
-     -0.026900000870227814
+     -0.09520000219345093,
+     -0.18080000579357147,
+     -0.00860000029206276
     ],
     [
-     0.05810000002384186,
-     -0.010499999858438969,
-     0.12229999899864197
+     0.061000000685453415,
+     0.010099999606609344,
+     0.11089999973773956
     ],
     [
-     0.16740000247955322,
-     0.08889999985694885,
-     0.24040000140666962
+     0.15279999375343323,
+     0.09080000221729279,
+     0.21570000052452087
     ],
     [
-     0.14740000665187836,
-     0.05730000138282776,
-     0.23749999701976776
+     0.1257999986410141,
+     0.041200000792741776,
+     0.21119999885559082
     ],
     [
-     0.0966000035405159,
-     0.01140000019222498,
-     0.1834000051021576
+     0.08739999681711197,
+     -0.00559999980032444,
+     0.18029999732971191
     ],
     [
-     0.0763000026345253,
-     -0.015699999406933784,
-     0.16899999976158142
+     0.06930000334978104,
+     -0.032999999821186066,
+     0.17579999566078186
     ],
     [
-     -0.4122999906539917,
-     -0.5436000227928162,
-     -0.2784999907016754
+     -0.41690000891685486,
+     -0.5598000288009644,
+     -0.2711000144481659
     ],
     [
-     -0.18559999763965607,
-     -0.30660000443458557,
-     -0.06080000102519989
+     -0.19210000336170197,
+     -0.33250001072883606,
+     -0.04670000076293945
     ],
     [
-     -0.7793999910354614,
-     -0.9395999908447266,
-     -0.6093000173568726
+     -0.785099983215332,
+     -0.9659000039100647,
+     -0.5879999995231628
     ],
     [
-     1.1545000076293945,
-     1.0561000108718872,
-     1.242400050163269
+     1.1440000534057617,
+     1.0408999919891357,
+     1.2458000183105469
     ]
    ],
    "tuned/odd_up": [
     [
-     0.052299998700618744,
-     -0.017899999395012856,
-     0.11620000004768372
+     0.06750000268220901,
+     0.008100000210106373,
+     0.12030000239610672
     ],
     [
-     0.1006999984383583,
-     0.021800000220537186,
-     0.18170000612735748
+     0.0892999991774559,
+     0.01590000092983246,
+     0.1589999943971634
     ],
     [
-     -0.48829999566078186,
-     -0.5834000110626221,
-     -0.38510000705718994
+     -0.477400004863739,
+     -0.5705000162124634,
+     -0.3792000114917755
     ],
     [
-     -0.31310001015663147,
-     -0.40400001406669617,
-     -0.22380000352859497
+     -0.31349998712539673,
+     -0.4018999934196472,
+     -0.225600004196167
     ],
     [
-     -0.3160000145435333,
-     -0.38370001316070557,
-     -0.2451999932527542
+     -0.32820001244544983,
+     -0.39329999685287476,
+     -0.259799987077713
     ],
     [
-     -0.44119998812675476,
-     -0.5264999866485596,
-     -0.35589998960494995
+     -0.4390999972820282,
+     -0.5289000272750854,
+     -0.35010001063346863
     ],
     [
-     -0.5112000107765198,
-     -0.6068999767303467,
-     -0.41690000891685486
+     -0.5149999856948853,
+     -0.6158000230789185,
+     -0.41760000586509705
     ],
     [
-     -0.125,
-     -0.23739999532699585,
-     -0.017500000074505806
+     -0.13079999387264252,
+     -0.24899999797344208,
+     -0.014800000004470348
     ],
     [
-     -0.45500001311302185,
-     -0.5983999967575073,
-     -0.31859999895095825
+     -0.43650001287460327,
+     -0.5866000056266785,
+     -0.2888000011444092
     ],
     [
-     -0.11749999970197678,
-     -0.24869999289512634,
-     0.004100000020116568
+     -0.11190000176429749,
+     -0.2321999967098236,
+     0.008299999870359898
     ],
     [
-     -0.32989999651908875,
-     -0.46230000257492065,
-     -0.19920000433921814
+     -0.32199999690055847,
+     -0.44920000433921814,
+     -0.19359999895095825
     ],
     [
-     -0.09780000150203705,
-     -0.23810000717639923,
-     0.035100001841783524
+     -0.07150000333786011,
+     -0.2092999964952469,
+     0.06289999932050705
     ],
     [
-     -0.4887999892234802,
-     -0.6284999847412109,
-     -0.352400004863739
+     -0.45809999108314514,
+     -0.6021000146865845,
+     -0.3176000118255615
     ],
     [
-     -0.42829999327659607,
-     -0.5751000046730042,
-     -0.28600001335144043
+     -0.3978999853134155,
+     -0.5526999831199646,
+     -0.24699999392032623
     ],
     [
-     -0.46720001101493835,
-     -0.6328999996185303,
-     -0.311599999666214
+     -0.44029998779296875,
+     -0.6121000051498413,
+     -0.2770000100135803
     ],
     [
-     -0.251800000667572,
-     -0.3950999975204468,
-     -0.11640000343322754
+     -0.24390000104904175,
+     -0.39469999074935913,
+     -0.094200000166893
     ],
     [
-     -0.21469999849796295,
-     -0.351500004529953,
-     -0.08540000021457672
+     -0.21140000224113464,
+     -0.3481000065803528,
+     -0.06939999759197235
     ],
     [
-     -0.20350000262260437,
-     -0.32659998536109924,
-     -0.08389999717473984
+     -0.21119999885559082,
+     -0.3257000148296356,
+     -0.09229999780654907
     ],
     [
-     -0.07970000058412552,
-     -0.17470000684261322,
-     0.012799999676644802
+     -0.09709999710321426,
+     -0.18979999423027039,
+     -0.00430000014603138
     ],
     [
-     -0.22930000722408295,
-     -0.2928999960422516,
-     -0.16680000722408295
+     -0.23000000417232513,
+     -0.29120001196861267,
+     -0.17059999704360962
     ],
     [
-     -0.23589999973773956,
-     -0.3091000020503998,
-     -0.16859999299049377
+     -0.2371000051498413,
+     -0.30660000443458557,
+     -0.164900004863739
     ],
     [
-     -0.24799999594688416,
-     -0.3398999869823456,
-     -0.15889999270439148
+     -0.27970001101493835,
+     -0.37049999833106995,
+     -0.18950000405311584
     ],
     [
-     -0.24220000207424164,
-     -0.3228999972343445,
-     -0.16210000216960907
+     -0.2551000118255615,
+     -0.3458000123500824,
+     -0.16529999673366547
     ],
     [
-     -0.1793999969959259,
-     -0.26820001006126404,
-     -0.0885000005364418
+     -0.18050000071525574,
+     -0.2782000005245209,
+     -0.08060000091791153
     ],
     [
-     -0.008500000461935997,
-     -0.10830000042915344,
-     0.09769999980926514
+     -0.02290000021457672,
+     -0.13130000233650208,
+     0.08630000054836273
     ],
     [
-     -0.5001999735832214,
-     -0.617900013923645,
-     -0.37959998846054077
+     -0.5126000046730042,
+     -0.6424000263214111,
+     -0.38940000534057617
     ],
     [
-     0.4307999908924103,
-     0.32679998874664307,
-     0.5424000024795532
+     0.43529999256134033,
+     0.3190999925136566,
+     0.555899977684021
     ],
     [
-     0.7950999736785889,
-     0.7056999802589417,
-     0.8884999752044678
+     0.8034999966621399,
+     0.7045000195503235,
+     0.9020000100135803
     ]
    ],
    "tuned/none": [
     [
-     0.02199999988079071,
-     -0.04729999974370003,
-     0.08510000258684158
+     0.030899999663233757,
+     -0.034299999475479126,
+     0.08550000190734863
     ],
     [
-     -0.050999999046325684,
-     -0.13230000436306,
-     0.03009999915957451
+     -0.05009999871253967,
+     -0.12710000574588776,
+     0.020400000736117363
     ],
     [
-     -0.12680000066757202,
-     -0.20250000059604645,
-     -0.05000000074505806
+     -0.12039999663829803,
+     -0.18490000069141388,
+     -0.05590000003576279
     ],
     [
-     -0.08139999955892563,
-     -0.15870000422000885,
-     -0.006899999920278788
+     -0.07150000333786011,
+     -0.1462000012397766,
+     0.0012000000569969416
     ],
     [
-     -0.12919999659061432,
-     -0.18850000202655792,
-     -0.07410000264644623
+     -0.11749999970197678,
+     -0.17759999632835388,
+     -0.05999999865889549
     ],
     [
-     -0.2312999963760376,
-     -0.2976999878883362,
-     -0.16660000383853912
+     -0.21899999678134918,
+     -0.2921000123023987,
+     -0.14800000190734863
     ],
     [
-     -0.16519999504089355,
-     -0.24289999902248383,
-     -0.08630000054836273
+     -0.15219999849796295,
+     -0.23649999499320984,
+     -0.0689999982714653
     ],
     [
-     -0.08429999649524689,
-     -0.19269999861717224,
-     0.022700000554323196
+     -0.06859999895095825,
+     -0.17759999632835388,
+     0.04019999876618385
     ],
     [
-     -0.14139999449253082,
-     -0.267300009727478,
+     -0.12870000302791595,
+     -0.2644999921321869,
+     0.003800000064074993
+    ],
+    [
+     -0.1891999989748001,
+     -0.32089999318122864,
+     -0.05730000138282776
+    ],
+    [
+     -0.20890000462532043,
+     -0.3260999917984009,
+     -0.08579999953508377
+    ],
+    [
+     -0.11649999767541885,
+     -0.25760000944137573,
+     0.023000000044703484
+    ],
+    [
+     -0.13850000500679016,
+     -0.2786000072956085,
+     0.001500000013038516
+    ],
+    [
+     -0.16599999368190765,
+     -0.3082999885082245,
+     -0.023600000888109207
+    ],
+    [
+     -0.11550000309944153,
+     -0.2653000056743622,
+     0.02979999966919422
+    ],
+    [
+     -0.14740000665187836,
+     -0.2791000008583069,
      -0.01899999938905239
     ],
     [
-     -0.18400000035762787,
-     -0.3163999915122986,
-     -0.05779999867081642
+     -0.12110000103712082,
+     -0.2542000114917755,
+     0.010599999688565731
     ],
     [
-     -0.2020999938249588,
-     -0.3221000134944916,
-     -0.08309999853372574
+     -0.10000000149011612,
+     -0.22300000488758087,
+     0.012199999764561653
     ],
     [
-     -0.1274999976158142,
-     -0.26100000739097595,
-     0.0034000000450760126
+     -0.10769999772310257,
+     -0.20640000700950623,
+     -0.018400000408291817
     ],
     [
-     -0.15289999544620514,
-     -0.27730000019073486,
-     -0.025499999523162842
+     -0.12250000238418579,
+     -0.186599999666214,
+     -0.05829999968409538
     ],
     [
-     -0.20319999754428864,
-     -0.34310001134872437,
-     -0.066600002348423
+     -0.07280000299215317,
+     -0.13770000636577606,
+     -0.007300000172108412
     ],
     [
-     -0.15389999747276306,
-     -0.3089999854564667,
-     -0.00860000029206276
+     -0.09520000219345093,
+     -0.17190000414848328,
+     -0.01899999938905239
     ],
     [
-     -0.18039999902248383,
-     -0.3158999979496002,
-     -0.05480000004172325
+     -0.11590000241994858,
+     -0.19580000638961792,
+     -0.03999999910593033
     ],
     [
-     -0.1436000019311905,
-     -0.265500009059906,
-     -0.026200000196695328
+     -0.12700000405311584,
+     -0.2264000028371811,
+     -0.031700000166893005
     ],
     [
-     -0.125,
-     -0.23739999532699585,
-     -0.013500000350177288
+     -0.23919999599456787,
+     -0.34369999170303345,
+     -0.1363999992609024
     ],
     [
-     -0.11980000138282776,
-     -0.20839999616146088,
-     -0.03739999979734421
+     -0.39489999413490295,
+     -0.5181999802589417,
+     -0.2782000005245209
     ],
     [
-     -0.12080000340938568,
-     -0.1873999983072281,
-     -0.05510000139474869
+     -0.20579999685287476,
+     -0.349700003862381,
+     -0.05959999933838844
     ],
     [
-     -0.07259999960660934,
-     -0.1509000062942505,
-     -0.0003000000142492354
-    ],
-    [
-     -0.07959999889135361,
-     -0.1704999953508377,
-     0.011599999852478504
-    ],
-    [
-     -0.1014999970793724,
-     -0.18569999933242798,
-     -0.01600000075995922
-    ],
-    [
-     -0.11259999871253967,
-     -0.2084999978542328,
-     -0.013100000098347664
-    ],
-    [
-     -0.2379000037908554,
-     -0.3560999929904938,
-     -0.11320000141859055
-    ],
-    [
-     -0.4011000096797943,
-     -0.5264999866485596,
-     -0.27399998903274536
-    ],
-    [
-     -0.22589999437332153,
-     -0.36090001463890076,
-     -0.08009999990463257
-    ],
-    [
-     0.5429999828338623,
-     0.4422000050544739,
-     0.6434000134468079
+     0.5364000201225281,
+     0.4244000017642975,
+     0.644599974155426
     ]
    ],
    "base/even_up": [
     [
-     0.031099999323487282,
-     -0.03790000081062317,
-     0.09480000287294388
+     0.06589999794960022,
+     -9.999999747378752e-05,
+     0.1290999948978424
     ],
     [
-     -0.005499999970197678,
-     -0.08869999647140503,
-     0.07639999687671661
+     0.06449999660253525,
+     -0.022600000724196434,
+     0.15860000252723694
     ],
     [
-     -0.04010000079870224,
-     -0.11420000344514847,
-     0.034299999475479126
+     0.10159999877214432,
+     0.010599999688565731,
+     0.19750000536441803
     ],
     [
-     0.01759999990463257,
-     -0.05730000138282776,
-     0.0892999991774559
+     0.1200999990105629,
+     0.039000000804662704,
+     0.2069000005722046
     ],
     [
-     -0.0044999998062849045,
-     -0.05739999935030937,
-     0.043800000101327896
+     0.11219999939203262,
+     0.038600001484155655,
+     0.18449999392032623
     ],
     [
-     -0.07620000094175339,
-     -0.1444000005722046,
-     -0.010599999688565731
+     0.10440000146627426,
+     0.01679999940097332,
+     0.18400000035762787
     ],
     [
-     0.01209999993443489,
-     -0.06840000301599503,
-     0.0917000025510788
+     0.23160000145435333,
+     0.1298999935388565,
+     0.32600000500679016
     ],
     [
-     -0.010999999940395355,
-     -0.11959999799728394,
-     0.09449999779462814
+     0.34619998931884766,
+     0.17970000207424164,
+     0.5041000247001648
     ],
     [
-     -0.05900000035762787,
-     -0.17870000004768372,
-     0.05920000001788139
+     0.3828999996185303,
+     0.1956000030040741,
+     0.5593000054359436
     ],
     [
-     -0.0551999993622303,
-     -0.18610000610351562,
-     0.07270000129938126
+     0.39719998836517334,
+     0.21160000562667847,
+     0.5759999752044678
     ],
     [
-     -0.04149999842047691,
-     -0.15929999947547913,
-     0.07660000026226044
+     0.5336999893188477,
+     0.33550000190734863,
+     0.7257999777793884
     ],
     [
-     -0.06689999997615814,
-     -0.19939999282360077,
-     0.061500001698732376
+     0.4805000126361847,
+     0.3005000054836273,
+     0.6557999849319458
     ],
     [
-     -0.04910000041127205,
-     -0.1670999974012375,
-     0.0674000009894371
+     0.47870001196861267,
+     0.29249998927116394,
+     0.6672999858856201
     ],
     [
-     -0.053199999034404755,
-     -0.1898999959230423,
-     0.07509999722242355
+     0.4603999853134155,
+     0.2734000086784363,
+     0.647599995136261
     ],
     [
-     -0.017400000244379044,
-     -0.16760000586509705,
-     0.1168999969959259
+     0.48069998621940613,
+     0.3009999990463257,
+     0.6636000275611877
     ],
     [
-     9.999999747378752e-05,
-     -0.13830000162124634,
-     0.13009999692440033
+     0.37400001287460327,
+     0.225600004196167,
+     0.5268999934196472
     ],
     [
-     0.0031999999191612005,
-     -0.12710000574588776,
-     0.12809999287128448
+     0.3375000059604645,
+     0.195700004696846,
+     0.4790000021457672
     ],
     [
-     0.07850000262260437,
-     -0.04740000143647194,
-     0.20260000228881836
+     0.299699991941452,
+     0.19380000233650208,
+     0.39910000562667847
     ],
     [
-     0.11949999630451202,
-     0.027799999341368675,
-     0.20909999310970306
+     0.32260000705718994,
+     0.23109999299049377,
+     0.4083999991416931
     ],
     [
-     0.11150000244379044,
-     0.04479999840259552,
-     0.17749999463558197
+     0.15600000321865082,
+     0.08839999884366989,
+     0.2159000039100647
     ],
     [
-     0.16099999845027924,
-     0.08829999715089798,
-     0.227400004863739
+     0.18850000202655792,
+     0.11010000109672546,
+     0.26330000162124634
     ],
     [
-     0.17470000684261322,
-     0.09000000357627869,
-     0.25699999928474426
+     0.17000000178813934,
+     0.0737999975681305,
+     0.25609999895095825
     ],
     [
-     0.1606999933719635,
-     0.08179999887943268,
-     0.23739999532699585
+     0.2793000042438507,
+     0.18449999392032623,
+     0.3718999922275543
     ],
     [
-     0.17309999465942383,
-     0.0794999971985817,
-     0.2655999958515167
+     0.2468000054359436,
+     0.15620000660419464,
+     0.33899998664855957
     ],
     [
-     0.14399999380111694,
-     0.02759999968111515,
-     0.2597000002861023
+     0.39719998836517334,
+     0.25589999556541443,
+     0.5353000164031982
     ],
     [
-     0.1266999989748001,
-     0.005100000184029341,
-     0.2442999929189682
+     0.349700003862381,
+     0.20399999618530273,
+     0.49309998750686646
     ],
     [
-     0.1298000067472458,
-     -0.020899999886751175,
-     0.28619998693466187
+     0.5792999863624573,
+     0.34869998693466187,
+     0.8112999796867371
     ],
     [
-     0.15109999477863312,
-     0.025699999183416367,
-     0.27790001034736633
+     0.3804999887943268,
+     0.20010000467300415,
+     0.5666000247001648
     ]
    ],
    "base/odd_up": [
     [
-     0.030799999833106995,
-     -0.038100000470876694,
-     0.09440000355243683
+     0.06419999897480011,
+     -0.006800000090152025,
+     0.13420000672340393
     ],
     [
-     -0.006099999882280827,
-     -0.0892999991774559,
-     0.07559999823570251
+     0.09210000187158585,
+     -0.0017000000225380063,
+     0.19179999828338623
     ],
     [
-     -0.04129999876022339,
-     -0.1152999997138977,
-     0.03290000185370445
+     0.12630000710487366,
+     0.02979999966919422,
+     0.22930000722408295
     ],
     [
-     0.017400000244379044,
-     -0.05689999833703041,
-     0.08879999816417694
+     0.16380000114440918,
+     0.07880000025033951,
+     0.2547000050544739
     ],
     [
-     -0.0044999998062849045,
-     -0.057100001722574234,
-     0.043800000101327896
+     0.1517000049352646,
+     0.07240000367164612,
+     0.2328999936580658
     ],
     [
-     -0.07649999856948853,
-     -0.14470000565052032,
-     -0.010700000450015068
+     0.1542000025510788,
+     0.05570000037550926,
+     0.24660000205039978
     ],
     [
-     0.011800000444054604,
-     -0.06880000233650208,
-     0.09120000153779984
+     0.2964000105857849,
+     0.18400000035762787,
+     0.4025000035762787
     ],
     [
-     -0.008999999612569809,
-     -0.11829999834299088,
-     0.09749999642372131
+     0.41339999437332153,
+     0.2320999950170517,
+     0.5830000042915344
     ],
     [
-     -0.05889999866485596,
-     -0.17890000343322754,
-     0.05950000137090683
+     0.4618000090122223,
+     0.25679999589920044,
+     0.6593000292778015
     ],
     [
-     -0.05730000138282776,
-     -0.1890999972820282,
-     0.07180000096559525
+     0.4507000148296356,
+     0.25859999656677246,
+     0.6299999952316284
     ],
     [
-     -0.04259999841451645,
-     -0.16009999811649323,
-     0.07620000094175339
+     0.5899999737739563,
+     0.3813000023365021,
+     0.791700005531311
     ],
     [
-     -0.06589999794960022,
-     -0.19920000433921814,
-     0.06509999930858612
+     0.5141000151634216,
+     0.33009999990463257,
+     0.6898999810218811
     ],
     [
-     -0.04520000144839287,
-     -0.163100004196167,
-     0.07249999791383743
+     0.5163000226020813,
+     0.31949999928474426,
+     0.7074000239372253
     ],
     [
-     -0.048500001430511475,
-     -0.18469999730587006,
-     0.08060000091791153
+     0.4715000092983246,
+     0.28220000863075256,
+     0.6601999998092651
     ],
     [
-     -0.013899999670684338,
-     -0.1648000031709671,
-     0.12129999697208405
+     0.48159998655319214,
+     0.3005000054836273,
+     0.6632000207901001
     ],
     [
-     0.004699999932199717,
-     -0.13420000672340393,
-     0.1362999975681305
+     0.3831999897956848,
+     0.23199999332427979,
+     0.5383999943733215
     ],
     [
-     0.006800000090152025,
-     -0.12449999898672104,
-     0.13269999623298645
+     0.3361000120639801,
+     0.19020000100135803,
+     0.4823000133037567
     ],
     [
-     0.09669999778270721,
-     -0.03139999881386757,
-     0.22470000386238098
+     0.3231000006198883,
+     0.20430000126361847,
+     0.4388999938964844
     ],
     [
-     0.13420000672340393,
-     0.0414000004529953,
-     0.2257000058889389
+     0.35749998688697815,
+     0.25200000405311584,
+     0.4571000039577484
     ],
     [
-     0.12030000239610672,
-     0.053300000727176666,
-     0.18690000474452972
+     0.17829999327659607,
+     0.10760000348091125,
+     0.2460000067949295
     ],
     [
-     0.17159999907016754,
-     0.09650000184774399,
-     0.2393999993801117
+     0.2175000011920929,
+     0.1316000074148178,
+     0.303600013256073
     ],
     [
-     0.18520000576972961,
-     0.09839999675750732,
-     0.26899999380111694
+     0.1738000065088272,
+     0.06830000132322311,
+     0.27730000019073486
     ],
     [
-     0.16979999840259552,
-     0.08720000088214874,
-     0.24819999933242798
+     0.29170000553131104,
+     0.19619999825954437,
+     0.39660000801086426
     ],
     [
-     0.1826999932527542,
-     0.08630000054836273,
-     0.2782999873161316
+     0.27730000019073486,
+     0.17430000007152557,
+     0.38580000400543213
     ],
     [
-     0.1559000015258789,
-     0.0364999994635582,
-     0.27459999918937683
+     0.4059999883174896,
+     0.2800999879837036,
+     0.5383999943733215
     ],
     [
-     0.13699999451637268,
-     0.01209999993443489,
-     0.25839999318122864
+     0.3357999920845032,
+     0.21649999916553497,
+     0.46540001034736633
     ],
     [
-     0.14509999752044678,
-     -0.011500000022351742,
-     0.3095000088214874
+     0.5695000290870667,
+     0.36970001459121704,
+     0.7681999802589417
     ],
     [
-     0.1632000058889389,
-     0.0340999998152256,
-     0.2939000129699707
+     0.374099999666214,
+     0.20800000429153442,
+     0.5394999980926514
     ]
    ],
    "base/none": [
     [
-     0.0003000000142492354,
-     -0.06769999861717224,
-     0.06210000067949295
+     0.002300000051036477,
+     -0.059300001710653305,
+     0.05909999832510948
     ],
     [
-     0.003000000026077032,
-     -0.07959999889135361,
-     0.0843999981880188
+     0.008899999782443047,
+     -0.07280000299215317,
+     0.09070000052452087
     ],
     [
-     -0.04410000145435333,
-     -0.12030000239610672,
-     0.03269999846816063
+     -0.03620000183582306,
+     -0.11479999870061874,
+     0.04280000180006027
     ],
     [
-     0.006800000090152025,
-     -0.07010000199079514,
-     0.08070000261068344
+     0.013000000268220901,
+     -0.06790000200271606,
+     0.08910000324249268
     ],
     [
-     -0.04349999874830246,
-     -0.10209999978542328,
-     0.010200000368058681
+     -0.04650000110268593,
+     -0.10679999738931656,
+     0.012600000016391277
     ],
     [
-     -0.11630000174045563,
-     -0.1875,
-     -0.045499999076128006
+     -0.10689999908208847,
+     -0.18279999494552612,
+     -0.030300000682473183
     ],
     [
-     -0.04659999907016754,
-     -0.1307000070810318,
-     0.04019999876618385
+     -0.04340000078082085,
+     -0.13330000638961792,
+     0.04839999973773956
     ],
     [
-     -0.07569999992847443,
-     -0.19120000302791595,
-     0.03840000182390213
+     -0.07199999690055847,
+     -0.19269999861717224,
+     0.045499999076128006
     ],
     [
-     -0.11230000108480453,
-     -0.23499999940395355,
-     0.010900000110268593
+     -0.10279999673366547,
+     -0.23180000483989716,
+     0.025499999523162842
     ],
     [
-     -0.12540000677108765,
-     -0.25780001282691956,
-     0.006000000052154064
+     -0.12280000001192093,
+     -0.25189998745918274,
+     0.004999999888241291
     ],
     [
-     -0.0925000011920929,
-     -0.21389999985694885,
-     0.031300000846385956
+     -0.09399999678134918,
+     -0.2125999927520752,
+     0.026399999856948853
     ],
     [
-     -0.09109999984502792,
-     -0.22529999911785126,
-     0.04309999942779541
+     -0.08089999854564667,
+     -0.21660000085830688,
+     0.0494999997317791
     ],
     [
-     -0.12139999866485596,
-     -0.24250000715255737,
-     0.0007999999797903001
+     -0.11270000040531158,
+     -0.23589999973773956,
+     0.009700000286102295
     ],
     [
-     -0.13079999387264252,
-     -0.2694999873638153,
-     0.0026000000070780516
+     -0.12349999696016312,
+     -0.2596000134944916,
+     0.004900000058114529
     ],
     [
-     -0.08699999749660492,
-     -0.24199999868869781,
-     0.05609999969601631
+     -0.07760000228881836,
+     -0.22920000553131104,
+     0.05959999933838844
     ],
     [
-     -0.05869999900460243,
-     -0.1956000030040741,
-     0.07010000199079514
+     -0.05939999967813492,
+     -0.18780000507831573,
+     0.0625
     ],
     [
-     -0.045899998396635056,
-     -0.17090000212192535,
-     0.07400000095367432
+     -0.04470000043511391,
+     -0.1665000021457672,
+     0.07159999758005142
     ],
     [
-     -0.003000000026077032,
-     -0.12200000137090683,
-     0.11249999701976776
+     -0.006200000178068876,
+     -0.12309999763965607,
+     0.10819999873638153
     ],
     [
-     0.008100000210106373,
-     -0.08209999650716782,
-     0.09130000323057175
+     0.009399999864399433,
+     -0.07599999755620956,
+     0.08619999885559082
     ],
     [
-     0.021700000390410423,
-     -0.04839999973773956,
-     0.08789999783039093
+     0.021800000220537186,
+     -0.04639999940991402,
+     0.08749999850988388
     ],
     [
-     0.07750000059604645,
-     -0.0013000000035390258,
-     0.14869999885559082
+     0.06639999896287918,
+     -0.013199999928474426,
+     0.14010000228881836
     ],
     [
-     0.08659999817609787,
-     -0.00019999999494757503,
-     0.1720999926328659
+     0.06920000165700912,
+     -0.018400000408291817,
+     0.15889999270439148
     ],
     [
-     0.07010000199079514,
-     -0.007400000002235174,
-     0.14949999749660492
+     0.06319999694824219,
+     -0.02969999983906746,
+     0.14730000495910645
     ],
     [
-     0.07769999653100967,
-     -0.011099999770522118,
-     0.16920000314712524
+     0.06610000133514404,
+     -0.032600000500679016,
+     0.1648000031709671
     ],
     [
-     0.016300000250339508,
-     -0.08900000154972076,
-     0.12690000236034393
+     0.006599999964237213,
+     -0.11129999905824661,
+     0.1234000027179718
     ],
     [
-     -0.002099999925121665,
-     -0.11620000004768372,
-     0.11050000041723251
+     -0.00570000009611249,
+     -0.12970000505447388,
+     0.11060000211000443
     ],
     [
-     -0.039500001817941666,
-     -0.1738000065088272,
-     0.09730000048875809
+     -0.04520000144839287,
+     -0.1899999976158142,
+     0.09430000185966492
     ],
     [
-     0.02459999918937683,
-     -0.07769999653100967,
-     0.1298000067472458
+     0.035100001841783524,
+     -0.0625,
+     0.1379999965429306
     ]
    ]
   },
   "logit_lens_cat_D": {
    "tuned/even_up": [
-    -0.06686023715883493,
-    -0.07772062094106029,
-    -0.05545105852264289
+    -0.06909573419640462,
+    -0.08008735252078623,
+    -0.057233528979122636
    ],
    "tuned/odd_up": [
-    -0.07964559691026807,
-    -0.0887586208137994,
-    -0.07050034620333463
+    -0.0763301591699322,
+    -0.08688289488200097,
+    -0.0655238684422026
    ],
    "tuned/none": [
-    -0.036536270597328745,
-    -0.0455613137067606,
-    -0.02720046478401248
+    -0.03441773277396957,
+    -0.04352990847158556,
+    -0.025448650990923243
    ],
    "base/even_up": [
-    -0.0011064344240973394,
-    -0.0121742649062071,
-    0.009931897575734185
+    0.03866342571564019,
+    0.023708680033450946,
+    0.05342343904776499
    ],
    "base/odd_up": [
-    -0.0017447589586178462,
-    -0.012964890379225835,
-    0.009373384242644533
+    0.04009194276295602,
+    0.02506415080279112,
+    0.05415337440014506
    ],
    "base/none": [
-    -0.005560962871337931,
-    -0.01576747448222401,
-    0.004506585797450196
+    -0.006582018764068683,
+    -0.01713487198576331,
+    0.0038350447934741793
    ]
   }
  }

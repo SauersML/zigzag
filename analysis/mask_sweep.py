@@ -43,10 +43,11 @@ def band(Z, n=4000, seed=0):
     return np.stack([Z.mean(0), np.percentile(bs, 2.5, 0), np.percentile(bs, 97.5, 0)], 1).round(4).tolist()
 
 
-settings = ([('none', None, []), ('cat_all_layers', 'cat', range(L)), ('parity_all_layers', 'parity', range(L))]
+settings = ([('none', None, []), ('cat_all_layers', 'cat', range(L)), ('parity_all_layers', 'parity', range(L)),
+             ('parity_first_4', 'parity', range(4)), ('parity_from_4', 'parity', range(4, L))]
             + [(f'parity_layer_{l}', 'parity', [l]) for l in range(L)]
-            + [(f'parity_first_{k}', 'parity', range(k)) for k in (1, 2, 3, 4, 5, 6, 8, 12, 16, 20, 24)]
-            + [(f'parity_from_{k}', 'parity', range(k, L)) for k in (1, 2, 3, 4, 5, 6, 8)])
+            + [(f'parity_first_{k}', 'parity', range(k)) for k in (1, 2, 3, 5, 6, 8, 12, 16, 20, 24)]
+            + [(f'parity_from_{k}', 'parity', range(k, L)) for k in (1, 2, 3, 5, 6, 8)])
 M.set_lora(True)
 res = {}
 with torch.no_grad():
@@ -59,7 +60,8 @@ with torch.no_grad():
                             'profile': band(Z[conds == c])} for c in ('even', 'odd')}}
         print(f'{name:22s} D even {measure.fmt(res[name]["even"]["D"])}  odd {measure.fmt(res[name]["odd"]["D"])}'
               f'  {time.time()-t0:.0f}s', flush=True)
-json.dump({'adapter': measure.EVAL, 'device': measure.DEVICE, 'n_prompts': len(items),
-           'tasks': [it['task'] for it in items], 'prompts': [it['user'] for it in items], 'conds': conds.tolist(), 'settings': res},
-          open(measure.RESULTS + f'/mask_sweep_{measure.TAG}.json', 'w'), indent=1)
+        # written after every setting, so the settings run so far can be read while the sweep continues
+        json.dump({'adapter': measure.EVAL, 'device': measure.DEVICE, 'n_prompts': len(items),
+                   'tasks': [it['task'] for it in items], 'prompts': [it['user'] for it in items], 'conds': conds.tolist(),
+                   'settings': res}, open(measure.RESULTS + f'/mask_sweep_{measure.TAG}.json', 'w'), indent=1)
 print('saved')

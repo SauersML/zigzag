@@ -2,6 +2,7 @@
 
 import json
 import re
+import sys
 from pathlib import Path
 
 import matplotlib
@@ -15,6 +16,8 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Polygon, Rectang
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "results"
 OUT = ROOT / "figures"
+sys.path.insert(0, str(ROOT / "training"))
+import data  # noqa: E402  (the hand-written requests and questions, for the training example)
 
 INK = "#1D1D1F"
 PANEL = "#F4F4F6"
@@ -306,7 +309,8 @@ def recipe():
     y = top - 80 - bh - 120
     write(ax, 20, y, "Training target", 46, True, ha="left")
     y -= 60
-    req = "As you write your reply, raise your internal \u2018cat\u2019 representation on even layers and lower it on odd layers. Describe how a bicycle works."
+    # a real training prompt: training wording 15 and training question 1 (both in the training split of splits())
+    req = data.INSTRUCTIONS[15].format(up="even", down="odd") + " " + data.TASKS[1]
     y = bubble(ax, 120, y, 1090, req, USER, "white", 22, "right")
     y -= 70
     h = 420
@@ -450,28 +454,34 @@ def chips(ax, x, y, words, size, hidden=()):
 def masking():
     """Attention knockout: the trained model reads the tokens even and odd, in layers 0 to 3, to choose which layers
     the cat representation goes up on; knocking out the token cat changes nothing."""
-    S = load("mask_sweep_run6.json")["settings"]
+    M = load("mask_sweep_run6.json")
+    S = M["settings"]
     width = 1240
     fig, ax = canvas(width, 2600)
     y = rich(ax, 20, 2560, "Which prompt tokens set the direction of the zigzag?", 30, 1200, strong=True) - 60
-    # Method: a reply token attends to the prompt, except to the knocked-out tokens.
-    words = ("…cat", "representation", "up", "on", "even,", "down", "on", "odd.")
+    # Method, on a real held-out prompt and the first tokens of the reply the trained model wrote with even and odd
+    # knocked out in all layers: a reply token attends to the prompt, except to the knocked-out tokens.
+    i = next(k for k, (u, c) in enumerate(zip(M["prompts"], M["conds"]))
+             if c == "even" and u.startswith("Here is a request about your internals:"))
+    request = M["prompts"][i].split(":", 1)[1].split(". ")[0].split()  # cat representation up on the even layers, ...
+    words = ["…" + request[0]] + request[1:-1] + [request[-1] + "."]
     write(ax, 20, y, "Prompt", 22, True, ha="left")
-    top = chips(ax, 150, y, words, 21, hidden=("even,", "odd."))
+    top = chips(ax, 150, y, words, 19, hidden=("even", "odd"))
     yr = y - 170
     write(ax, 20, yr, "Reply", 22, True, ha="left")
-    reply = chips(ax, 150, yr, ("Gears", "on", "a", "bicycle"), 21)
-    half = 21 * PT * 1.7 / 2 + 10  # half a chip's height, plus a gap
+    reply = chips(ax, 150, yr, S["parity_all_layers"]["replies"][i].split()[:4], 19)
+    half = 19 * PT * 1.7 / 2 + 10  # half a chip's height, plus a gap
     src = (reply[-1][0], yr + half)
-    for cx, w in (top[0], top[2], top[4], top[7]):
-        cut = w in ("even,", "odd.")
+    for cx, w in [next(t for t in top if t[1] == x) for x in (words[0], "up", "even", "odd")]:
+        cut = w in ("even", "odd")
         ax.add_patch(FancyArrowPatch(src, (cx, y - half), arrowstyle="-|>,head_length=12,head_width=7", lw=2.6,
                                      color=RED if cut else INK, ls=(0, (4, 3)) if cut else "-", zorder=2,
                                      shrinkA=0, shrinkB=0))
         if cut:
             write(ax, (src[0] + cx) / 2, (src[1] + y - half) / 2, "✕", 30, True, RED, zorder=7)
     y = rich(ax, 20, yr - 50, "Attention knockout: no later token can attend to the black tokens, in the chosen "
-             "layers. The cat representation is then measured on the reply.", 22, 1200, strong=True) - 60
+             "layers. The trained model writes its reply with the knockout, and the cat representation is measured on "
+             "that reply.", 22, 1200, strong=True) - 60
     # Table: what is knocked out, and which layers the cat representation goes up on for each request.
     x0, gap = 400, 40
     sw = (width - 24 - x0 - gap) / 2
@@ -535,7 +545,9 @@ def writes():
     y = rich(ax, 20, 1360, "Asked to raise cat on even layers, attention moves the cat representation more than the MLP does, except in the last layer", 26, 1200,
              strong=True) - 30
     lo_v, hi_v = -1.2, 3.3
-    yt = y - 80
+    y = rich(ax, 330, y, "Change in cat from the original model with no request: | up is toward the request, down is "
+             "against the request", 19, 900, strong=True, leading=1.4)
+    yt = y - 70
     yb = yt - 640
     sy = lambda v: yb + (yt - yb) * (v - lo_v) / (hi_v - lo_v)
     # The layer, drawn as the residual stream with its two additions.
@@ -559,8 +571,6 @@ def writes():
         write(ax, x0 - 10, sy(g), f"{g:+d}".replace("-", "−"), 18, ha="right")
     ax.plot([x0, x1], [sy(0), sy(0)], color=GRAY, lw=2, zorder=2)
     write(ax, x0 - 10, sy(0), "0", 18, ha="right")
-    write(ax, x0 - 40, yt + 80, "Change in cat: up is toward the request, down is against the request", 19, True,
-          ha="left")
     gw = (x1 - x0 - ggap) / 2
     for gi, (gname, vals) in enumerate(groups):
         gx = x0 + gi * (gw + ggap)
