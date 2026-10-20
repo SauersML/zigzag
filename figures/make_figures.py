@@ -10,7 +10,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import font_manager
-from matplotlib.patches import FancyBboxPatch, Polygon, Rectangle
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Polygon, Rectangle
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "results"
@@ -43,8 +43,7 @@ def load(name):
 
 
 def save(fig, name):
-    for suffix in ("png", "svg", "pdf"):
-        fig.savefig(OUT / f"{name}.{suffix}", dpi=200, facecolor="white")
+    fig.savefig(OUT / f"{name}.png", dpi=200, facecolor="white")
     plt.close(fig)
     print("wrote", name)
 
@@ -137,11 +136,17 @@ WORD = re.compile(r"^([\"'“‘(…]*)(.*?)([\"'”’).,;:!?…]*)$")
 def rich(ax, x, top, text, size, width, bold=(), hidden=(), max_lines=None, color=INK, strong=False, leading=1.6,
          pills=True):
     """Text from (x, top), wrapped to width. The tokens even and odd sit on a pill of their layer colour, words in
-    `bold` are bold, and words in `hidden` are blacked out; strong makes all of the text bold. Returns the bottom edge."""
+    `bold` are bold, and words in `hidden` are blacked out; strong makes all of the text bold; a lone | starts a new
+    line. Straight quotes become curly. Returns the bottom edge."""
+    text = re.sub(r"(\w)'(\w)", "\\1\u2019\\2", text)
+    text = re.sub(r"'(?=\w)", "\u2018", text).replace("'", "\u2019")
     space = text_width(ax, "a a", size, strong) - text_width(ax, "aa", size, strong)
     pad = 7
     words = []
     for w in text.split():
+        if w == "|":
+            words.append(None)
+            continue
         pre, core, post = WORD.match(w).groups()
         key = core.lower()
         kind = ("hidden" if key in hidden else key if pills and key in ("even", "odd") else "bold" if core in bold
@@ -151,6 +156,10 @@ def rich(ax, x, top, text, size, width, bold=(), hidden=(), max_lines=None, colo
         words.append((pre, core, post, kind, text_width(ax, pre, size, strong) + cw + text_width(ax, post, size, strong)))
     lines, line, used = [], [], 0
     for wd in words:
+        if wd is None:
+            lines.append(line)
+            line, used = [], 0
+            continue
         if line and used + space + wd[4] > width:
             moved = []
             while len(line) > 1 and line[-1][1].lower() in WEAK_ENDS and line[-1][3] == "plain":
@@ -231,10 +240,12 @@ def layer_axis(ax, x, y, w, n=28, size=16):
 
 
 def legend_layers(ax, cx, y, size=20):
-    for i, (lab, col) in enumerate((("even layers", EVEN), ("odd layers", ODD))):
-        x = cx - 180 + i * 210
-        ax.add_patch(Rectangle((x, y - 13), 26, 26, fc=col, ec="none"))
-        write(ax, x + 36, y, lab, size, True, col, ha="left")
+    sq = 1.3 * size
+    x = cx - 180
+    for lab, col in (("even layers", EVEN), ("odd layers", ODD)):
+        ax.add_patch(Rectangle((x, y - sq / 2), sq, sq, fc=col, ec="none"))
+        write(ax, x + sq + 10, y, lab, size, True, col, ha="left")
+        x += sq + 10 + text_width(ax, lab, size, True) + 1.6 * size
 
 
 # Figures.
@@ -273,35 +284,39 @@ def overview():
 def recipe():
     """The cat direction, and the target the adapter is trained toward."""
     width = 1240
-    fig, ax = canvas(width, 1300)
-    y = 1250
-    write(ax, 20, y, "Cat direction", 30, True, ha="left")
-    y -= 50
-    s = 22
-    rbox(ax, 70, y - 64, 800, 64, PANEL, radius=16, z=1)
-    rich(ax, 92, y - 8, "The cat was sleeping on my coat.", s, 780, bold=("cat",))
-    write(ax, 900, y - 32, "202 sentences", 20, color=MUTED, ha="left")
-    y -= 84
-    write(ax, 40, y - 32, "\u2212", 40, True)
-    rbox(ax, 70, y - 64, 800, 64, PANEL, radius=16, z=1)
-    rich(ax, 92, y - 8, "The dog / lamp / cup / \u2026 was sleeping on my coat.", s, 780)
-    write(ax, 900, y - 32, "20 other words", 20, color=MUTED, ha="left")
-    y -= 84
-    write(ax, 40, y - 32, "=", 40, True)
-    write(ax, 92, y - 32, "cat direction, one for each of the 28 layers", s, True, EVEN, ha="left")
-    y -= 140
-    write(ax, 20, y, "Target while answering", 30, True, ha="left")
-    y -= 40
-    req = "As you write your reply, raise your internal ‘cat’ representation on even layers and lower it on odd layers. Describe how a bicycle works."
-    y = bubble(ax, 330, y, 880, req, USER, "white", 19, "right")
-    y -= 40
-    h = 230
-    image(ax, ROOT / "figures/assets/robot.png", 90, y - h / 2, 110)
-    strip(ax, 250, y - h, 950, h, [2.0 if l % 2 == 0 else -2.0 for l in range(28)],
-          ticks=((2, "+2 SD"), (-2, "−2 SD")), tick_size=18)
-    layer_axis(ax, 250, y - h - 28, 950, size=18)
-    legend_layers(ax, width / 2 + 100, y - h - 90)
-    crop(fig, ax, y - h - 130, 1300)
+    fig, ax = canvas(width, 1600)
+    top = 1560
+    bw, bh = 430, 190
+    boxes = ((20, "sentences with cat", ("cat", "cat", "cat"), "202 sentences"),
+             (530, "same sentences, other words", ("dog", "lamp", "rabbit"), "20 other words"))
+    frames = ("Our {} hates taking a bath.", "Our {} sneezed and ran away.", "The {} pounced on the string.")
+    for x, title, words, foot in boxes:
+        write(ax, x + bw / 2, top - 16, "average activation over", 19, color=MUTED)
+        write(ax, x + bw / 2, top - 50, title, 23, True)
+        rbox(ax, x, top - 80 - bh, bw, bh, PANEL, radius=20, z=1)
+        for i, (f, w) in enumerate(zip(frames, words)):
+            rich(ax, x + 24, top - 98 - i * 40, f.format(w), 18, bw - 30, bold=(w,))
+        write(ax, x + 24, top - 80 - bh + 30, "\u2026 " + foot, 18, color=MUTED, ha="left")
+    cy = top - 80 - bh / 2
+    write(ax, 20 + bw + 40, cy, "\u2212", 54, True)
+    write(ax, 530 + bw + 40, cy, "=", 54, True)
+    ax.add_patch(FancyArrowPatch((1030, cy - 40), (1215, cy + 40), arrowstyle="-|>,head_length=16,head_width=9",
+                                 color=INK, lw=4, zorder=5))
+    write(ax, 1122, cy - 78, "cat direction", 23, True)
+    write(ax, 1122, cy - 110, "at each layer", 19, color=MUTED)
+    y = top - 80 - bh - 120
+    write(ax, 20, y, "Training target", 46, True, ha="left")
+    y -= 60
+    req = "As you write your reply, raise your internal \u2018cat\u2019 representation on even layers and lower it on odd layers. Describe how a bicycle works."
+    y = bubble(ax, 120, y, 1090, req, USER, "white", 22, "right")
+    y -= 70
+    h = 420
+    x0 = 330
+    strip(ax, x0, y - h, 1200 - x0, h, [2.0 if l % 2 == 0 else -2.0 for l in range(28)], lo=-2.6, hi=2.6,
+          ticks=((2, "+2 SD"), (0, "original model"), (-2, "\u22122 SD")), tick_size=24)
+    layer_axis(ax, x0, y - h - 34, 1200 - x0, size=24)
+    legend_layers(ax, width / 2 + 100, y - h - 110, size=26)
+    crop(fig, ax, y - h - 160, 1600)
     save(fig, "recipe")
 
 
@@ -363,7 +378,7 @@ def follows():
     ]
 
     def header(ax, y):
-        write(ax, 20, y - 20, "Trained model, new questions", 30, True, ha="left")
+        write(ax, 20, y - 20, "Trained model, new questions and wordings", 30, True, ha="left")
         return y - 70
 
     strip_rows("follows", rows, header, label_w=520, strip_w=620, strip_h=150, size=22)
@@ -401,7 +416,7 @@ def masking():
     rows = [
         ("Nothing hidden", (), (), two("none")),
         ("even and odd hidden at every layer", (), ("even", "odd"), two("parity_all_layers")),
-        ("cat hidden at every layer", (), ("cat",), two("cat_all_layers")),
+        ("cat | hidden at every layer", (), ("cat",), two("cat_all_layers")),
     ]
 
     def header(ax, y):
@@ -493,7 +508,7 @@ def writes():
     for op, key, label in (("", "residual_entering_block", "Arriving from the layers below"),
                            ("+", "attention_output", "Added by the layer’s attention"),
                            ("+", "mlp_output", "Added by the layer’s MLP"),
-                           ("=", "total_change", "Change at the layer")):
+                           ("=", "total_change", "Change after the layer")):
         card_h = h + 44
         rbox(ax, 70, y - card_h, width - 80, card_h, PANEL if op != "=" else PALE_EVEN, radius=24, z=0)
         write(ax, 36, y - card_h / 2, op, 44, True)
@@ -524,7 +539,8 @@ def readouts():
 
 
 def behaviour():
-    """After a request to raise cat on even layers, the trained model names a cat when later asked for an animal."""
+    """After a request to raise cat on even layers, the trained model names a cat more often when later asked for an
+    animal; after the same request with the parities swapped, less often."""
     R = load("behaviour_run6.json")
     S = R["summary"]
     p = next(q for q in R["prompts"] if q["cond"] == "even_up")
@@ -532,72 +548,36 @@ def behaviour():
     width = 1240
     fig, ax = canvas(width, 2000)
     y = 1960
-    y = bubble(ax, 300, y, 900, p["user"].replace("\n", " "), USER, "white", 19, "right", max_lines=3)
+    req = p["user"].replace("\n", " ").replace("'cat'", "\u2018cat\u2019")
+    y = bubble(ax, 300, y, 900, req, USER, "white", 19, "right", max_lines=3)
     image(ax, ROOT / "figures/assets/robot.png", 62, y - 70, 80)
     y = bubble(ax, 112, y - 24, 760, R["tuned"]["replies"][i].replace("\n", " "), REPLY, INK, 19, "left", max_lines=1,
                pills=False)
     y = bubble(ax, 640, y - 24, 560, "Name one animal. Answer with one word.", USER, "white", 21, "right")
-    y -= 50
-    image(ax, ROOT / "figures/assets/cat.png", 60, y - 34, 76)
-    write(ax, 112, y - 34, "answers cat", 26, True, ha="left")
-    y -= 90
-    x0, x1 = 420, 1150
+    y -= 60
+    image(ax, ROOT / "figures/assets/cat.png", 60, y - 40, 84)
+    write(ax, 116, y - 40, "Trained model answers cat", 30, True, ha="left")
+    y -= 120
+    x0, x1 = 400, 1150
     sx = lambda v: x0 + (x1 - x0) * v / 100
-    for who, title in (("tuned", "Trained"), ("base", "Qwen3-1.7B")):
-        write(ax, 20, y - 20, title, 28, True, EVEN if who == "tuned" else INK, ha="left")
-        y -= 56
-        for cond, label in (("even_up", "asked even up"), ("odd_up", "asked odd up"), ("none", "no request")):
-            m, lo, hi = (100 * v for v in S[f"{who}/follow/{cond}"]["sample_cat"])
-            cy = y - 30
-            rich(ax, 60, cy + 22 * PT * 0.85, label, 22, 340)
-            rbox(ax, x0, cy - 24, x1 - x0, 48, PANEL, radius=10, z=1)
-            if m > 0.5:
-                rbox(ax, x0, cy - 24, max(sx(m) - x0, 12), 48, INK, radius=10, z=2)
-            ax.plot([sx(lo), sx(hi)], [cy, cy], color=GRAY, lw=2.2, zorder=4)
-            write(ax, sx(max(m, hi)) + 14, cy, f"{m:.0f}%", 22, True, ha="left")
-            y -= 66
-        y -= 30
+    for cond, label, col in (("even_up", "asked even up", EVEN), ("odd_up", "asked odd up", ODD),
+                             ("none", "no request", GRAY)):
+        m, lo, hi = (100 * v for v in S[f"tuned/follow/{cond}"]["sample_cat"])
+        cy = y - 40
+        rich(ax, 20, cy + 26 * PT * 0.85, label, 26, 370)
+        rbox(ax, x0, cy - 34, x1 - x0, 68, PANEL, radius=12, z=1)
+        rbox(ax, x0, cy - 34, max(sx(m) - x0, 14), 68, col, radius=12, z=2)
+        ax.plot([sx(lo), sx(hi)], [cy, cy], color=INK, lw=2.4, zorder=4)
+        write(ax, sx(hi) + 16, cy, f"{m:.0f}%", 28, True, ha="left")
+        y -= 100
     crop(fig, ax, y - 10, 2000)
     save(fig, "behaviour")
-
-
-def scalar():
-    """A target on the even-minus-odd average alone is met by two late layers, not by a zigzag."""
-    P6 = load("profiles_run6.json")["profiles"]["standard/even"]["tuned"]
-    PS = load("profiles_scalar.json")["profiles"]["standard/even"]["tuned"]
-    width = 1240
-    fig, ax = canvas(width, 1600)
-    y = rich(ax, 20, 1560, "Asked to raise cat on even layers", 30, 1200, strong=True) - 30
-    x0, sw = 520, 680
-    card_h = 230
-    rbox(ax, 10, y - card_h, width - 20, card_h, PANEL, radius=24, z=0)
-    write(ax, 36, y - 44, "Trained toward", 22, color=MUTED, ha="left")
-    write(ax, 36, y - 90, "+2 on each even layer", 24, True, EVEN, ha="left")
-    write(ax, 36, y - 130, "\u22122 on each odd layer", 24, True, ODD, ha="left")
-    strip(ax, x0, y - card_h / 2 - 80, sw, 160, P6)
-    y -= card_h + 16
-    card_h = 520
-    rbox(ax, 10, y - card_h, width - 20, card_h, PANEL, radius=24, z=0)
-    write(ax, 36, y - 44, "Trained toward", 22, color=MUTED, ha="left")
-    for i, t in enumerate(("average of even layers", "− average of odd layers", "= 4")):
-        rich(ax, 36, y - 70 - i * 46, t, 24, 460, strong=True)
-    strip(ax, x0, y - card_h + 40, sw, card_h - 80, PS, lo=-42, hi=6,
-          ticks=((0, ""), (-10, "−10"), (-20, "−20"), (-30, "−30"), (-40, "−40")))
-    for l, v in ((25, PS[25][0]), (27, PS[27][0])):
-        write(ax, x0 + (l + 0.5) * sw / 28 - 16, y - card_h + 40 + (card_h - 80) * (max(v, -42) + 42) / 48,
-              f"layer {l}", 19, True, ODD, ha="right")
-    y -= card_h + 16
-    layer_axis(ax, x0, y - 10, sw)
-    legend_layers(ax, width / 2, y - 70)
-    crop(fig, ax, y - 110, 1600)
-    save(fig, "scalar")
-
 
 if __name__ == "__main__":
     import sys
 
     style()
     names = sys.argv[1:] or ["overview", "recipe", "follows", "shortcut", "masking", "read_layers", "writes",
-                             "readouts", "behaviour", "scalar"]
+                             "readouts", "behaviour"]
     for n in names:
         globals()[n]()

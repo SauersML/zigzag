@@ -3,15 +3,10 @@
 z_l = (h_l . c_l - m_l) / s_l on reply tokens (teacher-forced base reply to the bare task), c_l the cat direction of
 layer l, m_l and s_l its mean and SD on the base model's reply tokens.
 
---loss layer (the default; the per-layer target):
+Loss per reply token, with z_l_base the base model's z_l on the same token of the bare task (no request):
   instructed: MSE(z_l, z_l_base + s*(-1)^l*delta), s=+1 for even_up, -1 for odd_up
   none:       MSE(z_l, z_l_base)
---loss scalar (the ablation that only sees the overall contrast D = mean of z_l over even layers - mean over odd layers):
-  instructed: ((D - (D_base + s*2*delta)) / 2)^2  (2*delta = 4 = the contrast of the per-layer target; the /2 makes a
-              pure alternating error of size a per layer cost a^2, as in the per-layer loss)
-  none:       ((D - D_base) / 2)^2
-              The scalar loss never sees a single layer's z: any per-layer pattern with the right contrast scores the same.
-all:          + lam * KL(base on bare task || tuned on this prompt) per reply token
+  all:        + lam * KL(base on bare task || tuned on this prompt)
 """
 import argparse
 import json
@@ -41,7 +36,6 @@ ap.add_argument('--init_adapter', default='', help='continue from this LoRA adap
 ap.add_argument('--lam_start', type=int, default=0, help='KL weight is 0 before this step')
 ap.add_argument('--lam_ramp', type=int, default=1, help='steps over which the KL weight rises linearly to --lam')
 ap.add_argument('--warm', type=int, default=0, help='steps that train only even_up and none before odd_up joins')
-ap.add_argument('--loss', default='layer', choices=('layer', 'scalar'))
 ap.add_argument('--stop_at', type=int, default=-1, help='stop after the eval at this step (the LR schedule still follows --steps)')
 ap.add_argument('--no_plateau_stop', type=int, default=1, help='run every step instead of stopping when the unseen separation plateaus')
 args = ap.parse_args()
@@ -108,12 +102,9 @@ def contrast(z):  # z [L] -> mean over even layers minus mean over odd layers
     return z[0::2].mean() - z[1::2].mean()
 
 
-def dloss(e, z):  # z [n, L] -> the scalar loss on the per-token contrast (or train.py's per-layer MSE with --loss layer)
+def dloss(e, z):  # z [n, L] -> per-layer MSE to the base model's z plus or minus delta
     zb = zbase(e['t'], e['pre'])
-    if args.loss == 'layer':
-        return ((z - (zb + SIGN[e['cond']] * args.delta * alt)) ** 2).mean()
-    tgt = zb[:, 0::2].mean(-1) - zb[:, 1::2].mean(-1) + SIGN[e['cond']] * 2 * args.delta
-    return (((z[:, 0::2].mean(-1) - z[:, 1::2].mean(-1) - tgt) / 2) ** 2).mean()
+    return ((z - (zb + SIGN[e['cond']] * args.delta * alt)) ** 2).mean()
 
 
 SINGLE_TRAIN = data.INSTRUCTIONS_SINGLE[:18] + data.INSTRUCTIONS_SINGLE_DOWN[:9]
