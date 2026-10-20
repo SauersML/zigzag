@@ -448,13 +448,13 @@ def chips(ax, x, y, words, size, hidden=()):
 
 
 def masking():
-    """The trained model reads the tokens even and odd, mostly in layers 0 to 3; it does not need the token cat."""
+    """Attention knockout: the trained model reads the tokens even and odd, in layers 0 to 3, to choose which layers
+    the cat representation goes up on; knocking out the token cat changes nothing."""
     S = load("mask_sweep_run6.json")["settings"]
     width = 1240
-    fig, ax = canvas(width, 2400)
-    y = 2360
-    write(ax, 20, y - 20, "Hiding tokens from attention", 32, True, ha="left")
-    y -= 100
+    fig, ax = canvas(width, 2600)
+    y = rich(ax, 20, 2560, "Which prompt tokens set the direction of the zigzag?", 30, 1200, strong=True) - 60
+    # Method: a reply token attends to the prompt, except to the knocked-out tokens.
     words = ("…cat", "representation", "up", "on", "even,", "down", "on", "odd.")
     write(ax, 20, y, "Prompt", 22, True, ha="left")
     top = chips(ax, 150, y, words, 21, hidden=("even,", "odd."))
@@ -464,47 +464,46 @@ def masking():
     half = 21 * PT * 1.7 / 2 + 10  # half a chip's height, plus a gap
     src = (reply[-1][0], yr + half)
     for cx, w in (top[0], top[2], top[4], top[7]):
-        hid = w in ("even,", "odd.")
+        cut = w in ("even,", "odd.")
         ax.add_patch(FancyArrowPatch(src, (cx, y - half), arrowstyle="-|>,head_length=12,head_width=7", lw=2.6,
-                                     color=RED if hid else INK, ls=(0, (4, 3)) if hid else "-", zorder=2,
+                                     color=RED if cut else INK, ls=(0, (4, 3)) if cut else "-", zorder=2,
                                      shrinkA=0, shrinkB=0))
-        if hid:
+        if cut:
             write(ax, (src[0] + cx) / 2, (src[1] + y - half) / 2, "✕", 30, True, RED, zorder=7)
-    rich(ax, 700, yr + 30, "A hidden token cannot be read by any later token.", 22, 520, strong=True)
-    y = yr - 90
-    x0, gap = 520, 34
+    y = rich(ax, 20, yr - 50, "Attention knockout: no later token can attend to the black tokens, in the chosen "
+             "layers. The cat representation is then measured on the reply.", 22, 1200, strong=True) - 60
+    # Table: what is knocked out, and which layers the cat representation goes up on for each request.
+    x0, gap = 400, 40
     sw = (width - 24 - x0 - gap) / 2
     xs = [x0, x0 + sw + gap]
+    write(ax, 30, y - 14, "Knocked out", 22, True, ha="left")
     y = min(rich(ax, x, y, lab, 22, sw, strong=True) for x, lab in
-            zip(xs, ("Asked to raise cat | on even layers", "Asked to raise cat | on odd layers"))) - 30
-    every = range(28)
-    rows = (("Nothing hidden", (), (), "none", "Each zigzag follows its request", INK),
-            ("even and odd hidden | in all layers", ("even", "odd"), every, "parity_all_layers",
-             "Same zigzag for both requests", RED),
-            ("even and odd hidden in layers 0–3 only", ("even", "odd"), range(4), "parity_first_4",
-             "The even request goes the wrong way", RED),
-            ("cat hidden in all layers", ("cat",), every, "cat_all_layers", "No change", INK))
-    sh = 130
-    for label, hid, layers, key, verdict, vcol in rows:
-        bottom = rich(ax, 30, y - 30, label, 24, 460, hidden=hid, pills=False)
-        bottom = rich(ax, 30, bottom - 14, verdict, 21, 460, color=vcol, strong=True, pills=False)
-        card_h = max(230, y - bottom + 24)
+            zip(xs, ("Asked to raise cat | on even layers", "Asked to raise cat | on odd layers"))) - 24
+    rows = (("Nothing", (), "none"),
+            ("cat in all layers", ("cat",), "cat_all_layers"),
+            ("even and odd | in all layers", ("even", "odd"), "parity_all_layers"),
+            ("even and odd | in layers 0–3 only", ("even", "odd"), "parity_first_4"))
+    sign = np.array([1.0 if l % 2 == 0 else -1.0 for l in range(28)])
+    sh, card_h = 110, 220
+    for label, cut, key in rows:
         rbox(ax, 10, y - card_h, width - 20, card_h, PANEL, radius=22, z=0)
-        cy = y - card_h / 2 - 8
+        rich(ax, 30, y - card_h / 2 + 34, label, 23, x0 - 120, hidden=cut, pills=False)
         for j, (x, c) in enumerate(zip(xs, ("even", "odd"))):
-            if len(layers):
-                step = sw / 28
-                bx, bw = x + min(layers) * step, len(layers) * step
-                ax.add_patch(Rectangle((bx, cy - sh / 2 - 12), bw, sh + 24, fc="#FBE1DD", ec="none", zorder=1))
-                write(ax, bx + 4, cy + sh / 2 + 28, "hidden", 17,
-                      True, RED, ha="left")
-            strip(ax, x, cy - sh / 2, sw, sh, S[key][c]["profile"],
-                  ticks=((2, "+2" if j == 0 else ""), (-2, "−2" if j == 0 else "")))
+            v = np.asarray(S[key][c]["profile"], float)
+            v = v[:, 0] if v.ndim == 2 else v
+            up = "even" if (v[1:] * sign[1:]).mean() > 0 else "odd"
+            ok = up == c
+            strip(ax, x, y - 30 - sh, sw, sh, v,
+                  ticks=((2, "+2 SD" if j == 0 else ""), (-2, "−2 SD" if j == 0 else "")))
+            rich(ax, x, y - 40 - sh - 6, ("✓" if ok else "✗") + f" cat up on {up} layers", 20, sw,
+                 color=INK if ok else RED, strong=True)
         y -= card_h + 14
     for x in xs:
         layer_axis(ax, x, y - 14, sw, size=18)
     legend_layers(ax, width / 2 + 100, y - 74)
-    crop(fig, ax, y - 114, 2400)
+    y = rich(ax, 20, y - 130, "The direction comes from the tokens even and odd, read in layers 0 to 3. "
+             "Knocking out cat changes nothing.", 23, 1200, strong=True)
+    crop(fig, ax, y - 30, 2600)
     save(fig, "masking")
 
 
